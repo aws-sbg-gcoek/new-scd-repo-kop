@@ -1,22 +1,21 @@
 /* eslint-disable react-doctor/no-initialize-state, react-doctor/prefer-useReducer, react-doctor/no-event-handler, react-doctor/rerender-state-only-in-handlers, react-doctor/no-derived-state */
 import { motion, useScroll, useTransform } from "motion/react";
 import { AngledButton } from "./LayoutElements";
-import { Zap, Calendar, MapPin } from "lucide-react";
+import { Zap, Calendar, MapPin, Volume2, VolumeX } from "lucide-react";
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 
-let globalIsMuted = true;
+let globalIsMuted = false;
 
 export const HeroSection = () => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
   const [isMuted, setIsMuted] = useState(globalIsMuted);
   
   // Initialize video media immediately so the video element is preloaded & ready
-  const [media] = useState<{video: string, audio?: string}>({ video: '/videoplayback.webm' });
+  const [media] = useState<{video: string}>({ video: '/videoplayback.webm' });
   const [isLiteMode, setIsLiteMode] = useState(() => {
     if (typeof window === 'undefined') return false;
     return localStorage.getItem('scd_lite_mode') === 'true';
@@ -24,23 +23,61 @@ export const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(true);
 
-  // Safe play helper that guarantees playback in loop
-  const ensureVideoPlaying = useCallback(() => {
+  // Play helper that plays the F1 car video and its roaring engine sound in loop
+  const ensureVideoPlaying = useCallback((forceUnmute = false) => {
     const video = videoRef.current;
     if (!video) return;
 
     video.loop = true;
+    if (forceUnmute || !isMuted) {
+      video.muted = false;
+      video.volume = 0.65;
+    }
+
     if (video.paused) {
       const playPromise = video.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // If browser restricts unmuted autoplay, mute and resume instantly
+        playPromise.catch((err) => {
+          console.warn("Autoplay audio blocked by browser policy, starting muted until interaction:", err);
+          // If browser restricts unmuted autoplay before gesture, start muted temporarily
           video.muted = true;
           video.play().catch(() => {});
+          
+          // As soon as the user scrolls, clicks, or touches anywhere, instantly unmute and unleash engine roar!
+          const unlockSound = () => {
+            if (videoRef.current) {
+              videoRef.current.muted = false;
+              videoRef.current.volume = 0.65;
+              globalIsMuted = false;
+              setIsMuted(false);
+              videoRef.current.play().catch(() => {});
+            }
+            window.removeEventListener('click', unlockSound);
+            window.removeEventListener('scroll', unlockSound);
+            window.removeEventListener('touchstart', unlockSound);
+          };
+          window.addEventListener('click', unlockSound, { once: true });
+          window.addEventListener('scroll', unlockSound, { once: true, passive: true });
+          window.addEventListener('touchstart', unlockSound, { once: true });
         });
       }
     }
-  }, []);
+  }, [isMuted]);
+
+  // Toggle Sound Button handler
+  const toggleSound = () => {
+    const nextMuted = !isMuted;
+    if (videoRef.current) {
+      videoRef.current.muted = nextMuted;
+      videoRef.current.volume = 0.65;
+      if (!nextMuted && videoRef.current.paused) {
+        videoRef.current.play().catch(() => {});
+      }
+    }
+    globalIsMuted = nextMuted;
+    setIsMuted(nextMuted);
+    window.dispatchEvent(new CustomEvent("muteStateChange", { detail: nextMuted }));
+  };
 
   // IntersectionObserver: automatically play when hero scrolls into view, pause when scrolled away
   useEffect(() => {
@@ -62,7 +99,7 @@ export const HeroSection = () => {
     return () => observer.disconnect();
   }, [ensureVideoPlaying]);
 
-  // Window scroll listener: as user scrolls above to the top, automatically resume playback
+  // Window scroll listener: as user scrolls above to the top, automatically resume playback and sound
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY < 650) {
@@ -105,33 +142,30 @@ export const HeroSection = () => {
     return () => clearInterval(watchdog);
   }, [inView, ensureVideoPlaying]);
 
+  // Preloader greenLight event listener - starts roaring engine sound
   useEffect(() => {
     const handleGreenLight = () => {
       const lite = localStorage.getItem('scd_lite_mode') === 'true';
       setIsLiteMode(lite);
-      ensureVideoPlaying();
+      if (videoRef.current) {
+        videoRef.current.muted = false;
+        videoRef.current.volume = 0.65;
+        setIsMuted(false);
+      }
+      ensureVideoPlaying(true);
     };
 
-    const handleToggleMute = () => {
-      const nextMuted = !isMuted;
-      if (videoRef.current) {
-        videoRef.current.muted = nextMuted;
-      }
-      if (audioRef.current) {
-        audioRef.current.muted = nextMuted;
-      }
-      globalIsMuted = nextMuted;
-      setIsMuted(nextMuted);
-      window.dispatchEvent(new CustomEvent("muteStateChange", { detail: nextMuted }));
+    const handleExternalToggleMute = () => {
+      toggleSound();
     };
 
     window.addEventListener("greenLight", handleGreenLight);
-    window.addEventListener("toggleMute", handleToggleMute);
+    window.addEventListener("toggleMute", handleExternalToggleMute);
     return () => {
       window.removeEventListener("greenLight", handleGreenLight);
-      window.removeEventListener("toggleMute", handleToggleMute);
+      window.removeEventListener("toggleMute", handleExternalToggleMute);
     };
-  }, [isMuted, ensureVideoPlaying]);
+  }, [ensureVideoPlaying]);
 
   return (
     <section ref={sectionRef} className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden border-b border-white/5 z-10 px-4 sm:px-12 lg:px-24 pt-24 pb-12" aria-label="Hero Section">
@@ -153,7 +187,7 @@ export const HeroSection = () => {
             loop
             muted={isMuted}
             playsInline
-            onEnded={ensureVideoPlaying}
+            onEnded={() => ensureVideoPlaying()}
             className="w-full h-full object-cover opacity-60 mix-blend-screen mix-blend-lighten"
             src={media.video}
           >
@@ -164,6 +198,33 @@ export const HeroSection = () => {
         <div className="absolute -right-20 top-0 w-[500px] h-[500px] bg-aws-orange/5 blur-[150px]" />
         <div className="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-f1-red to-aws-orange" />
       </motion.div>
+
+      {/* Interactive Sound HUD Control */}
+      {!isLiteMode && (
+        <button
+          type="button"
+          onClick={toggleSound}
+          aria-label={isMuted ? "Unmute F1 Car Engine Sound" : "Mute F1 Car Engine Sound"}
+          className="absolute bottom-6 right-6 sm:bottom-10 sm:right-12 z-20 inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-black/70 backdrop-blur-md border border-white/15 hover:border-aws-orange/60 text-white font-mono text-[10px] tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(0,0,0,0.6)] cursor-pointer group"
+        >
+          {isMuted ? (
+            <>
+              <VolumeX size={14} className="text-white/50 group-hover:text-aws-orange" />
+              <span className="text-white/60 group-hover:text-white">SOUND: MUTED</span>
+            </>
+          ) : (
+            <>
+              <Volume2 size={14} className="text-aws-orange animate-pulse" />
+              <span className="text-aws-orange font-bold">F1 ENGINE // ON</span>
+              <span className="flex gap-0.5 items-end h-3">
+                <span className="w-0.5 h-2 bg-aws-orange animate-pulse" />
+                <span className="w-0.5 h-3 bg-aws-orange animate-bounce" />
+                <span className="w-0.5 h-1.5 bg-aws-orange animate-pulse" />
+              </span>
+            </>
+          )}
+        </button>
+      )}
 
       <div className="max-w-7xl mx-auto w-full relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12 mt-18 lg:mt-12">
         
