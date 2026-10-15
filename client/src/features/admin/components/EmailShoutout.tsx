@@ -14,10 +14,10 @@ function extractHtmlFromMime(mime: string) {
   return `<div style="font-family: monospace; padding: 1rem; color: #666;">No valid HTML content detected yet...<br/>(Looking for &lt;html&gt;, &lt;body&gt;, or &lt;div&gt; tags)</div>`;
 }
 
-const DEFAULT_THEME_MIME = `From: AWS Student Community Day Dhule 2026 <no-reply@aws-scd-dhule.tech>
-Reply-To: info@aws-scd-dhule.tech
+const DEFAULT_THEME_MIME = `From: AWS Student Community Day Kolhapur 2026 <no-reply@aws-scd-kolhapur.tech>
+Reply-To: info@aws-scd-kolhapur.tech
 To: {{attendee_email}}
-Subject: 🎟️ Your Ticket is Confirmed — AWS Student Community Day Dhule 2026
+Subject: 🎟️ Your Ticket is Confirmed — AWS Student Community Day Kolhapur 2026
 MIME-Version: 1.0
 Content-Type: multipart/alternative; boundary="AWS-SCD-2026-BOUNDARY"
 
@@ -35,7 +35,7 @@ Content-Type: text/html; charset=UTF-8
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Ticket is Confirmed — AWS Student Community Day Dhule 2026</title>
+  <title>Your Ticket is Confirmed — AWS Student Community Day Kolhapur 2026</title>
 </head>
 <body style="margin:0;padding:0;background:#f0f2f5;font-family:Arial,Helvetica,sans-serif;color:#1f2937;">
 
@@ -53,8 +53,8 @@ Content-Type: text/html; charset=UTF-8
 
               <!-- Logo centered -->
               <img
-                src="https://aws-scd-dhule.tech/scd-dhule-logo.avif"
-                alt="AWS Student Community Day Dhule"
+                src="https://aws-scd-kolhapur.tech/scd-kolhapur-logo.avif"
+                alt="AWS Student Community Day Kolhapur"
                 height="max-height:100%"
                 style="display:block;margin:0 auto 16px;max-width:180px;"
               />
@@ -63,7 +63,7 @@ Content-Type: text/html; charset=UTF-8
                 AWS Student Community Day
               </h1>
               <p style="margin:6px 0 0;color:#FF9900;font-size:15px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">
-                Dhule &nbsp;·&nbsp; 2026
+                Kolhapur &nbsp;·&nbsp; 2026
               </p>
             </td>
           </tr>
@@ -86,7 +86,7 @@ Content-Type: text/html; charset=UTF-8
               </p>
 
               <p style="margin:0 0 16px;font-size:15px;line-height:1.8;color:#4b5563;">
-                Thank you for registering for <strong>AWS Student Community Day Dhule 2026</strong>.
+                Thank you for registering for <strong>AWS Student Community Day Kolhapur 2026</strong>.
                 Your registration has been confirmed and your event ticket is ready below.
               </p>
 
@@ -157,7 +157,7 @@ Content-Type: text/html; charset=UTF-8
                           Venue
                         </td>
                         <td style="font-size:14px;color:#374151;">
-                          SVKM's Institute of Technology, Dhule
+                          V.T. Patil Hall, Kolhapur
                         </td>
                       </tr>
                     </table>
@@ -180,11 +180,11 @@ Content-Type: text/html; charset=UTF-8
                       <tr>
                         <td>
                           <p style="margin:0;font-size:15px;font-weight:700;color:#0f172a;">
-                            SVKM's Institute of Technology, Dhule
+                            V.T. Patil Hall, Kolhapur
                           </p>
                           <p style="margin:4px 0 0;font-size:13px;color:#475569;line-height:1.6;">
-                            SVKM's Institute of Technology, Nardana Road,<br>
-                            Dhule, Maharashtra 424 001, India
+                            V.T. Patil Hall, Kolhapur, Nardana Road,<br>
+                            Kolhapur, Maharashtra 416 003, India
                           </p>
                         </td>
                       </tr>
@@ -194,7 +194,7 @@ Content-Type: text/html; charset=UTF-8
                     <table cellpadding="0" cellspacing="0" border="0">
                       <tr>
                         <td style="padding-right:10px;">
-                          <a href="https://maps.google.com/?q=SVKM+Institute+of+Technology+Dhule"
+                          <a href="https://maps.google.com/?q=V.T.+Patil+Smruti+Bhavan,+Kolhapur"
                              target="_blank"
                              style="background:#ffffff;color:#374151;text-decoration:none;padding:9px 16px;border-radius:6px;font-size:13px;font-weight:600;display:inline-block;border:1px solid #e5e7eb;vertical-align:middle;">
                             <img src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"
@@ -277,7 +277,7 @@ Content-Type: text/html; charset=UTF-8
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;">
                 <tr>
                   <td style="background:#fff7ed;border-left:4px solid #FF9900;border-radius:0 6px 6px 0;padding:14px 18px;">
-                    <strong style="font-size:13px;color:#92400e;">AWS Student Community Day Dhule 2026</strong><br>
+                    <strong style="font-size:13px;color:#92400e;">AWS Student Community Day Kolhapur 2026</strong><br>
                     <span style="font-size:13px;color:#6b7280;line-height:1.7;">
                       A student-driven conference on Cloud Computing, AI, DevOps, Serverless, Security, and Innovation.
                     </span>
@@ -291,9 +291,9 @@ Content-Type: text/html; charset=UTF-8
                   <td style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px 20px;text-align:center;">
                     <p style="margin:0;font-size:13px;color:#6b7280;">
                       Questions? Reach us at
-                      <a href="mailto:info@aws-scd-dhule.tech"
+                      <a href="mailto:info@aws-scd-kolhapur.tech"
                          style="color:#FF9900;font-weight:700;text-decoration:none;">
-                        info@aws-scd-dhule.tech
+                        info@aws-scd-kolhapur.tech
                       </a>
                     </p>
                   </td>
@@ -315,13 +315,13 @@ Content-Type: text/html; charset=UTF-8
               />
 
               <p style="margin:0;color:#d1d5db;font-size:13px;font-weight:600;">
-                AWS Student Community Day Dhule 2026
+                AWS Student Community Day Kolhapur 2026
               </p>
               <p style="margin:6px 0 0;color:#9ca3af;font-size:12px;">
                 Building the next generation of cloud innovators.
               </p>
               <p style="margin:16px 0 0;color:#4b5563;font-size:11px;">
-                © 2026 AWS Student Community Day Dhule. All rights reserved.
+                © 2026 AWS Student Community Day Kolhapur. All rights reserved.
               </p>
 
             </td>

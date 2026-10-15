@@ -27,7 +27,7 @@ export function TicketPass({ ticket_number, full_name, pass_name, role, organiza
                 AWS Student Community Day
               </p>
               <p className="font-mono text-[9px] tracking-wider text-white/30">
-                Dhule 2026
+                Kolhapur 2026
               </p>
             </div>
             <div
@@ -84,7 +84,7 @@ export function TicketPass({ ticket_number, full_name, pass_name, role, organiza
             <div className="flex justify-between items-center">
               <div>
                 <p className="font-mono text-[8px] text-white/30">14 August 2026</p>
-                <p className="font-mono text-[8px] text-white/30">SVKM's IoT, Dhule</p>
+                <p className="font-mono text-[8px] text-white/30">V.T. Patil Hall, Kolhapur</p>
               </div>
               <p className="font-mono text-[8px] text-white/20">Show QR at gate</p>
             </div>

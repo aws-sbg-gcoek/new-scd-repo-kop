@@ -10,7 +10,7 @@ export const MpdPage = () => {
 
   const requirements = [
     { title: "Female Opportunity Only", desc: "This panel moderator role is open exclusively to female builders to support and encourage women in tech.", icon: Heart },
-    { title: "Paddock Pass Holder", desc: "Applicants must hold a valid paid ticket/pass for AWS Student Community Day Dhule 2026.", icon: ShieldCheck },
+    { title: "Paddock Pass Holder", desc: "Applicants must hold a valid paid ticket/pass for AWS Student Community Day Kolhapur 2026.", icon: ShieldCheck },
     { title: "Sleek Communication", desc: "Must be comfortable steering panel discussions, asking questions, and coordinating with speakers.", icon: Mic },
     { title: "Exclusive Event Access", desc: "Work directly with core organizing leads, panel speakers, and VIP cloud architects.", icon: Sparkles },
     { title: "Event Hospitality", desc: "Stay fully energized with high-quality lunch, high-tea, and credentials during the event.", icon: Coffee },
@@ -30,7 +30,7 @@ export const MpdPage = () => {
           <span className="font-mono text-xs uppercase tracking-widest">Back to Home</span>
         </Link>
         <div className="font-sans font-black italic text-xl uppercase tracking-tighter">
-          AWS SCD <span className="text-aws-orange">DHULE</span>
+          AWS SCD <span className="text-aws-orange">KOLHAPUR</span>
         </div>
       </nav>
 
@@ -45,7 +45,7 @@ export const MpdPage = () => {
             Panel Discussion <span className="text-pink-500 drop-shadow-[0_0_15px_rgba(236,72,153,0.3)]">Moderator</span>
           </h1>
           <p className="text-white/60 text-lg max-w-2xl mx-auto">
-            Take center stage and drive high-impact tech panel discussions at AWS Student Community Day Dhule 2026. An exclusive opportunity for female leaders to lead conversations with cloud experts.
+            Take center stage and drive high-impact tech panel discussions at AWS Student Community Day Kolhapur 2026. An exclusive opportunity for female leaders to lead conversations with cloud experts.
           </p>
         </div>
 

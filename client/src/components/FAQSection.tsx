@@ -5,7 +5,7 @@ import { Plus, Minus } from 'lucide-react';
 
 const faqs = [
 {
-question: "Who should attend AWS Student Community Day Dhule?",
+question: "Who should attend AWS Student Community Day Kolhapur?",
 answer: "Students, developers, builders, founders, cloud enthusiasts, and anyone curious about technology. If you've ever broken something while learning and somehow fixed it later, you'll fit right in. Aliens may attend, but only if they register first."
 },
 {

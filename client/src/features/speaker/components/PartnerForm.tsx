@@ -104,7 +104,7 @@ export const PartnerForm = () => {
       <div>
         <h4 className="text-lg font-black italic uppercase tracking-wider text-blue-400 border-b border-white/10 pb-2 mb-6">Community Details</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <InputField label="Community Name" name="community_name" placeholder="e.g. AWS Users Dhule" required register={register} errors={errors} />
+          <InputField label="Community Name" name="community_name" placeholder="e.g. AWS Users Kolhapur" required register={register} errors={errors} />
           <SelectField label="Community Type" name="community_type" required options={['AWS User Group', 'AWS Cloud Club (Student)', 'Developer Circle', 'College Club', 'Non-Profit Organization', 'Other']} register={register} errors={errors} />
           <InputField label="Community Website / Social URL" name="website_url" placeholder="https://mycommunity.org" required register={register} errors={errors} />
           <InputField label="Approximate Member Size" name="member_size" placeholder="e.g. 250" required register={register} errors={errors} />
@@ -119,7 +119,7 @@ export const PartnerForm = () => {
           <InputField label="Organizer Email" name="organizer_email" type="email" placeholder="organizer@email.com" required register={register} errors={errors} />
           <InputField label="Organizer Phone" name="organizer_phone" placeholder="+91 99999 99999" required register={register} errors={errors} />
           <InputField label="LinkedIn Profile URL" name="linkedin_url" placeholder="https://linkedin.com/in/username" required register={register} errors={errors} />
-          <InputField label="City / Operations Base" name="city" placeholder="e.g. Dhule, Nashik, Jalgaon" required register={register} errors={errors} />
+          <InputField label="City / Operations Base" name="city" placeholder="e.g. Kolhapur, Nashik, Jalgaon" required register={register} errors={errors} />
         </div>
       </div>
 

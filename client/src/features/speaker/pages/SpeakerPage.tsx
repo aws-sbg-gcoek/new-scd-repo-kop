@@ -31,7 +31,7 @@ export const SpeakerPage = () => {
     { title: "Event Branding", desc: "Prominent highlight in our conference schedule and programs.", icon: Star },
     { title: "Social Promotion", desc: "Dedicated digital flyer highlighting your profile on all social networks.", icon: Share2 },
     { title: "Premium Networking", desc: "Exclusive access to VIP networking lunches with core experts.", icon: Users },
-    { title: "Community Recognition", desc: "Stand out as a key contributor to North Maharashtra's tech space.", icon: CheckCircle2 },
+    { title: "Community Recognition", desc: "Stand out as a key contributor to Western Maharashtra's tech space.", icon: CheckCircle2 },
     { title: "Full Access Pass", desc: "Complimentary VIP entrance to all tracks and key exhibition slots.", icon: BadgeCheck }
   ];
 
@@ -57,7 +57,7 @@ export const SpeakerPage = () => {
           <span className="font-mono text-xs uppercase tracking-widest">Back to Home</span>
         </Link>
         <div className="font-sans font-black italic text-xl uppercase tracking-tighter">
-          AWS SCD <span className="text-aws-orange">DHULE</span>
+          AWS SCD <span className="text-aws-orange">KOLHAPUR</span>
         </div>
       </nav>
 
@@ -73,7 +73,7 @@ export const SpeakerPage = () => {
             <span className={activeTab === 'partner' ? 'text-blue-400' : 'text-white'}>Community Partnerships</span>
           </h1>
           <p className="text-white/60 text-lg max-w-2xl mx-auto">
-            Become a speaker to inspire developers, or link your tech community to co-host one of North Maharashtra's premier events.
+            Become a speaker to inspire developers, or link your tech community to co-host one of Western Maharashtra's premier events.
           </p>
         </div>
 
@@ -272,8 +272,8 @@ export const SpeakerPage = () => {
 
       {/* Footer */}
       <footer className="border-t border-white/5 bg-[#050505] py-8 px-6 text-center">
-        <p className="text-white/40 text-xs mb-2">© 2026 AWS Student Community Day Dhule. All rights reserved.</p>
-        <p className="text-white/20 text-[10px]">Organized by student volunteers at SVKM's Institute of Technology.</p>
+        <p className="text-white/40 text-xs mb-2">© 2026 AWS Student Community Day Kolhapur. All rights reserved.</p>
+        <p className="text-white/20 text-[10px]">Organized by student volunteers at V.T. Patil Hall, Kolhapur.</p>
       </footer>
 
     </div>

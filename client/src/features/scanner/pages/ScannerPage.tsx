@@ -156,7 +156,7 @@ export function ScannerPage() {
                 Gate Scanner
               </h1>
               <p className="font-mono text-[11px] text-white/30 uppercase tracking-widest">
-                AWS SCD Dhule 2026
+                AWS SCD Kolhapur 2026
               </p>
             </div>
           </div>

@@ -48,9 +48,9 @@ export const CodeOfConductPage = () => {
             CODE OF <span className="text-aws-orange drop-shadow-[0_0_15px_rgba(255,153,0,0.3)]">CONDUCT</span>
           </h1>
           <div className="text-white/50 font-mono text-[9px] sm:text-xs uppercase tracking-wider max-w-xl mx-auto leading-relaxed space-y-1">
-            <p className="font-black text-white">AWS Student Community Day (SCD) Dhule 2026</p>
-            <p className="text-[10px] text-white/40">Organized by AWS Student Builder Group, SVKM's Institute of Technology, Dhule</p>
-            <p className="text-[9px] text-aws-orange">📅 August 14, 2026 · 📍 SVKM's Institute of Technology, Dhule</p>
+            <p className="font-black text-white">AWS Student Community Day (SCD) Kolhapur 2026</p>
+            <p className="text-[10px] text-white/40">Organized by AWS Student Builder Group, V.T. Patil Hall, Kolhapur</p>
+            <p className="text-[9px] text-aws-orange">📅 August 14, 2026 · 📍 V.T. Patil Hall, Kolhapur</p>
           </div>
         </div>
 
@@ -66,7 +66,7 @@ export const CodeOfConductPage = () => {
             </h2>
             <div className="font-mono text-xs text-white/60 space-y-4 leading-relaxed">
               <p>
-                AWS Student Community Day Dhule 2026 is North Maharashtra's first AWS-backed student cloud summit. We're building a space where students, developers, sponsors, and industry guests can learn, network, and build together — free from harassment and discrimination.
+                AWS Student Community Day Kolhapur 2026 is Western Maharashtra's first AWS-backed student cloud summit. We're building a space where students, developers, sponsors, and industry guests can learn, network, and build together — free from harassment and discrimination.
               </p>
               <p>
                 This Code of Conduct applies to <strong>everyone</strong> at the event: attendees, speakers, sponsors, exhibitors, volunteers, organizers, and staff. It covers all event spaces — the main venue, breakout/lab rooms, expo/sponsor area, washrooms, parking, and any official afterparty or meetup — as well as all associated online spaces (Discord, WhatsApp groups, Builder Center Certified Space, social media using event hashtags).
@@ -457,7 +457,7 @@ export const CodeOfConductPage = () => {
         {/* Footer Acknowledgement */}
         <div className="text-center mt-12 sm:mt-16 border-t border-white/5 pt-8 space-y-6">
           <div className="max-w-xl mx-auto font-mono text-[10px] text-white/40 leading-relaxed uppercase tracking-wider">
-            <p>12. By registering for or attending AWS Student Community Day Dhule 2026, you agree to abide by this Code of Conduct. We reserve the right to update this document; the latest version will always be available on the official event page.</p>
+            <p>12. By registering for or attending AWS Student Community Day Kolhapur 2026, you agree to abide by this Code of Conduct. We reserve the right to update this document; the latest version will always be available on the official event page.</p>
           </div>
           <div>
             <Link 

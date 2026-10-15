@@ -1,79 +1,84 @@
-import { useEffect } from 'react';
+import React from 'react';
 import { motion } from 'motion/react';
-import { Loader2, CreditCard } from 'lucide-react';
 import type { PassType } from '../hooks/usePassTypes';
+import UpiPaymentCard from '../../../components/UpiPaymentCard';
 
 interface Props {
   selectedPass: PassType;
+  attendeeName?: string;
   loading: boolean;
   error: string | null;
-  onInitiatePayment: () => void;
+  onPaymentSubmitted: (utrNumber: string, screenshotBase64?: string, screenshotName?: string) => void;
   onBack: () => void;
 }
 
-export function PaymentEmbed({ selectedPass, loading, error, onInitiatePayment, onBack }: Props) {
-  useEffect(() => {
-    // Auto-initiate payment on mount
-    onInitiatePayment();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+export function PaymentEmbed({
+  selectedPass,
+  attendeeName,
+  loading,
+  error,
+  onPaymentSubmitted,
+  onBack,
+}: Props) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="text-center"
+      className="space-y-6"
     >
-      {/* Pass summary */}
-      <div className="inline-flex items-center gap-3 mb-8 p-4 border border-white/10 bg-white/5">
-        <div
-          className="w-3 h-12 shrink-0"
-          style={{ backgroundColor: selectedPass.badge_color }}
-        />
-        <div className="text-left">
-          <p className="font-sans font-black italic text-lg uppercase tracking-tight text-white">
-            {selectedPass.name}
-          </p>
-          <p className="font-mono text-2xl text-aws-orange font-bold">₹{selectedPass.price}</p>
+      {/* Tier & Fee Banner */}
+      <div className="p-4 border border-white/10 bg-[#0d0d0d] flex items-center justify-between">
+        <div className="flex items-center gap-3 text-left">
+          <div className="w-2.5 h-10 shrink-0" style={{ backgroundColor: selectedPass.badge_color }} />
+          <div>
+            <span className="font-mono text-[9px] text-aws-orange uppercase tracking-widest block font-bold">
+              TICKET TIER SELECTED
+            </span>
+            <h3 className="font-sans font-black italic text-lg uppercase text-white tracking-tight">
+              {selectedPass.name}
+            </h3>
+            {attendeeName && (
+              <p className="font-mono text-[10px] text-white/50">Attendee: {attendeeName}</p>
+            )}
+          </div>
+        </div>
+        <div className="text-right">
+          <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">
+            TOTAL PAYABLE
+          </span>
+          <span className="font-mono text-2xl font-black text-emerald-400">
+            ₹{selectedPass.price}
+          </span>
         </div>
       </div>
 
       {error && (
-        <div className="p-3 mb-6 border border-f1-red/30 bg-f1-red/10 text-f1-red text-xs font-mono">
+        <div className="p-3 border border-f1-red/30 bg-f1-red/10 text-f1-red text-xs font-mono">
           {error}
         </div>
       )}
 
-      {loading && (
-        <div className="flex flex-col items-center gap-4 py-8">
-          <Loader2 size={32} className="animate-spin text-aws-orange" />
-          <p className="font-mono text-xs text-white/50 uppercase tracking-widest">
-            Connecting to payment gateway...
-          </p>
-        </div>
-      )}
+      {/* Proven UPI Payment Component from Commity Day */}
+      <UpiPaymentCard
+        amount={selectedPass.price}
+        payeeName="Bhushan Jadhav"
+        upiId="aj6244249-1@okaxis"
+        transactionNote="AWS SCD 2026 Ticket"
+        onPaymentDone={(utr, ssBase64, ssName) => {
+          onPaymentSubmitted(utr, ssBase64, ssName);
+        }}
+      />
 
-      {!loading && !error && (
-        <div className="flex flex-col items-center gap-4 py-8">
-          <CreditCard size={32} className="text-white/30" />
-          <p className="font-mono text-xs text-white/50">
-            Payment window should open automatically.
-          </p>
-          <button type="button"
-            onClick={onInitiatePayment}
-            className="px-6 py-2.5 bg-aws-orange text-black text-xs font-mono uppercase tracking-widest font-bold hover:bg-white transition-colors"
-          >
-            Retry Payment
-          </button>
-        </div>
-      )}
-
-      <button type="button"
-        onClick={onBack}
-        className="mt-4 text-white/30 hover:text-white/60 text-xs font-mono uppercase tracking-widest transition-colors"
-      >
-        ← Back
-      </button>
+      <div className="pt-2 text-center">
+        <button
+          type="button"
+          onClick={onBack}
+          className="text-white/40 hover:text-white text-xs font-mono uppercase tracking-widest transition-colors"
+        >
+          ← Back to Details
+        </button>
+      </div>
     </motion.div>
   );
 }

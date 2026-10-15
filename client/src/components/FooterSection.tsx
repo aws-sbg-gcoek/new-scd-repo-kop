@@ -43,10 +43,10 @@ export const FooterSection = () => {
       <div className="flex flex-col md:flex-row gap-8 sm:gap-12 justify-between">
          
          <div className="flex flex-col max-w-sm">
-           <div className="text-white font-sans font-black italic text-2xl sm:text-4xl mb-2 uppercase tracking-tighter">AWS SCD<br/>DHULE 2026.</div>
+           <div className="text-white font-sans font-black italic text-2xl sm:text-4xl mb-2 uppercase tracking-tighter">AWS SCD<br/>KOLHAPUR 2026.</div>
            <div className="text-white/60 text-xs sm:text-sm font-sans mb-6 sm:mb-8">Powering the next generation of cloud innovators. See You At The Starting Grid.</div>
-           <a href="mailto:info@aws-scd-dhule.tech" className="inline-flex max-w-max items-center font-mono text-[10px] sm:text-xs text-aws-orange hover:text-white transition-colors mb-2 uppercase tracking-widest gap-2 break-all">
-             <Mail size={14} className="shrink-0" /> info@aws-scd-dhule.tech
+           <a href="mailto:info@aws-scd-kolhapur.tech" className="inline-flex max-w-max items-center font-mono text-[10px] sm:text-xs text-aws-orange hover:text-white transition-colors mb-2 uppercase tracking-widest gap-2 break-all">
+             <Mail size={14} className="shrink-0" /> info@aws-scd-kolhapur.tech
            </a>
          </div>
 
@@ -63,9 +63,9 @@ export const FooterSection = () => {
             <div className="flex flex-col">
                <span className="font-sans font-black italic text-base sm:text-lg uppercase text-white mb-3 sm:mb-4">Social</span>
                <ul className="flex flex-col gap-3 font-mono text-[10px] sm:text-xs opacity-60 uppercase tracking-wider sm:tracking-widest">
-                  <li><a href="https://linkedin.com/company/aws-sbg-at-svkm-iot-dhule" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#0a66c2] transition-colors"><Linkedin size={14} /> LinkedIn</a></li>
-                  <li><a href="https://x.com/AWSCC_SVKMIOT" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors"><Twitter size={14} /> X / Twitter</a></li>
-                  <li><a href="https://www.instagram.com/awsbuildersdhule/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#e1306c] transition-colors"><Instagram size={14} /> Instagram</a></li>
+                  <li><a href="https://linkedin.com/company/aws-sbg-gcoek" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#0a66c2] transition-colors"><Linkedin size={14} /> LinkedIn</a></li>
+                  <li><a href="https://x.com/aws_gcoek" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors"><Twitter size={14} /> X / Twitter</a></li>
+                  <li><a href="https://www.instagram.com/aws_gcoek/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#e1306c] transition-colors"><Instagram size={14} /> Instagram</a></li>
                </ul>
             </div>
          </div>

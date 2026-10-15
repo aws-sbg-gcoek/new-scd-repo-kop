@@ -233,7 +233,7 @@ export const HeroSection = () => {
           >
             <span className="block mb-2">AWS Student</span>
             <span className="block mb-2">Community Day</span>
-            <span className="block text-aws-orange">Dhule 2026</span>
+            <span className="block text-aws-orange">Kolhapur 2026</span>
           </motion.h1>
 
           <motion.h2
@@ -242,7 +242,7 @@ export const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
             className="text-base sm:text-lg lg:text-xl font-bold tracking-tight uppercase text-white/90 border-l-4 border-aws-orange pl-4"
           >
-            The Largest Student-Led Cloud Event in the North       - Maharashtra Region
+            The Largest Student-Led Cloud Event in Western Maharashtra
           </motion.h2>
 
           <motion.p
@@ -251,7 +251,7 @@ export const HeroSection = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="max-w-2xl text-sm lg:text-base opacity-70 font-medium leading-relaxed"
           >
-             <i><b>AWS Student Community Day Dhule 2026</b></i> is the largest student-led cloud event in North Maharashtra, bringing together students, developers, AWS Heroes, Community Builders, UG Leaders, and industry experts under one roof. Supported by the global AWS community, the event offers cutting-edge cloud learning, inspiring technical sessions, and valuable networking opportunities to help the next generation of technology leaders learn, connect, and grow. 
+             <i><b>AWS Student Community Day Kolhapur 2026</b></i> is the largest student-led cloud event in Western Maharashtra, bringing together students, developers, AWS Heroes, Community Builders, UG Leaders, and industry experts under one roof. Supported by the global AWS community, the event offers cutting-edge cloud learning, inspiring technical sessions, and valuable networking opportunities to help the next generation of technology leaders learn, connect, and grow. 
 
           </motion.p>
 
@@ -287,7 +287,7 @@ export const HeroSection = () => {
                 <Calendar size={12} /> Date
               </span>
               <span className="font-sans text-lg sm:text-xl lg:text-2xl font-black text-white group-hover:text-f1-red transition-colors duration-300">
-                14 August 2026
+                01 November 2026
               </span>
             </div>
 
@@ -305,11 +305,11 @@ export const HeroSection = () => {
                 <MapPin size={12} /> Venue
               </span>
               <span className="font-sans text-lg sm:text-xl lg:text-2xl font-black text-white leading-tight group-hover:text-aws-orange transition-colors duration-300">
-                SVKM's IOT Campus, Dhule
+                V.T. Patil Hall, Kolhapur
               </span>
               <div className="flex gap-4 mt-2 font-mono text-[9px] uppercase tracking-widest relative z-20">
                 <a 
-                  href="https://maps.google.com/?q=SVKM's+Institute+of+Technology,+Dhule" 
+                  href="https://maps.google.com/?q=V.T.+Patil+Smruti+Bhavan,+Kolhapur" 
                   target="_blank" 
                   rel="noreferrer" 
                   className="text-white/40 hover:text-aws-orange transition-colors"

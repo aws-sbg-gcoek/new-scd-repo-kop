@@ -13,7 +13,7 @@ if (localStorage.getItem('scd_lite_mode') !== 'false') {
 }
 
 if (!/bot|googlebot|crawler|spider|robot|crawling|lighthouse/i.test(navigator.userAgent)) {
-  document.title = "AWS Student Community Day Dhule 2026";
+  document.title = "AWS Student Community Day Kolhapur 2026";
 }
 
 createRoot(document.getElementById('root')!).render(

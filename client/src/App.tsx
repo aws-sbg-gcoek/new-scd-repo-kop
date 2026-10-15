@@ -3,11 +3,11 @@ import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Suspense, lazy } from 'react';
 
-const TicketPage = lazy(() => import('./features/ticketing/pages/TicketPage').then(module => ({ default: module.TicketPage })));
 const TicketsPurchasePage = lazy(() => import('./features/ticketing/pages/TicketsPurchasePage').then(module => ({ default: module.TicketsPurchasePage })));
+const TicketPage = lazy(() => import('./features/ticketing/pages/TicketPage').then(module => ({ default: module.TicketPage })));
 const MyReferralsPage = lazy(() => import('./features/ticketing/pages/MyReferralsPage'));
-const ScannerPage = lazy(() => import('./features/scanner/pages/ScannerPage').then(module => ({ default: module.ScannerPage })));
-const AdminPage = lazy(() => import('./features/admin/pages/AdminPage').then(module => ({ default: module.AdminPage })));
+const TicketAdminPage = lazy(() => import('./pages/TicketAdminPage'));
+const TicketScanner = lazy(() => import('./components/TicketScanner'));
 const SpeakerPage = lazy(() => import('./features/speaker/pages/SpeakerPage').then(module => ({ default: module.SpeakerPage })));
 const VolunteerPage = lazy(() => import('./features/volunteer/pages/VolunteerPage').then(module => ({ default: module.VolunteerPage })));
 const MpdPage = lazy(() => import('./features/mpd/pages/MpdPage').then(module => ({ default: module.MpdPage })));
@@ -117,13 +117,14 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/sponsors" element={<SponsorPage />} />
         <Route path="/ticket" element={<TicketsPurchasePage />} />
+        <Route path="/register" element={<TicketsPurchasePage />} />
         <Route path="/ticket/:id" element={<TicketPage />} />
         <Route path="/refertowin" element={<MyReferralsPage />} />
         <Route path="/cfp" element={<SpeakerPage />} />
         <Route path="/volunteer" element={<VolunteerPage />} />
         <Route path="/womenintech" element={<MpdPage />} />
-        <Route path="/scanner" element={<ScannerPage />} />
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/scanner" element={<TicketScanner />} />
+        <Route path="/admin" element={<TicketAdminPage />} />
         <Route path="/status" element={<StatusPage />} />
         <Route path="/badge" element={<BadgePage />} />
         <Route path="/codeofconduct" element={<CodeOfConductPage />} />

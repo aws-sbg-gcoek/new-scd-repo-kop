@@ -8,7 +8,7 @@ export const BecomeSponsorSection = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText("info@aws-scd-dhule.tech");
+    navigator.clipboard.writeText("info@aws-scd-kolhapur.tech");
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
@@ -27,7 +27,7 @@ export const BecomeSponsorSection = () => {
           <div className="lg:col-span-7 flex flex-col gap-6">
             <SectionHeader
               title="Become a Sponsor"
-              subtitle="Partner with one of North Maharashtra's largest student-driven cloud conferences. Empower regional talent, showcase your products, and connect with emerging cloud builders."
+              subtitle="Partner with one of Western Maharashtra's largest student-driven cloud conferences. Empower regional talent, showcase your products, and connect with emerging cloud builders."
               sysId="05.SPN"
             />
             
@@ -41,7 +41,7 @@ export const BecomeSponsorSection = () => {
                 <div>
                   <h4 className="font-sans font-bold text-white text-sm uppercase tracking-wider mb-1">Empower Regional Talent</h4>
                   <p className="font-sans text-xs text-white/50 leading-relaxed">
-                    Enable hands-on workshops, cloud engineering learning paths, and active developer projects for students in North Maharashtra.
+                    Enable hands-on workshops, cloud engineering learning paths, and active developer projects for students in Western Maharashtra.
                   </p>
                 </div>
               </div>
@@ -112,7 +112,7 @@ export const BecomeSponsorSection = () => {
                 </div>
                 <div>
                   <span className="text-[9px] uppercase text-white/40 block tracking-wider mb-1">Venue</span>
-                  <span className="text-sm font-black text-white">SVKM's IOT, Dhule</span>
+                  <span className="text-sm font-black text-white">V.T. Patil Hall, Kolhapur</span>
                 </div>
               </div>
 
@@ -138,7 +138,7 @@ export const BecomeSponsorSection = () => {
                   className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 text-white font-mono text-[10px] uppercase tracking-widest hover:border-white/30 hover:bg-white/10 transition-colors"
                 >
                   <Mail size={12} className="text-aws-orange" />
-                  {copiedEmail ? "Copied to clipboard!" : "info@aws-scd-dhule.tech"}
+                  {copiedEmail ? "Copied to clipboard!" : "info@aws-scd-kolhapur.tech"}
                 </button>
               </div>
 

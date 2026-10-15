@@ -5,7 +5,7 @@ import { SectionHeader } from './LayoutElements';
 const schedule = [
   { time: "09:00 - 10:00", type: "Pit Lane", title: "Registration, Networking & Breakfast", detail: "Check-in, attendee networking, sponsor booths", isPit: true, flag: "red" },
   { time: "10:00 - 10:15", type: "Lights Out", title: "Opening Ceremony", detail: "Event inauguration", isPit: false, flag: "gray" },
-  { time: "10:15 - 10:25", type: "Formation Lap", title: "Welcome Note", detail: "AWS Student Builder Group Dhule", isPit: false, flag: "gray" },
+  { time: "10:15 - 10:25", type: "Formation Lap", title: "Welcome Note", detail: "AWS Student Builder Club GCOEK", isPit: false, flag: "gray" },
   { time: "10:25 - 10:45", type: "Green Flag", title: "Community Keynote", detail: "Community growth, opportunities, certifications", isPit: false, flag: "green" },
   { time: "10:45 - 11:30", type: "Green Flag", title: "Technical Keynote", detail: "AWS Cloud, Containers, Serverless, Databases, AI & Career Opportunities", isPit: false, flag: "green" },
   { time: "11:30 - 12:00", type: "Green Flag", title: "Tech Session 1", detail: "AWS Compute Services (EC2, Lambda, ECS, EKS)", isPit: false, flag: "green" },

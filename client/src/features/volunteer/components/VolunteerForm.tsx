@@ -173,7 +173,7 @@ export const VolunteerForm = () => {
       <div>
         <h4 className="text-lg font-black italic uppercase tracking-wider text-aws-orange border-b border-white/10 pb-2 mb-6">Academic Details</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <InputField label="College" name="college" placeholder="e.g. SVKM's IOT, Dhule" required register={register} errors={errors} />
+          <InputField label="College" name="college" placeholder="e.g. GCOEK / KIT, Karad" required register={register} errors={errors} />
           <InputField label="Branch" name="branch" placeholder="e.g. Computer Engineering" required register={register} errors={errors} />
           
           <SelectField 

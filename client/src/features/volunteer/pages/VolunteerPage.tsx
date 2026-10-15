@@ -14,7 +14,7 @@ export const VolunteerPage = () => {
     { title: "Direct Networking", desc: "Connect closely with AWS experts, industry speakers, and student community leaders.", icon: Heart },
     { title: "Event Meals & Refreshments", desc: "Stay fueled with complimentary lunch, high-tea, and refreshments throughout the event.", icon: Coffee },
     { title: "Hands-on Management", desc: "Work behind the scenes, learn logistics, crowd control, and event coordination.", icon: Briefcase },
-    { title: "Community Standing", desc: "Be recognized as a vital contributor to North Maharashtra's largest cloud conference.", icon: Zap }
+    { title: "Community Standing", desc: "Be recognized as a vital contributor to Western Maharashtra's largest cloud conference.", icon: Zap }
   ];
 
   return (
@@ -30,7 +30,7 @@ export const VolunteerPage = () => {
           <span className="font-mono text-xs uppercase tracking-widest">Back to Home</span>
         </Link>
         <div className="font-sans font-black italic text-xl uppercase tracking-tighter">
-          AWS SCD <span className="text-aws-orange">DHULE</span>
+          AWS SCD <span className="text-aws-orange">KOLHAPUR</span>
         </div>
       </nav>
 
@@ -45,7 +45,7 @@ export const VolunteerPage = () => {
             Volunteer <span className="text-aws-orange">Registration</span>
           </h1>
           <p className="text-white/60 text-lg max-w-2xl mx-auto">
-            Become a core driver behind AWS Student Community Day Dhule 2026. Apply to volunteer and help shape an incredible tech experience for over 1000+ builders.
+            Become a core driver behind AWS Student Community Day Kolhapur 2026. Apply to volunteer and help shape an incredible tech experience for over 1000+ builders.
           </p>
         </div>
 
@@ -74,7 +74,7 @@ export const VolunteerPage = () => {
               <ul className="space-y-3.5 text-white/70 text-xs sm:text-sm font-sans leading-relaxed">
                 <li className="flex items-start gap-2">
                   <span className="text-[#E10600] mt-1">•</span>
-                  <span>Volunteering for AWS Student Community Day Dhule 2026 <strong>does not include a complimentary event ticket</strong>.</span>
+                  <span>Volunteering for AWS Student Community Day Kolhapur 2026 <strong>does not include a complimentary event ticket</strong>.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#E10600] mt-1">•</span>

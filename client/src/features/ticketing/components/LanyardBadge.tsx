@@ -67,7 +67,7 @@ function createBadgeTexture(props: BadgeProps): THREE.CanvasTexture {
   ctx.fillText('AWS STUDENT COMMUNITY DAY', 120, 320);
   ctx.fillStyle = 'rgba(255,255,255,0.4)';
   ctx.font = '48px monospace';
-  ctx.fillText('DHULE 2026', 120, 390);
+  ctx.fillText('KOLHAPUR 2026', 120, 390);
 
   // Pass type badge
   const passText = props.pass_name.toUpperCase();
@@ -159,7 +159,7 @@ function createBadgeTexture(props: BadgeProps): THREE.CanvasTexture {
   ctx.font = '48px monospace';
   ctx.textAlign = 'left';
   ctx.fillText('14 August 2026', 120, h - 100);
-  ctx.fillText("SVKM's IoT, Dhule", 120, h - 40);
+  ctx.fillText("V.T. Patil Hall, Kolhapur", 120, h - 40);
   ctx.textAlign = 'right';
   ctx.fillStyle = 'rgba(255,255,255,0.3)';
   ctx.fillText('Show QR at gate', w - 120, h - 70);

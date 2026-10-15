@@ -39,7 +39,7 @@ export const BadgePage = () => {
         backgroundColor: "#050505",
       });
       const link = document.createElement("a");
-      link.download = "SCD_Dhule_2026_Badge.png";
+      link.download = "SCD_Kolhapur_2026_Badge.png";
       link.href = dataUrl;
       link.click();
     } catch (error) {
@@ -85,7 +85,7 @@ export const BadgePage = () => {
               </span>
             </h1>
             <p className="text-white/60 max-w-xl font-medium">
-              Generate your personalized AWS Student Community Day Dhule 2026
+              Generate your personalized AWS Student Community Day Kolhapur 2026
               digital badge. Download and share it on your socials to let
               everyone know!
             </p>
@@ -109,8 +109,8 @@ export const BadgePage = () => {
                 <div className="absolute top-0 left-0 w-full h-[70px] bg-[#050505] z-30 flex justify-between items-center px-5 border-b border-white/10 shadow-md">
                   {/* Left Logo */}
                   <img
-                    src="/scd-dhule-logo.png?v=4"
-                    alt="SCD Dhule"
+                    src="/scd-kolhapur-logo.png?v=4"
+                    alt="SCD Kolhapur"
                     className="h-20 sm:h-11 w-auto max-w-[220px] object-contain"
                     crossOrigin="anonymous"
                   />
@@ -315,7 +315,7 @@ export const BadgePage = () => {
                 </h3>
                 <p className="text-sm text-white/50 mb-3">
                   Post it on LinkedIn and tag{" "}
-                  <strong className="text-white">#SCDDhule2026</strong>.
+                  <strong className="text-white">#SCDKolhapur2026</strong>.
                 </p>
 
                 <button

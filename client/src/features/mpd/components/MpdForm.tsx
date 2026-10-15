@@ -310,7 +310,7 @@ export const MpdForm = () => {
           <div>
             <h4 className="text-lg font-black italic uppercase tracking-wider text-pink-500 border-b border-white/10 pb-2 mb-6 drop-shadow-[0_0_8px_rgba(236,72,153,0.2)]">Academic Details</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InputField label="College" name="college" placeholder="e.g. SVKM's IOT, Dhule" required register={register} errors={errors} />
+              <InputField label="College" name="college" placeholder="e.g. GCOEK / KIT / Shivaji University, Karad" required register={register} errors={errors} />
               <InputField label="Branch" name="branch" placeholder="e.g. Computer Engineering" required register={register} errors={errors} />
               
               <SelectField 
@@ -406,7 +406,7 @@ export const MpdForm = () => {
                     className="wit-input mt-1 accent-pink-500 bg-[#0a0a0a] border border-white/10 rounded w-4 h-4 focus:ring-0 focus:ring-offset-0 shrink-0" 
                   />
                   <span className="text-white/70 text-xs sm:text-sm font-sans select-none group-hover:text-white transition-colors leading-relaxed">
-                    I agree to abide by the Student Community Day Dhule 2026{' '}
+                    I agree to abide by the Student Community Day Kolhapur 2026{' '}
                     <Link to="/codeofconduct" target="_blank" className="text-pink-500 hover:text-pink-400 font-bold underline underline-offset-2 transition-colors">
                       Code of Conduct
                     </Link>. <span className="text-[#E10600] font-bold">*</span>

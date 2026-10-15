@@ -14,7 +14,7 @@ const navLinks = [
 ];
 
 function Countdown() {
-  const target = new Date('2026-08-14T09:00:00+05:30').getTime();
+  const target = new Date('2026-11-01T09:00:00+05:30').getTime();
   const [diff, setDiff] = useState(target - Date.now());
 
   useEffect(() => {
@@ -119,7 +119,7 @@ export const HeaderSection = () => {
           }}
         />
         <div className="flex items-center mt-4 sm:gap-4">
-          <img src="/scd-dhule-logo.png?v=4" alt="SCD Dhule" className="w-30 sm:w-40 lg:w-48 h-auto max-h-16 sm:max-h-20 lg:max-h-24 object-contain" fetchPriority="high" />
+          <img src="/scd-kolhapur-logo.png?v=4" alt="SCD Kolhapur" className="w-30 sm:w-40 lg:w-48 h-auto max-h-16 sm:max-h-20 lg:max-h-24 object-contain" fetchPriority="high" />
         </div>
 
         {/* Desktop nav */}

@@ -113,7 +113,7 @@ export const SpeakerForm = () => {
           <InputField label="Full Name" name="full_name" placeholder="e.g. Jane Doe" required register={register} errors={errors} />
           <InputField label="Email Address" name="email" type="email" placeholder="name@email.com" required register={register} errors={errors} />
           <InputField label="Phone Number" name="phone" placeholder="+91 99999 99999" required register={register} errors={errors} />
-          <InputField label="City" name="city" placeholder="Dhule, Mumbai, etc." required register={register} errors={errors} />
+          <InputField label="City" name="city" placeholder="Kolhapur, Pune, Mumbai, etc." required register={register} errors={errors} />
           <InputField label="Organization" name="organization" placeholder="e.g. Acme Corp" required register={register} errors={errors} />
           <InputField label="Designation" name="designation" placeholder="e.g. Student, SDE, Founder" required register={register} errors={errors} />
           <InputField label="LinkedIn URL" name="linkedin_url" placeholder="https://linkedin.com/in/username" required register={register} errors={errors} />

@@ -116,7 +116,7 @@ export default function MyReferralsPage() {
     setTimeout(() => setCopiedCode(false), 2000);
   };
 
-  const shareText = `Hey! I just registered for AWS Student Community Day Dhule 2026. Use my referral link to get your pass and let's meet on the grid! 🏁 ${referralUrl}`;
+  const shareText = `Hey! I just registered for AWS Student Community Day Kolhapur 2026. Use my referral link to get your pass and let's meet on the grid! 🏁 ${referralUrl}`;
 
   const shareWhatsApp = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
   const shareTwitter = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
@@ -353,7 +353,7 @@ export default function MyReferralsPage() {
 
         {/* Live Broadcast HUD Footer */}
         <div className="px-4 py-3 border-t border-white/5 bg-[#08080c]/50 flex items-center justify-between font-mono text-[9px] text-white/50 uppercase tracking-widest font-semibold">
-          <span>GP: DHULE 2026</span>
+          <span>GP: KOLHAPUR 2026</span>
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-[#E10600] animate-pulse" />
             <span>LIVE</span>
@@ -723,7 +723,7 @@ export default function MyReferralsPage() {
         {/* Footer */}
         <footer className="border-t border-white/5 bg-[#0a0a0a]/60 py-6 text-center relative z-10 mt-auto flex flex-col items-center gap-2">
           <p className="font-mono text-[9px] text-white/30 uppercase tracking-widest">
-            AWS Student Community Day Dhule 2026 • Race to the Cloud
+            AWS Student Community Day Kolhapur 2026 • Race to the Cloud
           </p>
           <Link 
             to="/codeofconduct" 

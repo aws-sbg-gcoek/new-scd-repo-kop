@@ -1,487 +1,452 @@
-/* eslint-disable react-doctor/no-initialize-state, react-doctor/prefer-useReducer, react-doctor/no-event-handler, react-doctor/rerender-state-only-in-handlers, react-doctor/no-derived-state */
-/* eslint-disable react-doctor/label-has-associated-control, react-doctor/control-has-associated-label */
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { motion } from 'motion/react';
-import { z } from 'zod';
-import { Loader2, AlertCircle, CheckCircle2, UserPlus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Upload, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
 import type { PassType } from '../hooks/usePassTypes';
-import type { AttendeeData } from '../hooks/useRegistration';
-import { api } from '../../../lib/api';
+import { compressImageToBase64 } from '../../../utils/registrationStore';
 
-const attendeeSchema = z.object({
-  full_name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.email('Please enter a valid email'),
-  phone: z.string().regex(/^[0-9]{10}$/, 'Must be a valid 10-digit number'),
-  role: z.enum(['student', 'professional'], { message: 'Please select a role' }),
-  organization: z.string().min(2, 'Organization is required'),
-});
+export interface RegistrationFormData {
+  fullName: string;
+  email: string;
+  phone: string;
+  district: string;
+  collegeName: string;
+  prnRollNo: string;
+  degree: string;
+  branch: string;
+  academicYear: string;
+  idProofName?: string;
+  idProofBase64?: string;
+}
 
 interface Props {
   selectedPass: PassType;
-  initialAttendees?: AttendeeData[];
-  verifiedEmail?: string;
+  initialData?: Partial<RegistrationFormData>;
   loading: boolean;
   error: string | null;
-  onSubmit: (primaryEmail: string, attendees: AttendeeData[]) => void;
+  onSubmit: (data: RegistrationFormData) => void;
   onBack: () => void;
 }
 
-export function RegistrationForm({ selectedPass, initialAttendees, verifiedEmail, loading, error, onSubmit, onBack }: Props) {
-  const [attendees, setAttendees] = useState<AttendeeData[]>(
-    initialAttendees && initialAttendees.length > 0 
-      ? initialAttendees 
-      : [{
-          full_name: '',
-          email: '',
-          phone: '',
-          role: 'student',
-          organization: '',
-        }]
-  );
-  const [fieldErrors, setFieldErrors] = useState<Record<number, Record<string, string>>>({});
-  
-  // OTP State
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpVerified, setOtpVerified] = useState(() => {
-    return !!verifiedEmail && initialAttendees?.[0]?.email === verifiedEmail;
+const DISTRICT_COLLEGES: Record<string, string[]> = {
+  Kolhapur: [
+    'Government College of Engineering Karad (GCOEK)',
+    'Shivaji University (DOT), Kolhapur',
+    'D.Y. Patil College of Engineering and Technology, Kolhapur',
+    "KIT's College of Engineering (Autonomous), Kolhapur",
+    "DKTE Society's Textile and Engineering Institute, Ichalkaranji",
+    'Sanjeevan Engineering and Technology Institute, Panhala',
+    'Bharati Vidyapeeth College of Engineering, Kolhapur',
+    'Government Polytechnic, Kolhapur',
+    'Sharad Institute of Technology College of Engineering, Yadrav',
+    'Tatyasaheb Kore Institute of Engineering & Technology, Warananagar',
+    'Other / College not listed',
+  ],
+  Pune: [
+    'COEP Technological University, Pune',
+    'Pune Institute of Computer Technology (PICT)',
+    'Vishwakarma Institute of Technology (VIT)',
+    'MIT World Peace University (MIT-WPU)',
+    'Cummins College of Engineering for Women',
+    'Army Institute of Technology (AIT)',
+    'Pimpri Chinchwad College of Engineering (PCCOE)',
+    'Sinhgad College of Engineering (SCOE)',
+    'Other / College not listed',
+  ],
+  Mumbai: [
+    'Veermata Jijabai Technological Institute (VJTI)',
+    'Sardar Patel Institute of Technology (SPIT)',
+    'K. J. Somaiya College of Engineering',
+    'Thadomal Shahani Engineering College (TSEC)',
+    'Dwarkadas J. Sanghvi College of Engineering (DJSCE)',
+    'Father Conceicao Rodrigues College of Engineering (FCRCE)',
+    'Other / College not listed',
+  ],
+  Sangli: [
+    'Walchand College of Engineering, Sangli',
+    'Padmabhooshan Vasantraodada Patil Institute of Technology (PVPIT)',
+    'Nanasaheb Mahadik College of Engineering, Peth',
+    'Other / College not listed',
+  ],
+  Satara: [
+    'Government College of Engineering, Karad',
+    'Karmaveer Bhaurao Patil College of Engineering, Satara',
+    'Rayat Shikshan Sanstha Institutes',
+    'Other / College not listed',
+  ],
+  Solapur: [
+    'Walchand Institute of Technology (WIT), Solapur',
+    'N.K. Orchid College of Engineering and Technology',
+    'Brahmdevdada Mane Institute of Technology',
+    'Other / College not listed',
+  ],
+  Other: [
+    'Other Maharashtra Engineering College',
+    'Other University / Institute outside Maharashtra',
+  ],
+};
+
+const DEGREES = [
+  'B.Tech / B.E.',
+  'BCA (Bachelor of Computer Applications)',
+  'MCA (Master of Computer Applications)',
+  'M.Tech / M.E.',
+  'B.Sc (Computer Science / IT)',
+  'M.Sc (Computer Science / IT)',
+  'Diploma in Engineering',
+  'Other Degree / Program',
+];
+
+const BRANCHES = [
+  'Computer Science & Engineering (CSE)',
+  'Artificial Intelligence & Data Science (AI & DS)',
+  'Information Technology (IT)',
+  'Computer Science & Business Systems (CSBS)',
+  'Electronics & Telecommunication (E&TC)',
+  'Electrical Engineering',
+  'Mechanical Engineering',
+  'Civil Engineering',
+  'Robotics & Automation',
+  'Other Specialization',
+];
+
+const ACADEMIC_YEARS = ['1st Yr', '2nd Yr', '3rd Yr', '4th Yr', 'PG'];
+
+export function RegistrationForm({ selectedPass, initialData, loading, error, onSubmit, onBack }: Props) {
+  const [formData, setFormData] = useState<RegistrationFormData>({
+    fullName: initialData?.fullName || '',
+    email: initialData?.email || '',
+    phone: initialData?.phone || '',
+    district: initialData?.district || 'Kolhapur',
+    collegeName: initialData?.collegeName || DISTRICT_COLLEGES.Kolhapur[0],
+    prnRollNo: initialData?.prnRollNo || '',
+    degree: initialData?.degree || DEGREES[0],
+    branch: initialData?.branch || BRANCHES[0],
+    academicYear: initialData?.academicYear || '3rd Yr',
+    idProofName: initialData?.idProofName || '',
+    idProofBase64: initialData?.idProofBase64 || '',
   });
-  const [otp, setOtp] = useState('');
-  const [otpLoading, setOtpLoading] = useState(false);
-  const [otpError, setOtpError] = useState<string | null>(null);
-  const [cooldown, setCooldown] = useState(0);
 
-  useEffect(() => {
-    if (cooldown <= 0) return;
-    const timer = setInterval(() => {
-      setCooldown(prev => prev - 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [cooldown]);
+  const [customCollege, setCustomCollege] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [uploadingId, setUploadingId] = useState(false);
 
-  // Realtime email validation state
-  const [emailValidationStatus, setEmailValidationStatus] = useState<Record<string, 'checking' | 'registered' | 'available' | 'invalid'>>({});
-
-  const primaryEmail = attendees[0]?.email;
-
-  const checkedEmailsRef = useRef<Set<string> | null>(null);
-  if (!checkedEmailsRef.current) {
-    checkedEmailsRef.current = new Set();
-  }
-  const checkedEmails = checkedEmailsRef.current;
-
-  // Real-time email debounced checking
-  useEffect(() => {
-    const timeoutIds: NodeJS.Timeout[] = [];
-
-    attendees.forEach((att) => {
-      const email = att.email;
-      if (!email) return;
-
-      const isValidFormat = z.email().safeParse(email).success;
-      
-      if (!isValidFormat) {
-        setEmailValidationStatus(prev => {
-          if (prev[email] === 'invalid') return prev;
-          return { ...prev, [email]: 'invalid' };
-        });
-        return;
-      }
-
-      // If we already checked this exact email successfully, don't check again
-      if (checkedEmails.has(email)) {
-        return;
-      }
-
-      setEmailValidationStatus(prev => {
-        if (prev[email] === 'checking') return prev;
-        return { ...prev, [email]: 'checking' };
-      });
-
-      const tid = setTimeout(async () => {
-        try {
-          const res = await api.get(`/api/auth/check-email?email=${encodeURIComponent(email)}`);
-          checkedEmails.add(email);
-          setEmailValidationStatus(prev => ({ 
-            ...prev, 
-            [email]: res.data.registered ? 'registered' : 'available' 
-          }));
-        } catch (err) {
-          setEmailValidationStatus(prev => {
-            const next = { ...prev };
-            delete next[email];
-            return next;
-          });
-        }
-      }, 500); // 500ms debounce
-      timeoutIds.push(tid);
-    });
-
-    return () => timeoutIds.forEach(clearTimeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps, react-doctor/exhaustive-deps
-  }, [attendees]);
-
-  const updateField = (index: number, field: keyof AttendeeData, value: string) => {
-    setAttendees(prev => {
-      const next = [...prev];
-      next[index] = { ...next[index], [field]: value };
-      return next;
-    });
-    if (fieldErrors[index]?.[field]) {
-      setFieldErrors(e => {
-        const next = { ...e };
-        if (next[index]) {
-          const nextIndex = { ...next[index] };
-          delete nextIndex[field];
-          next[index] = nextIndex;
-        }
-        return next;
-      });
-    }
-    // Reset OTP if primary email changes
-    if (index === 0 && field === 'email') {
-      setOtpSent(false);
-      setOtpVerified(false);
-      setOtpError(null);
-    }
+  const handleDistrictChange = (district: string) => {
+    const colleges = DISTRICT_COLLEGES[district] || DISTRICT_COLLEGES.Other;
+    setFormData((prev) => ({
+      ...prev,
+      district,
+      collegeName: colleges[0],
+    }));
   };
 
-  const addMember = () => {
-    if (attendees.length >= 10) return;
-    setAttendees(prev => [...prev, {
-      full_name: '',
-      email: '',
-      phone: '',
-      role: 'student',
-      organization: '',
-    }]);
-  };
+  const handleIdProofUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  const removeMember = (indexToRemove: number) => {
-    if (indexToRemove === 0) return; // Cannot remove primary registrant
-    setAttendees(prev => prev.filter((_, i) => i !== indexToRemove));
-    // Clear errors for this member and shift subsequent errors
-    setFieldErrors(e => {
-      const next: Record<number, Record<string, string>> = {};
-      Object.keys(e).forEach(key => {
-        const k = parseInt(key);
-        if (k < indexToRemove) next[k] = e[k];
-        if (k > indexToRemove) next[k - 1] = e[k];
-      });
-      return next;
-    });
-  };
-
-  const handleSendOtp = async () => {
-    if (!primaryEmail || !z.email().safeParse(primaryEmail).success) {
-      setOtpError('Please enter a valid primary email first.');
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file (PNG, JPG, JPEG)');
       return;
     }
-    if (cooldown > 0) return;
-    setOtpLoading(true);
-    setOtpError(null);
-    try {
-      await api.post('/api/auth/send-otp', { email: primaryEmail });
-      setOtpSent(true);
-      setCooldown(60);
-    } catch (err: any) {
-      setOtpError(err.response?.data?.message || 'Failed to send OTP.');
-    } finally {
-      setOtpLoading(false);
-    }
-  };
 
-  const handleVerifyOtp = async () => {
-    if (otp.length !== 6) {
-      setOtpError('OTP must be 6 digits.');
+    if (file.size > 8 * 1024 * 1024) {
+      alert('Image size exceeds 8MB. Please select a smaller photo.');
       return;
     }
-    setOtpLoading(true);
-    setOtpError(null);
+
+    setUploadingId(true);
     try {
-      await api.post('/api/auth/verify-otp', { email: primaryEmail, otp });
-      setOtpVerified(true);
-      setOtpError(null);
-    } catch (err: any) {
-      setOtpError(err.response?.data?.message || 'Invalid OTP.');
+      const base64 = await compressImageToBase64(file, 800, 800, 0.7);
+      setFormData((prev) => ({
+        ...prev,
+        idProofName: file.name,
+        idProofBase64: base64,
+      }));
+    } catch (err) {
+      console.error(err);
+      alert('Failed to process image');
     } finally {
-      setOtpLoading(false);
+      setUploadingId(false);
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const errors: Record<string, string> = {};
 
-    if (!otpVerified) {
-      setOtpError('Please verify the primary email before continuing.');
-      return;
+    if (!formData.fullName.trim()) errors.fullName = 'Full Name is required';
+    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Valid Email Address is required';
+    }
+    const cleanPhone = formData.phone.replace(/\D/g, '');
+    if (!cleanPhone || cleanPhone.length < 10) {
+      errors.phone = 'Valid 10-digit mobile number is required';
+    }
+    if (!formData.prnRollNo.trim()) {
+      errors.prnRollNo = 'College PRN / Roll Number is required';
+    }
+    if (formData.collegeName.includes('Other') && !customCollege.trim()) {
+      errors.collegeName = 'Please enter your college name';
     }
 
-    const isAnyEmailRegistered = attendees.some(att => emailValidationStatus[att.email] === 'registered');
-    if (isAnyEmailRegistered) {
-      setOtpError('One or more emails are already registered. Please use different emails.');
-      return;
-    }
-
-    const isAnyEmailChecking = attendees.some(att => emailValidationStatus[att.email] === 'checking');
-    if (isAnyEmailChecking) {
-      setOtpError('Please wait while we validate the emails.');
-      return;
-    }
-
-    // Prevent duplicate emails across attendees in a group
-    if (attendees.length > 1) {
-      const emailSet = new Set<string>();
-      for (const att of attendees) {
-        const lower = att.email.toLowerCase();
-        if (emailSet.has(lower)) {
-          setOtpError('Each attendee must have a unique email address. Please remove duplicates.');
-          return;
-        }
-        emailSet.add(lower);
-      }
-    }
-
-    const errors: Record<number, Record<string, string>> = {};
-    let hasError = false;
-
-    attendees.forEach((att, i) => {
-      const result = attendeeSchema.safeParse(att);
-      if (!result.success) {
-        hasError = true;
-        errors[i] = {};
-        result.error.issues.forEach((issue) => {
-          errors[i][issue.path[0] as string] = issue.message;
-        });
-      }
-    });
-
-    if (hasError) {
+    if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
     }
 
-    setFieldErrors({});
-    onSubmit(primaryEmail, attendees);
+    const finalCollege = formData.collegeName.includes('Other') ? customCollege.trim() : formData.collegeName;
+    onSubmit({
+      ...formData,
+      collegeName: finalCollege,
+      phone: cleanPhone.slice(-10),
+    });
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className="flex items-center justify-between mb-6 p-3 border border-white/10 bg-white/5">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+      {/* Pass summary top pill */}
+      <div className="flex items-center justify-between p-3.5 mb-6 border border-white/10 bg-white/5">
         <div className="flex items-center gap-3">
-          <div className="w-3 h-8 shrink-0" style={{ backgroundColor: selectedPass.badge_color }} />
+          <div className="w-2.5 h-8 shrink-0" style={{ backgroundColor: selectedPass.badge_color }} />
           <div>
             <p className="font-sans font-black italic text-sm uppercase tracking-tight text-white">
               {selectedPass.name}
             </p>
-            <p className="font-mono text-xs text-white/40">Selected Passes: {attendees.length}</p>
+            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">
+              Selected Tier
+            </p>
           </div>
         </div>
+        <span className="font-mono text-lg text-aws-orange font-bold">₹{selectedPass.price}</span>
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 p-3 mb-4 border border-f1-red/30 bg-f1-red/10 text-f1-red text-xs font-mono">
-          <AlertCircle size={14} />
-          {error}
+        <div className="p-3 mb-6 border border-f1-red/30 bg-f1-red/10 text-f1-red text-xs font-mono flex items-center gap-2">
+          <AlertCircle size={14} /> {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-8">
-        {attendees.map((attendee, index) => (
-          <div key={index} className="space-y-4 border border-white/10 p-3 sm:p-5 bg-[#0a0a0a] relative">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-sans font-bold text-aws-orange uppercase text-sm">
-                {index === 0 ? 'Primary Registrant (Attendee 1)' : `Attendee ${index + 1}`}
-              </h3>
-              {index > 0 && (
-                <button
-                  type="button"
-                  onClick={() => removeMember(index)}
-                  className="text-white/30 hover:text-f1-red transition-colors flex items-center gap-1 text-[10px] font-mono uppercase"
-                >
-                  <Trash2 size={12} /> Remove
-                </button>
-              )}
-            </div>
+      <form onSubmit={handleSubmit} className="space-y-4 text-left">
+        {/* Full Name */}
+        <div>
+          <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5 font-bold">
+            Full Name <span className="text-red-400">*</span>
+          </label>
+          <input
+            type="text"
+            required
+            value={formData.fullName}
+            onChange={(e) => {
+              setFormData({ ...formData, fullName: e.target.value });
+              if (fieldErrors.fullName) setFieldErrors({ ...fieldErrors, fullName: '' });
+            }}
+            placeholder="e.g. Rohan Sharma"
+            className="w-full bg-[#111] border border-white/15 px-4 py-2.5 text-xs sm:text-sm text-white focus:border-aws-orange focus:outline-none transition-colors"
+          />
+          {fieldErrors.fullName && <p className="text-f1-red text-[10px] font-mono mt-1">{fieldErrors.fullName}</p>}
+        </div>
 
-            {/* Email (with inline OTP for primary) */}
-            <div>
-              <label className="block font-mono text-[10px] uppercase tracking-widest text-white/40 mb-1.5">
-                Email {index === 0 ? '*' : ''}
-              </label>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <input
-                  type="email"
-                  value={attendee.email}
-                  onChange={(e) => updateField(index, 'email', e.target.value)}
-                  disabled={index === 0 && otpVerified}
-                  className="flex-1 min-w-0 w-full bg-[#111] border border-white/10 px-4 py-2 text-sm text-white focus:border-aws-orange focus:outline-none"
-                  placeholder="you@example.com"
-                />
-                {index === 0 && !otpVerified && (
-                  <button
-                    type="button"
-                    onClick={handleSendOtp}
-                    disabled={otpLoading || cooldown > 0 || !attendee.email || emailValidationStatus[attendee.email] === 'registered' || emailValidationStatus[attendee.email] === 'checking'}
-                    className="w-full sm:w-auto shrink-0 px-4 py-2 bg-aws-orange hover:bg-white text-black font-bold text-xs font-mono uppercase transition-colors whitespace-nowrap disabled:opacity-50"
-                  >
-                    {otpLoading ? (
-                      <Loader2 size={14} className="animate-spin" />
-                    ) : cooldown > 0 ? (
-                      `Resend (${cooldown}s)`
-                    ) : otpSent ? (
-                      'Resend'
-                    ) : (
-                      'Verify'
-                    )}
-                  </button>
-                )}
-                {index === 0 && otpVerified && (
-                  <div className="px-4 py-2 bg-emerald-500/20 text-emerald-400 flex items-center gap-2 text-xs font-mono uppercase border border-emerald-500/30">
-                    <CheckCircle2 size={14} /> Verified
-                  </div>
-                )}
-              </div>
-              
-              {/* Real-time Validation UI */}
-              {attendee.email && emailValidationStatus[attendee.email] === 'checking' && (
-                <p className="text-white/40 text-[10px] font-mono mt-1 flex items-center gap-1">
-                  <Loader2 size={10} className="animate-spin" /> Checking availability...
-                </p>
-              )}
-              {attendee.email && emailValidationStatus[attendee.email] === 'registered' && (
-                <p className="text-f1-red text-[10px] font-mono mt-1 flex items-center gap-1">
-                  <AlertCircle size={10} /> This email is already registered.
-                </p>
-              )}
-              {attendee.email && emailValidationStatus[attendee.email] === 'available' && (
-                <p className="text-emerald-400 text-[10px] font-mono mt-1 flex items-center gap-1">
-                  <CheckCircle2 size={10} /> Email is available.
-                </p>
-              )}
-
-              {fieldErrors[index]?.email && emailValidationStatus[attendee.email] !== 'registered' && (
-                <p className="text-f1-red text-[10px] font-mono mt-1">{fieldErrors[index].email}</p>
-              )}
-
-              {index === 0 && otpError && (
-                <p className="text-f1-red text-[10px] font-mono mt-1 flex items-center gap-1">
-                  <AlertCircle size={10} /> {otpError}
-                </p>
-              )}
-            </div>
-
-            {/* OTP Field (only shows for primary when sent and not verified) */}
-            {index === 0 && otpSent && !otpVerified && (
-              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="pt-2">
-                <label className="block font-mono text-[10px] uppercase tracking-widest text-aws-orange mb-1.5">
-                  Enter 6-digit OTP
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    maxLength={6}
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                    className="flex-1 bg-[#111] border border-aws-orange/50 px-4 py-2 text-sm text-white focus:border-aws-orange focus:outline-none tracking-[0.5em] font-mono"
-                    placeholder="------"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleVerifyOtp}
-                    disabled={otpLoading || otp.length !== 6}
-                    className="px-4 py-2 bg-aws-orange text-black font-bold text-xs font-mono uppercase hover:bg-white transition-colors"
-                  >
-                    {otpLoading ? <Loader2 size={14} className="animate-spin" /> : 'Confirm'}
-                  </button>
-                </div>
-                <p className="text-white/40 text-[10px] font-mono mt-2">We sent a verification code to {attendee.email}. Please check your inbox or spam folder.</p>
-              </motion.div>
-            )}
-
-            {/* Full Name */}
-            <div>
-              <label className="block font-mono text-[10px] uppercase tracking-widest text-white/40 mb-1.5">
-                Full Name *
-              </label>
-              <input
-                type="text"
-                value={attendee.full_name}
-                onChange={(e) => updateField(index, 'full_name', e.target.value)}
-                className="w-full min-w-0 bg-[#111] border border-white/10 px-4 py-2 text-sm text-white focus:border-aws-orange focus:outline-none"
-              />
-              {fieldErrors[index]?.full_name && (
-                <p className="text-f1-red text-[10px] font-mono mt-1">{fieldErrors[index].full_name}</p>
-              )}
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Phone */}
-              <div>
-                <label className="block font-mono text-[10px] uppercase tracking-widest text-white/40 mb-1.5">
-                  Phone *
-                </label>
-                <input
-                  type="tel"
-                  value={attendee.phone}
-                  onChange={(e) => updateField(index, 'phone', e.target.value)}
-                  className="w-full min-w-0 bg-[#111] border border-white/10 px-4 py-2 text-sm text-white focus:border-aws-orange focus:outline-none"
-                  maxLength={10}
-                />
-                {fieldErrors[index]?.phone && (
-                  <p className="text-f1-red text-[10px] font-mono mt-1">{fieldErrors[index].phone}</p>
-                )}
-              </div>
-
-              {/* Role */}
-              <div>
-                <label className="block font-mono text-[10px] uppercase tracking-widest text-white/40 mb-1.5">
-                  Role *
-                </label>
-                <select
-                  value={attendee.role}
-                  onChange={(e) => updateField(index, 'role', e.target.value)}
-                  className="w-full min-w-0 bg-[#111] border border-white/10 px-4 py-2 text-sm text-white focus:border-aws-orange focus:outline-none"
-                >
-                  <option value="student">Student</option>
-                  <option value="professional">Professional</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Organization */}
-            <div>
-              <label className="block font-mono text-[10px] uppercase tracking-widest text-white/40 mb-1.5">
-                College / Organization *
-              </label>
-              <input
-                type="text"
-                value={attendee.organization}
-                onChange={(e) => updateField(index, 'organization', e.target.value)}
-                className="w-full min-w-0 bg-[#111] border border-white/10 px-4 py-2 text-sm text-white focus:border-aws-orange focus:outline-none"
-              />
-              {fieldErrors[index]?.organization && (
-                <p className="text-f1-red text-[10px] font-mono mt-1">{fieldErrors[index].organization}</p>
-              )}
-            </div>
+        {/* Email & Phone */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5 font-bold">
+              Email Address <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="email"
+              required
+              value={formData.email}
+              onChange={(e) => {
+                setFormData({ ...formData, email: e.target.value });
+                if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: '' });
+              }}
+              placeholder="e.g. rohan@example.com"
+              className="w-full bg-[#111] border border-white/15 px-4 py-2.5 text-xs sm:text-sm text-white focus:border-aws-orange focus:outline-none transition-colors"
+            />
+            {fieldErrors.email && <p className="text-f1-red text-[10px] font-mono mt-1">{fieldErrors.email}</p>}
+            <p className="text-[9px] font-mono text-white/30 mt-1">Ticket pass will be delivered to this email.</p>
           </div>
-        ))}
 
-        {attendees.length < 10 && (
-          <button
-            type="button"
-            onClick={addMember}
-            className="w-full py-4 border border-dashed border-white/20 text-white/50 hover:text-white hover:border-white/40 hover:bg-white/5 transition-all flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest"
-          >
-            <UserPlus size={16} /> Add another member
-          </button>
+          <div>
+            <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5 font-bold">
+              Mobile Number <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="tel"
+              required
+              maxLength={10}
+              value={formData.phone}
+              onChange={(e) => {
+                const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+                setFormData({ ...formData, phone: digits });
+                if (fieldErrors.phone) setFieldErrors({ ...fieldErrors, phone: '' });
+              }}
+              placeholder="e.g. 9823456781"
+              className="w-full bg-[#111] border border-white/15 px-4 py-2.5 text-xs sm:text-sm text-white focus:border-aws-orange focus:outline-none transition-colors font-mono"
+            />
+            {fieldErrors.phone && <p className="text-f1-red text-[10px] font-mono mt-1">{fieldErrors.phone}</p>}
+          </div>
+        </div>
+
+        {/* District & College */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5 font-bold">
+              District / Region <span className="text-red-400">*</span>
+            </label>
+            <select
+              value={formData.district}
+              onChange={(e) => handleDistrictChange(e.target.value)}
+              className="w-full bg-[#111] border border-white/15 px-4 py-2.5 text-xs sm:text-sm text-white focus:border-aws-orange focus:outline-none transition-colors"
+            >
+              {Object.keys(DISTRICT_COLLEGES).map((d) => (
+                <option key={d} value={d} className="bg-[#111] text-white">
+                  {d}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5 font-bold">
+              College / Institution <span className="text-red-400">*</span>
+            </label>
+            <select
+              value={formData.collegeName}
+              onChange={(e) => setFormData({ ...formData, collegeName: e.target.value })}
+              className="w-full bg-[#111] border border-white/15 px-4 py-2.5 text-xs sm:text-sm text-white focus:border-aws-orange focus:outline-none transition-colors truncate"
+            >
+              {(DISTRICT_COLLEGES[formData.district] || DISTRICT_COLLEGES.Other).map((c) => (
+                <option key={c} value={c} className="bg-[#111] text-white">
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {formData.collegeName.includes('Other') && (
+          <div>
+            <label className="block font-mono text-[10px] uppercase tracking-widest text-aws-orange mb-1.5 font-bold">
+              Specify College Name <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="text"
+              required
+              value={customCollege}
+              onChange={(e) => setCustomCollege(e.target.value)}
+              placeholder="Enter your college / institute full name"
+              className="w-full bg-[#111] border border-aws-orange/40 px-4 py-2.5 text-xs sm:text-sm text-white focus:border-aws-orange focus:outline-none transition-colors"
+            />
+          </div>
         )}
 
-        {/* Buttons */}
-        <div className="flex gap-3 pt-4">
+        {/* PRN, Degree, Branch & Year */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5 font-bold">
+              PRN / Roll Number <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="text"
+              required
+              value={formData.prnRollNo}
+              onChange={(e) => {
+                setFormData({ ...formData, prnRollNo: e.target.value });
+                if (fieldErrors.prnRollNo) setFieldErrors({ ...fieldErrors, prnRollNo: '' });
+              }}
+              placeholder="e.g. 2201045"
+              className="w-full bg-[#111] border border-white/15 px-4 py-2.5 text-xs sm:text-sm text-white focus:border-aws-orange focus:outline-none transition-colors font-mono"
+            />
+            {fieldErrors.prnRollNo && <p className="text-f1-red text-[10px] font-mono mt-1">{fieldErrors.prnRollNo}</p>}
+          </div>
+
+          <div>
+            <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5 font-bold">
+              Degree / Program <span className="text-red-400">*</span>
+            </label>
+            <select
+              value={formData.degree}
+              onChange={(e) => setFormData({ ...formData, degree: e.target.value })}
+              className="w-full bg-[#111] border border-white/15 px-4 py-2.5 text-xs sm:text-sm text-white focus:border-aws-orange focus:outline-none transition-colors"
+            >
+              {DEGREES.map((d) => (
+                <option key={d} value={d} className="bg-[#111] text-white">
+                  {d}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5 font-bold">
+              Branch / Specialization <span className="text-red-400">*</span>
+            </label>
+            <select
+              value={formData.branch}
+              onChange={(e) => setFormData({ ...formData, branch: e.target.value })}
+              className="w-full bg-[#111] border border-white/15 px-4 py-2.5 text-xs sm:text-sm text-white focus:border-aws-orange focus:outline-none transition-colors truncate"
+            >
+              {BRANCHES.map((b) => (
+                <option key={b} value={b} className="bg-[#111] text-white">
+                  {b}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5 font-bold">
+              Academic Year <span className="text-red-400">*</span>
+            </label>
+            <select
+              value={formData.academicYear}
+              onChange={(e) => setFormData({ ...formData, academicYear: e.target.value })}
+              className="w-full bg-[#111] border border-white/15 px-4 py-2.5 text-xs sm:text-sm text-white focus:border-aws-orange focus:outline-none transition-colors"
+            >
+              {ACADEMIC_YEARS.map((y) => (
+                <option key={y} value={y} className="bg-[#111] text-white">
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Student ID Proof Upload */}
+        <div className="pt-2">
+          <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5 font-bold">
+            Student College ID Proof (Recommended)
+          </label>
+          <div className="border border-dashed border-white/20 p-4 text-center hover:border-aws-orange/50 transition-colors bg-white/[0.02]">
+            <input
+              type="file"
+              id="studentIdUpload"
+              accept="image/*"
+              className="hidden"
+              onChange={handleIdProofUpload}
+            />
+            <label htmlFor="studentIdUpload" className="cursor-pointer flex flex-col items-center gap-1.5">
+              <Upload size={18} className="text-aws-orange" />
+              {uploadingId ? (
+                <span className="font-mono text-xs text-aws-orange">Compressing ID proof...</span>
+              ) : formData.idProofName ? (
+                <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs">
+                  <CheckCircle2 size={14} /> {formData.idProofName}
+                </div>
+              ) : (
+                <>
+                  <span className="font-mono text-xs text-white/70">Click to upload Student ID or Fee Receipt</span>
+                  <span className="font-mono text-[9px] text-white/30">PNG, JPG up to 8MB</span>
+                </>
+              )}
+            </label>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-3 pt-6 border-t border-white/10">
           <button
             type="button"
             onClick={onBack}
@@ -491,16 +456,10 @@ export function RegistrationForm({ selectedPass, initialAttendees, verifiedEmail
           </button>
           <button
             type="submit"
-            disabled={loading || !otpVerified}
-            className={`flex-1 px-5 py-3 text-white text-xs font-mono uppercase tracking-widest font-bold transition-all flex items-center justify-center gap-2 ${
-              otpVerified ? 'bg-f1-red hover:bg-white hover:text-black' : 'bg-f1-red/50 cursor-not-allowed'
-            }`}
+            disabled={loading}
+            className="flex-1 px-5 py-3 bg-f1-red text-white text-xs font-mono uppercase tracking-widest font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2"
           >
-            {loading ? (
-              <><Loader2 size={14} className="animate-spin" /> Saving...</>
-            ) : (
-              'Continue to Summary'
-            )}
+            Continue to Payment (₹{selectedPass.price})
           </button>
         </div>
       </form>

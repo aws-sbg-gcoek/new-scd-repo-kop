@@ -84,7 +84,7 @@ export function SuccessScreen({
     if (!referralUrl) return;
     const shareData = {
       title: 'AWS Student Community Day 2026',
-      text: `Hey! Use my referral link to grab your ticket for AWS Student Community Day Dhule 2026! 🚀`,
+      text: `Hey! Use my referral link to grab your ticket for AWS Student Community Day Kolhapur 2026! 🚀`,
       url: referralUrl,
     };
     if (navigator.share) {

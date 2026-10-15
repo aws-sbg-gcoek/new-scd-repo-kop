@@ -14,27 +14,19 @@ const contentMap: Record<string, ReactNode> = {
   venue: (
     <div className="flex flex-col gap-4">
       <p className="font-sans text-sm sm:text-base text-white/70 leading-relaxed">
-        SVKM's Institute of Technology,<br />
-        Survey No. 499, Plot No. 2, Behind Gurudwara,<br />
-        Mumbai - Agra National Highway,<br />
-        Dhule, Maharashtra 424001
+        <strong className="text-white text-base">V.T. Patil Smruti Bhavan (V.T. Patil Hall)</strong><br />
+        Near Kawala Naka & Tarabai Park,<br />
+        CSMT Road, Kolhapur,<br />
+        Maharashtra 416003, India
       </p>
       <div className="flex flex-wrap gap-2.5 mt-2">
         <a 
-          href="https://maps.google.com/?q=SVKM's+Institute+of+Technology,+Dhule" 
+          href="https://maps.google.com/?q=V.T.+Patil+Smruti+Bhavan,+Kolhapur" 
           target="_blank" 
           rel="noreferrer"
           className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-aws-orange hover:text-black border border-white/10 transition-colors font-mono text-[10px] uppercase tracking-widest"
         >
-          <Navigation size={14} /> Google Maps
-        </a>
-        <a 
-          href="https://maps.apple/p/yY~~WHcrydco3q" 
-          target="_blank" 
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-aws-orange hover:text-black border border-white/10 transition-colors font-mono text-[10px] uppercase tracking-widest"
-        >
-          <Navigation size={14} /> Apple Maps
+          <Navigation size={14} /> Open in Google Maps
         </a>
       </div>
     </div>
@@ -42,34 +34,34 @@ const contentMap: Record<string, ReactNode> = {
   train: (
     <div className="flex flex-col gap-4">
       <p className="font-sans text-sm sm:text-base text-white/70 leading-relaxed">
-        The nearest major railway stations are:
+        The nearest major railway stations to the venue:
       </p>
       <ul className="flex flex-col gap-3 mt-2">
         <li className="flex flex-col bg-[#0a0a0a] p-3 border border-white/5">
-          <span className="font-sans font-bold text-white">Dhule Railway Station (DHI)</span>
-          <span className="font-mono text-[10px] text-aws-orange uppercase tracking-widest mt-1">Approx. 3km away • 10 min drive</span>
+          <span className="font-sans font-bold text-white">Chhatrapati Shahu Maharaj Terminus (CSMT / KOP)</span>
+          <span className="font-mono text-[10px] text-aws-orange uppercase tracking-widest mt-1">Approx. 2.5km away · 8 min auto / taxi drive</span>
         </li>
         <li className="flex flex-col bg-[#0a0a0a] p-3 border border-white/5">
-          <span className="font-sans font-bold text-white">Chalisgaon Junction (CSN)</span>
-          <span className="font-mono text-[10px] text-f1-red uppercase tracking-widest mt-1">Approx. 60km away • 1.5 hr drive</span>
+          <span className="font-sans font-bold text-white">Miraj Railway Junction (MRJ)</span>
+          <span className="font-mono text-[10px] text-f1-red uppercase tracking-widest mt-1">Approx. 45km away · 1 hour drive (express trains hub)</span>
         </li>
       </ul>
       <p className="font-sans text-xs text-white/50 mt-2">
-        Taxis and auto-rickshaws are readily available from both stations to the campus.
+        Auto-rickshaws, city cabs, and city buses are readily available from CSMT Kolhapur Station directly to V.T. Patil Hall.
       </p>
     </div>
   ),
   road: (
     <div className="flex flex-col gap-4">
       <p className="font-sans text-sm sm:text-base text-white/70 leading-relaxed">
-        Dhule is a major highway hub. The campus is located directly on the <strong className="text-white">Mumbai-Agra National Highway (NH 3)</strong> and connects seamlessly to other major routes including the <strong className="text-white">Surat-Nagpur National Highway (NH 6)</strong> and the <strong className="text-white">Dhule-Solapur National Highway (NH 52)</strong>.
+        Kolhapur is prominently located on <strong className="text-white">National Highway 48 (NH-48, Pune-Bengaluru Highway)</strong> with seamless arterial connectivity across Maharashtra and Karnataka.
       </p>
       <div className="grid grid-cols-2 gap-2 mt-2">
         {[
-          { city: "Mumbai", time: "~ 6 hours" },
-          { city: "Pune", time: "~ 5.5 hours" },
-          { city: "Nashik", time: "~ 3 hours" },
-          { city: "Chhatrapati Sambhajinagar", time: "~ 3.5 hours" },
+          { city: "Pune", time: "~ 4.5 hours (NH-48)" },
+          { city: "Mumbai", time: "~ 7.5 hours" },
+          { city: "Sangli", time: "~ 50 mins" },
+          { city: "Belagavi", time: "~ 2 hours" },
         ].map(route => (
           <div key={route.city} className="bg-[#0a0a0a] border border-white/5 p-3 flex flex-col">
             <span className="font-sans font-bold text-white text-sm">{route.city}</span>
@@ -77,25 +69,28 @@ const contentMap: Record<string, ReactNode> = {
           </div>
         ))}
       </div>
+      <p className="font-sans text-xs text-white/50 mt-2">
+        Central Bus Stand (CBS Kolhapur) is just 2 km away from V.T. Patil Hall with round-the-clock state & private luxury buses.
+      </p>
     </div>
   ),
   air: (
     <div className="flex flex-col gap-4">
       <p className="font-sans text-sm sm:text-base text-white/70 leading-relaxed">
-        The closest airports to Dhule are:
+        The closest airports for national & international attendees:
       </p>
       <ul className="flex flex-col gap-3 mt-2">
         <li className="flex flex-col bg-[#0a0a0a] p-3 border border-white/5">
-          <span className="font-sans font-bold text-white">Jalgaon Airport (JLG)</span>
-          <span className="font-mono text-[10px] text-blue-400 uppercase tracking-widest mt-1">Approx. 90km • 2 hr drive</span>
+          <span className="font-sans font-bold text-white">Kolhapur Airport (KLH / Ujalaiwadi)</span>
+          <span className="font-mono text-[10px] text-blue-400 uppercase tracking-widest mt-1">Approx. 8km · 15 min drive (Direct flights from Mumbai, Hyderabad, Bengaluru)</span>
         </li>
         <li className="flex flex-col bg-[#0a0a0a] p-3 border border-white/5">
-          <span className="font-sans font-bold text-white">Nashik Airport (ISK)</span>
-          <span className="font-mono text-[10px] text-blue-400 uppercase tracking-widest mt-1">Approx. 150km • 3 hr drive</span>
+          <span className="font-sans font-bold text-white">Pune International Airport (PNQ)</span>
+          <span className="font-mono text-[10px] text-blue-400 uppercase tracking-widest mt-1">Approx. 235km · 4.5 hr drive or direct train/bus</span>
         </li>
       </ul>
       <p className="font-sans text-xs text-white/50 mt-2">
-        From either airport, you can hire a private taxi or take a state transport bus to Dhule.
+        Prepaid taxis and auto-rickshaws connect Kolhapur Airport directly to V.T. Patil Hall.
       </p>
     </div>
   ),
@@ -116,7 +111,7 @@ export const DirectionsSection = () => {
         activeTab === 'road' ? 'bg-[#00ff00]' : 'bg-blue-400'
       }`} />
 
-      <SectionHeader title="Track Directions" subtitle="Navigate to the circuit. Find the best routes to SVKM's Institute of Technology Campus, Dhule via air, train, or road." sysId="08.NAV" />
+      <SectionHeader title="Track Directions" subtitle="Navigate to the circuit. Find the best routes to V.T. Patil Hall, Kolhapur via air, train, or road." sysId="08.NAV" />
 
       <div className="w-full flex flex-col lg:flex-row gap-6 sm:gap-10 mt-12 sm:mt-16 relative z-10 bg-[#111] border border-white/5 p-4 sm:p-6 lg:p-8">
         
@@ -181,17 +176,17 @@ export const DirectionsSection = () => {
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-aws-orange/50 shadow-[0_0_10px_#FF9900] z-20 animate-[scan_3s_ease-in-out_infinite] opacity-50 pointer-events-none"></div>
           
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d778.9748565349158!2d74.76861642464331!3d20.870206706633578!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdec60f78cc96db%3A0x6ae5738a6d39c455!2sSVKM&#39;s%20Institute%20of%20Technology!5e1!3m2!1sen!2sin!4v1780047179109!5m2!1sen!2sin"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3821.5796799042296!2d74.2435773!3d16.6978438!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc1001a1c4b72ef%3A0xe54955bcaee798ef!2sV.T.Patil%20Smruti%20Bhavan!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
             className="w-full h-full contrast-125 saturate-50 opacity-80 group-hover:opacity-100 group-hover:saturate-100 transition-all duration-700 relative z-10"
             style={{ border: 0 }} 
             allowFullScreen 
             loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
-            title="SVKM IOT Campus Location"
+            title="V.T. Patil Hall Kolhapur Location"
           ></iframe>
         </div>
 
       </div>
     </section>
-  )
-}
+  );
+};

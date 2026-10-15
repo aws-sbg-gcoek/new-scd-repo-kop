@@ -20,7 +20,7 @@ const crew: TeamMember[] = [
   {
     name: "Soham Chaudhari",
     role: "AWS Cloud Club Captain",
-    description: "AWS Cloud Club Captain leading the community and driving cloud innovation at SVKM IOT Dhule.",
+    description: "AWS Cloud Club Captain leading the community and driving cloud innovation at AWS Student Builder Club GCOEK.",
     image: "/team/team-01.png",
     linkedin: "https://www.linkedin.com/in/soham-chaudhari-174b4b287/",
     github: "https://github.com/Soham156"
