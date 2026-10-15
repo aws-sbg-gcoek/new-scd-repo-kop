@@ -32,6 +32,7 @@ const NotFoundPage = lazy(() => import('./components/NotFoundPage').then(module 
 const StatusPage = lazy(() => import('./components/StatusPage').then(module => ({ default: module.StatusPage })));
 const BadgePage = lazy(() => import('./components/BadgePage').then(module => ({ default: module.BadgePage })));
 const CodeOfConductPage = lazy(() => import('./components/CodeOfConductPage').then(module => ({ default: module.CodeOfConductPage })));
+const TeamPage = lazy(() => import('./pages/TeamPage'));
 import { BackToTop } from './components/BackToTop';
 import { CustomCursor } from './components/CustomCursor';
 import { SmoothScroll } from './components/SmoothScroll';
@@ -128,6 +129,7 @@ export default function App() {
         <Route path="/status" element={<StatusPage />} />
         <Route path="/badge" element={<BadgePage />} />
         <Route path="/codeofconduct" element={<CodeOfConductPage />} />
+        <Route path="/team" element={<TeamPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
