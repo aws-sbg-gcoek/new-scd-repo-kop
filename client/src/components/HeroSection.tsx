@@ -29,7 +29,17 @@ export const HeroSection = () => {
     if (!video) return;
 
     video.loop = true;
-    if (forceUnmute || !isMuted) {
+    const isPreloaderActive = typeof document !== 'undefined' && document.body.classList.contains('preloader-active');
+
+    // While preloader is active, keep the video muted so engine-start.mp3 plays first exclusively
+    if (isPreloaderActive && !forceUnmute) {
+      video.muted = true;
+      video.volume = 0;
+      video.play().catch(() => {});
+      return;
+    }
+
+    if (forceUnmute || (!isMuted && !isPreloaderActive)) {
       video.muted = false;
       video.volume = 0.65;
     }
@@ -142,15 +152,17 @@ export const HeroSection = () => {
     return () => clearInterval(watchdog);
   }, [inView, ensureVideoPlaying]);
 
-  // Preloader greenLight event listener - starts roaring engine sound
+  // Preloader greenLight and homeEntered listener - starts roaring F1 video sound upon entering home page
   useEffect(() => {
-    const handleGreenLight = () => {
+    const handleHomeEntered = () => {
       const lite = localStorage.getItem('scd_lite_mode') === 'true';
       setIsLiteMode(lite);
-      if (videoRef.current) {
+      globalIsMuted = false;
+      setIsMuted(false);
+      if (!lite && videoRef.current) {
         videoRef.current.muted = false;
         videoRef.current.volume = 0.65;
-        setIsMuted(false);
+        videoRef.current.play().catch(() => {});
       }
       ensureVideoPlaying(true);
     };
@@ -159,10 +171,12 @@ export const HeroSection = () => {
       toggleSound();
     };
 
-    window.addEventListener("greenLight", handleGreenLight);
+    window.addEventListener("greenLight", handleHomeEntered);
+    window.addEventListener("homeEntered", handleHomeEntered);
     window.addEventListener("toggleMute", handleExternalToggleMute);
     return () => {
-      window.removeEventListener("greenLight", handleGreenLight);
+      window.removeEventListener("greenLight", handleHomeEntered);
+      window.removeEventListener("homeEntered", handleHomeEntered);
       window.removeEventListener("toggleMute", handleExternalToggleMute);
     };
   }, [ensureVideoPlaying]);

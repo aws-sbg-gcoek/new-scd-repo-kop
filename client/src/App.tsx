@@ -51,7 +51,9 @@ function HomePage() {
   const handlePreloaderComplete = () => {
     preloaderShown = true;
     setLoading(false);
+    document.body.classList.remove('preloader-active');
     window.dispatchEvent(new Event('greenLight'));
+    window.dispatchEvent(new Event('homeEntered'));
   };
 
   return (

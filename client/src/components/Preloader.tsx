@@ -138,9 +138,9 @@ export const Preloader = ({ onComplete }: { onComplete: () => void; key?: string
 
     // Load engine audio on click (user gesture needed), play after 1.5s delay
     const audio = new Audio('/engine-start.mp3');
-    audio.volume = 0.5;
+    audio.volume = 0.85;
     engineAudioRef.current = audio;
-    setTimeout(() => audio.play().catch(() => {}), 1500);
+    audio.play().catch(err => console.warn('engine-start.mp3 play notice:', err));
 
     setStarted(true);
     window.dispatchEvent(new Event('startEngine'));
