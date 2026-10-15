@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { SectionHeader } from './LayoutElements';
 
-export interface TeamMember {
+interface TeamMember {
   name: string;
   role: string;
   department: string;
@@ -18,7 +18,7 @@ export interface TeamMember {
   skills?: string;
 }
 
-export const coreCrew: TeamMember[] = [
+const coreCrew: TeamMember[] = [
   {
     name: "Shardul Kolekar",
     role: "Captain (President)",
