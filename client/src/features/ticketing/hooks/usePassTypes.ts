@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { subscribeToTicketConfig, TicketSystemConfig, getTierEffectiveStatus } from '../../../utils/ticketConfig';
+import { subscribeToTicketConfig, TicketSystemConfig, getTierEffectiveStatus, TicketCode } from '../../../utils/ticketConfig';
 
 export interface PassType {
   id: string;
@@ -22,45 +22,43 @@ function mapConfigToPasses(config: TicketSystemConfig): PassType[] {
   const tiers = config.tiers;
   const result: PassType[] = [];
 
-  if (tiers.super_early_bird) {
-    const t = tiers.super_early_bird;
-    const eff = getTierEffectiveStatus(t);
-    result.push({
-      id: 'super_early_bird',
-      name: t.label || 'Super Early Bird',
+  const tierDefs: Array<{
+    code: TicketCode;
+    defaultName: string;
+    slug: string;
+    defaultTagline: string;
+    defaultPrice: number;
+    capacity: number;
+    badgeColor: string;
+    defaultBadge: string;
+    perks: string[];
+  }> = [
+    {
+      code: 'super_early_bird',
+      defaultName: 'Super Early Bird Tickets',
       slug: 'SCD-SUPER-EARLY',
-      description: t.tagline || 'Be Super, Be Early!',
-      price: t.price || 149,
+      defaultTagline: 'Be Super, Be Early!',
+      defaultPrice: 149,
       capacity: 100,
-      sold: eff.status === 'sold_out' ? 100 : Math.max(0, 100 - (t.remaining ?? 0)),
-      available: eff.status === 'sold_out' ? 0 : (t.remaining ?? 0),
+      badgeColor: '#3b82f6',
+      defaultBadge: 'SUPER SAVER',
       perks: [
         'Full Day All-Track Conference Access',
         'Official Event Swag Kit & Badge',
         'Networking High Tea & Catered Lunch',
         'Verified Certificate of Participation',
         'Access to Keynotes & Hands-on Tech Demos'
-      ],
-      is_active: true,
-      is_locked: eff.status === 'coming_soon',
-      sort_order: 1,
-      badge_color: '#3b82f6',
-      label: eff.status === 'sold_out' ? 'SOLD OUT' : (t.highlightBadge || 'SUPER SAVER')
-    });
-  }
-
-  if (tiers.early_bird) {
-    const t = tiers.early_bird;
-    const eff = getTierEffectiveStatus(t);
-    result.push({
-      id: 'early_bird',
-      name: t.label || 'Early Bird Ticket',
+      ]
+    },
+    {
+      code: 'early_bird',
+      defaultName: 'Early Bird Ticket',
       slug: 'SCD-EARLY-BIRD',
-      description: t.tagline || 'Early Bird, Be Quick!',
-      price: t.price || 249,
+      defaultTagline: 'Early Bird, Be Quick!',
+      defaultPrice: 249,
       capacity: 250,
-      sold: eff.status === 'sold_out' ? 250 : Math.max(0, 250 - (t.remaining ?? 150)),
-      available: eff.status === 'sold_out' ? 0 : (t.remaining ?? 150),
+      badgeColor: '#FF9900',
+      defaultBadge: 'POPULAR CHOICE',
       perks: [
         'Priority Seating & Fast-Track Check-In',
         'Full Day Keynotes, Tech Sessions & AI Demos',
@@ -68,39 +66,63 @@ function mapConfigToPasses(config: TicketSystemConfig): PassType[] {
         'Networking Lunch & Afternoon High Tea',
         'Direct Access to Sponsor & Career Booths',
         'Verified Certificate of Participation'
-      ],
-      is_active: true,
-      is_locked: eff.status === 'coming_soon',
-      sort_order: 2,
-      badge_color: '#FF9900',
-      label: eff.status === 'sold_out' ? 'SOLD OUT' : (t.highlightBadge || 'POPULAR CHOICE')
-    });
-  }
-
-  if (tiers.regular) {
-    const t = tiers.regular;
-    const eff = getTierEffectiveStatus(t);
-    result.push({
-      id: 'regular',
-      name: t.label || 'Regular Ticket',
+      ]
+    },
+    {
+      code: 'regular',
+      defaultName: 'Regular Ticket',
       slug: 'SCD-STANDARD',
-      description: t.tagline || 'General Admission',
-      price: t.price || 349,
+      defaultTagline: 'General Admission',
+      defaultPrice: 349,
       capacity: 300,
-      sold: eff.status === 'sold_out' ? 300 : Math.max(0, 300 - (t.remaining ?? 300)),
-      available: eff.status === 'sold_out' ? 0 : (t.remaining ?? 300),
+      badgeColor: '#10b981',
+      defaultBadge: 'STANDARD ENTRY',
       perks: [
         'Full Day All-Track Conference Access',
         'Official Attendee Badge & Swags',
         'Lunch & Networking Refreshments',
         'Verified Certificate of Participation',
         'Access to Sponsor Exhibits & Q&A Sessions'
-      ],
+      ]
+    }
+  ];
+
+  for (let i = 0; i < tierDefs.length; i++) {
+    const def = tierDefs[i];
+    const t = tiers[def.code];
+    if (!t) continue;
+
+    const eff = getTierEffectiveStatus(t);
+    const isOpen = eff.status === 'open';
+    const isSoldOut = eff.status === 'sold_out';
+    const isComingSoon = eff.status === 'coming_soon';
+
+    // If admin set tier to open, guarantee available > 0
+    let available = 0;
+    if (isOpen) {
+      available = t.remaining !== undefined && t.remaining > 0 ? t.remaining : def.capacity;
+    } else if (isSoldOut) {
+      available = 0;
+    } else {
+      available = t.remaining !== undefined ? t.remaining : def.capacity;
+    }
+    const sold = Math.max(0, def.capacity - available);
+
+    result.push({
+      id: def.code,
+      name: t.label || def.defaultName,
+      slug: def.slug,
+      description: t.tagline || def.defaultTagline,
+      price: t.price !== undefined ? t.price : def.defaultPrice,
+      capacity: def.capacity,
+      sold,
+      available,
+      perks: def.perks,
       is_active: true,
-      is_locked: eff.status === 'coming_soon',
-      sort_order: 3,
-      badge_color: '#10b981',
-      label: eff.status === 'sold_out' ? 'SOLD OUT' : (t.highlightBadge || 'STANDARD ENTRY')
+      is_locked: isComingSoon,
+      sort_order: i + 1,
+      badge_color: def.badgeColor,
+      label: isSoldOut ? 'SOLD OUT' : isComingSoon ? 'COMING SOON' : (t.highlightBadge || def.defaultBadge)
     });
   }
 

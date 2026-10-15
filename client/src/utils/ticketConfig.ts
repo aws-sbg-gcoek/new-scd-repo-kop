@@ -212,7 +212,8 @@ export function getTierEffectiveStatus(
   isOpen: boolean;
   statusText: string;
 } {
-  if (tier.mode === 'manual') {
+  // If manual mode is active or manualStatus is explicitly defined, honor manual status
+  if (tier.mode === 'manual' || (tier.manualStatus && tier.mode !== 'scheduled')) {
     if (tier.manualStatus === 'open') {
       return {
         status: 'open',

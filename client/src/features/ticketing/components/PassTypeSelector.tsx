@@ -31,7 +31,7 @@ export function PassTypeSelector({ passes, loading, onSelect }: Props) {
     <Skeleton name="pass-type-selector" loading={loading}>
       <div className="flex flex-wrap justify-center gap-4 items-stretch">
         {displayPasses.map((pass, i) => {
-          const soldOut = pass.available <= 0;
+          const soldOut = (pass.available <= 0 && !pass.is_locked) || pass.label === "SOLD OUT";
           const locked = pass.is_locked;
           const disabled = soldOut || locked;
           const hex = pass.badge_color || '#ffffff';

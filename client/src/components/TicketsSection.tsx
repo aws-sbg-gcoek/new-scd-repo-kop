@@ -29,7 +29,7 @@ export const TicketsSection = () => {
       <Skeleton name="tickets-section" loading={loading}>
         <div className="flex flex-wrap justify-center gap-6 sm:gap-8 mt-12 sm:mt-16 max-w-7xl mx-auto relative z-10 items-stretch">
           {displayPasses.map((tier, i) => {
-            const isSoldOut = tier.capacity - tier.sold <= 0;
+            const isSoldOut = (tier.available <= 0 && !tier.is_locked) || tier.label === "SOLD OUT";
             const isLocked = tier.is_locked;
             const isDisabled = isSoldOut || isLocked;
             const hex = tier.badge_color || '#ffffff';

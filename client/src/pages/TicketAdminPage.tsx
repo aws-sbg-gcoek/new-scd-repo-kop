@@ -138,6 +138,12 @@ export default function TicketAdminPage() {
 
   // Tier Configuration State
   const [config, setConfig] = useState<TicketSystemConfig>(() => loadTicketConfig());
+
+    // Live sync with real-time Firestore and local updates
+    useEffect(() => {
+      const unsub = subscribeToTicketConfig(liveConfig => setConfig(liveConfig));
+      return () => unsub();
+    }, []);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
 
@@ -1246,7 +1252,7 @@ export default function TicketAdminPage() {
                         <div className="grid grid-cols-3 gap-2">
                           <button
                             type="button"
-                            onClick={() => updateTier(key, { manualStatus: 'open' })}
+                            onClick={() => updateTier(key, { manualStatus: 'open', mode: 'manual', remaining: (tier.remaining && tier.remaining > 0) ? tier.remaining : 100 })}
                             className={`p-2 rounded text-xs font-mono font-bold uppercase border ${
                               tier.manualStatus === 'open'
                                 ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
@@ -1257,7 +1263,7 @@ export default function TicketAdminPage() {
                           </button>
                           <button
                             type="button"
-                            onClick={() => updateTier(key, { manualStatus: 'sold_out' })}
+                            onClick={() => updateTier(key, { manualStatus: 'sold_out', mode: 'manual', remaining: 0 })}
                             className={`p-2 rounded text-xs font-mono font-bold uppercase border ${
                               tier.manualStatus === 'sold_out'
                                 ? 'bg-red-500/20 border-red-400 text-red-300'
@@ -1268,7 +1274,7 @@ export default function TicketAdminPage() {
                           </button>
                           <button
                             type="button"
-                            onClick={() => updateTier(key, { manualStatus: 'coming_soon' })}
+                            onClick={() => updateTier(key, { manualStatus: 'coming_soon', mode: 'manual' })}
                             className={`p-2 rounded text-xs font-mono font-bold uppercase border ${
                               tier.manualStatus === 'coming_soon'
                                 ? 'bg-amber-500/20 border-amber-400 text-amber-300'
