@@ -20,17 +20,7 @@ export default function EventsPage() {
       {/* Sticky Header */}
       <header className="sticky top-0 z-50 bg-[#070707]/90 backdrop-blur-md border-b border-white/10 px-4 sm:px-12 lg:px-24 py-4 flex items-center justify-between shadow-xl">
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-lg bg-aws-orange/10 border border-aws-orange/30 flex items-center justify-center text-aws-orange font-bold font-mono text-xs group-hover:scale-105 transition-transform">
-            AWS
-          </div>
-          <div className="flex flex-col text-left">
-            <span className="font-sans font-black italic text-sm tracking-tight text-white leading-none">
-              COMMUNITY EVENTS
-            </span>
-            <span className="font-mono text-[9px] uppercase tracking-widest text-aws-orange mt-0.5">
-              AWS SBG GCOEK
-            </span>
-          </div>
+          <img src="/scd-kolhapur-logo.png" alt="Student Community Day" className="h-9 sm:h-11 w-auto max-w-[220px] object-contain group-hover:scale-105 transition-transform" />
         </Link>
 
         <Link

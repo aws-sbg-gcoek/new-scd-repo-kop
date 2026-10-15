@@ -120,9 +120,9 @@ export const HeaderSection = () => {
             WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%)',
           }}
         />
-        <div className="flex items-center mt-4 sm:gap-4">
-          <img src="/scd-kolhapur-logo.png?v=4" alt="SCD Kolhapur" className="w-30 sm:w-40 lg:w-48 h-auto max-h-16 sm:max-h-20 lg:max-h-24 object-contain" fetchPriority="high" />
-        </div>
+        <Link to="/" className="flex items-center mt-1 sm:gap-4 group">
+          <img src="/scd-kolhapur-logo.png" alt="Student Community Day" className="h-10 sm:h-12 lg:h-14 w-auto max-w-[210px] sm:max-w-[270px] object-contain group-hover:scale-105 transition-transform" fetchPriority="high" />
+        </Link>
 
         {/* Desktop nav */}
         <div className="hidden md:flex gap-6 lg:gap-8 items-center">

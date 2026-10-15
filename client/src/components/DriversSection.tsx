@@ -60,16 +60,6 @@ const coreCrew: TeamMember[] = [
     skills: "Management, Coordination, Community Building"
   },
   {
-    name: "Atharv Patil",
-    role: "Technical Lead",
-    department: "Technical Dept",
-    description: "Spearheading technical workshops, cloud architecture masterclasses, and assisting in the strategic and operational direction of the club.",
-    image: "https://i.ibb.co/wZYNhv1R/Whats-App-Image-2026-04-18-at-1-54-07-PM.jpg",
-    linkedin: "https://www.linkedin.com/in/atharvpatilw",
-    email: "atharvpatil1808@gmail.com",
-    skills: "Cloud Computing, Management, AWS"
-  },
-  {
     name: "Yash Nawal",
     role: "Technical Associate",
     department: "Technical Dept",
@@ -78,6 +68,16 @@ const coreCrew: TeamMember[] = [
     linkedin: "https://www.linkedin.com/in/yash-nawal-51b5a228b/",
     email: "yashsanjaynawal810@gmail.com",
     skills: "AWS, Python, Cloud Native"
+  },
+  {
+    name: "Atharv Patil",
+    role: "Technical Lead",
+    department: "Technical Dept",
+    description: "Spearheading technical workshops, cloud architecture masterclasses, and assisting in the strategic and operational direction of the club.",
+    image: "https://i.ibb.co/wZYNhv1R/Whats-App-Image-2026-04-18-at-1-54-07-PM.jpg",
+    linkedin: "https://www.linkedin.com/in/atharvpatilw",
+    email: "atharvpatil1808@gmail.com",
+    skills: "Cloud Computing, Management, AWS"
   },
   {
     name: "Bhushan Jadhav",
