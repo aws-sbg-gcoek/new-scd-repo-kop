@@ -20,15 +20,6 @@ export interface TeamMember {
 
 export const coreCrew: TeamMember[] = [
   {
-    name: "Dr. Varsha Gaikwad",
-    role: "Faculty Coordinator",
-    department: "Leadership Dept",
-    description: "Guiding the AWS Student Builder Group and supporting student initiatives, academic excellence, and cloud innovation at GCOEK.",
-    image: "https://i.ibb.co/xqY0bSS3/Varsha-maam.jpg",
-    linkedin: "#",
-    skills: "Mentorship, Leadership, Cloud Computing"
-  },
-  {
     name: "Shardul Kolekar",
     role: "Captain (President)",
     department: "Leadership Dept",
@@ -59,6 +50,16 @@ export const coreCrew: TeamMember[] = [
     skills: "Operations, Communication, Event Management"
   },
   {
+    name: "Shubham Sonwane",
+    role: "Joint Secretary",
+    department: "Leadership Dept",
+    description: "Supporting the General Secretary in daily club operations, event planning, and student builder community coordination.",
+    image: "https://i.ibb.co/LDDfM6hn/Gemini-Generated-Image-nbpxu8nbpxu8nbpx-Shubham-Sonwane.png",
+    linkedin: "https://www.linkedin.com/in/shubham-sonwane-b9b056312",
+    email: "sonwaneshubham38@gmail.com",
+    skills: "Management, Coordination, Community Building"
+  },
+  {
     name: "Atharv Patil",
     role: "Technical Lead",
     department: "Technical Dept",
@@ -69,14 +70,14 @@ export const coreCrew: TeamMember[] = [
     skills: "Cloud Computing, Management, AWS"
   },
   {
-    name: "Anas Pathan",
-    role: "Project Lead",
+    name: "Yash Nawal",
+    role: "Technical Associate",
     department: "Technical Dept",
-    description: "Leading technical project development, coordinating student builder teams, and architecting scalable cloud-native applications with modern cloud technologies.",
-    image: "https://i.ibb.co/YBDxDXfV/Chat-GPT-Image-Sep-4-2026-12-44-21-AM.png",
-    linkedin: "https://www.linkedin.com/in/anas-pathan-91a6b3368",
-    email: "pathananas2007@gmail.com",
-    skills: "AWS, Project Leadership, Cloud Development, Node.js, Docker"
+    description: "Passionate about cloud computing, AWS infrastructure, and eager to contribute to the club's technical initiatives and hands-on workshops.",
+    image: "https://i.ibb.co/gFrBmXJv/Whats-App-Image-2026-04-18-at-8-14-43-AM-2.jpg",
+    linkedin: "https://www.linkedin.com/in/yash-nawal-51b5a228b/",
+    email: "yashsanjaynawal810@gmail.com",
+    skills: "AWS, Python, Cloud Native"
   },
   {
     name: "Bhushan Jadhav",
@@ -467,7 +468,7 @@ const LiteModeSection = ({ crew }: { crew: TeamMember[] }) => {
                 to="/team"
                 className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-aws-orange hover:text-white transition-colors"
               >
-                <span>View All 29 Builders</span>
+                <span>View All 28 Builders</span>
                 <ArrowRight size={12} />
               </Link>
             </div>
@@ -527,7 +528,7 @@ export const DriversSection = () => {
               className="inline-flex items-center gap-2 px-4 py-2 border border-white/15 bg-white/[0.02] hover:bg-aws-orange hover:text-black hover:border-aws-orange text-white text-xs font-mono font-bold uppercase tracking-wider transition-all rounded group"
             >
               <Users size={14} className="text-aws-orange group-hover:text-black" />
-              <span>Full Team Directory (29)</span>
+              <span>Full Team Directory (28)</span>
               <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
           }
@@ -547,7 +548,7 @@ export const DriversSection = () => {
               AWS Student Builder Group GCOEK
             </span>
             <span className="font-mono text-[11px] text-white/40">
-              29 Builders across Leadership, Tech, Operations, Media, PR & Finance
+              28 Builders across Leadership, Tech, Operations, Media, PR & Finance
             </span>
           </div>
         </div>
@@ -557,7 +558,7 @@ export const DriversSection = () => {
           className="inline-flex items-center gap-2 px-5 py-2.5 bg-aws-orange text-black font-sans font-black italic uppercase text-[11px] tracking-wider skew-x-[-10deg] hover:bg-white transition-all shadow-[0_0_20px_rgba(255,153,0,0.2)]"
         >
           <span className="skew-x-[10deg] flex items-center gap-2">
-            <span>View All 29 Builders</span>
+            <span>View All 28 Builders</span>
             <ExternalLink size={13} />
           </span>
         </Link>

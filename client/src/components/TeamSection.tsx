@@ -18,17 +18,6 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
   // Leadership Dept
   {
     department: "Leadership Dept",
-    id: "varsha-gaikwad",
-    name: "Dr. Varsha Gaikwad",
-    role: "Faculty Coordinator",
-    bio: "Guiding the AWS Student Builder Group and supporting student initiatives and cloud innovation at GCOEK.",
-    skills: "Mentorship, Leadership, Cloud Computing",
-    email: "N/A",
-    linkedin: "N/A",
-    image: "https://i.ibb.co/xqY0bSS3/Varsha-maam.jpg"
-  },
-  {
-    department: "Leadership Dept",
     id: "shardul-kolekar",
     name: "Shardul Kolekar",
     role: "Captain (President)",
@@ -440,7 +429,7 @@ export default function TeamSection() {
           </h2>
 
           <p className="mt-4 text-xs sm:text-sm md:text-base text-white/60 max-w-2xl leading-relaxed">
-            The passionate team of student organizers, cloud enthusiasts, and faculty guiding the largest 
+            The passionate team of student organizers, cloud enthusiasts, guiding the largest 
             AWS student community summit in Kolhapur at V.T. Patil Hall.
           </p>
         </div>
