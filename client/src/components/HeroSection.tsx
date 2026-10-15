@@ -152,30 +152,68 @@ export const HeroSection = () => {
     return () => clearInterval(watchdog);
   }, [inView, ensureVideoPlaying]);
 
-  // Preloader greenLight and homeEntered listener - starts roaring F1 video sound upon entering home page
+  // Preloader homeEntered listener - engine-start.mp3 continues playing after homepage opens for 4 seconds, then stops and F1 video sound roars
   useEffect(() => {
+    let homeTimer: any = null;
+
     const handleHomeEntered = () => {
       const lite = localStorage.getItem('scd_lite_mode') === 'true';
       setIsLiteMode(lite);
-      globalIsMuted = false;
-      setIsMuted(false);
-      if (!lite && videoRef.current) {
-        videoRef.current.muted = false;
-        videoRef.current.volume = 0.65;
-        videoRef.current.play().catch(() => {});
+      if (lite) return;
+
+      const starterAudio = typeof window !== 'undefined' ? (window as any).__scd_starter_audio : null;
+
+      if (starterAudio && !starterAudio.paused) {
+        // While starter engine is running on homepage, keep video muted for 4 seconds
+        if (videoRef.current) {
+          videoRef.current.muted = true;
+          videoRef.current.volume = 0;
+          videoRef.current.play().catch(() => {});
+        }
+
+        if (homeTimer) clearTimeout(homeTimer);
+        homeTimer = setTimeout(() => {
+          // After 4 seconds on homepage: smoothly fade out and stop engine-start.mp3
+          const fadeInterval = setInterval(() => {
+            if (starterAudio.volume > 0.1) {
+              starterAudio.volume = Math.max(0, starterAudio.volume - 0.15);
+            } else {
+              starterAudio.pause();
+              try { starterAudio.currentTime = 0; } catch (e) {}
+              (window as any).__scd_starter_audio = null;
+              clearInterval(fadeInterval);
+            }
+          }, 60);
+
+          // Now unleash the roaring F1 car video sound!
+          globalIsMuted = false;
+          setIsMuted(false);
+          if (videoRef.current) {
+            videoRef.current.muted = false;
+            videoRef.current.volume = 0.65;
+            videoRef.current.play().catch(() => {});
+          }
+        }, 4000);
+      } else {
+        // If starter audio wasn't active (e.g. returning visitor), start F1 video sound directly
+        globalIsMuted = false;
+        setIsMuted(false);
+        if (videoRef.current) {
+          videoRef.current.muted = false;
+          videoRef.current.volume = 0.65;
+          videoRef.current.play().catch(() => {});
+        }
       }
-      ensureVideoPlaying(true);
     };
 
     const handleExternalToggleMute = () => {
       toggleSound();
     };
 
-    window.addEventListener("greenLight", handleHomeEntered);
     window.addEventListener("homeEntered", handleHomeEntered);
     window.addEventListener("toggleMute", handleExternalToggleMute);
     return () => {
-      window.removeEventListener("greenLight", handleHomeEntered);
+      if (homeTimer) clearTimeout(homeTimer);
       window.removeEventListener("homeEntered", handleHomeEntered);
       window.removeEventListener("toggleMute", handleExternalToggleMute);
     };

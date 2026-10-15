@@ -138,6 +138,8 @@ export const Preloader = ({ onComplete }: { onComplete: () => void; key?: string
 
     // Load engine audio on click (user gesture needed), play after 1.5s delay
     const audio = new Audio('/engine-start.mp3');
+    audio.loop = true;
+    (window as any).__scd_starter_audio = audio;
     audio.volume = 0.85;
     engineAudioRef.current = audio;
     audio.play().catch(err => console.warn('engine-start.mp3 play notice:', err));
@@ -147,6 +149,7 @@ export const Preloader = ({ onComplete }: { onComplete: () => void; key?: string
   };
 
   const handleLiteModeStart = () => {
+    if (engineAudioRef.current) { engineAudioRef.current.pause(); (window as any).__scd_starter_audio = null; }
     localStorage.setItem('scd_lite_mode', 'true');
     localStorage.removeItem('scd_skip_intro');
     document.body.classList.add('lite-mode');
