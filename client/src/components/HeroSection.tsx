@@ -1,11 +1,11 @@
 /* eslint-disable react-doctor/no-initialize-state, react-doctor/prefer-useReducer, react-doctor/no-event-handler, react-doctor/rerender-state-only-in-handlers, react-doctor/no-derived-state */
 import { motion, useScroll, useTransform } from "motion/react";
 import { AngledButton } from "./LayoutElements";
-import { Zap, Calendar, MapPin, Users, Mic, Wrench } from "lucide-react";
-import React, { useRef, useState, useEffect } from "react";
+import { Zap, Calendar, MapPin } from "lucide-react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 
-let globalIsMuted = false;
+let globalIsMuted = true;
 
 export const HeroSection = () => {
   const { scrollY } = useScroll();
@@ -15,55 +15,106 @@ export const HeroSection = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isMuted, setIsMuted] = useState(globalIsMuted);
   
-  const [media, setMedia] = useState<{video: string, audio?: string} | null>(null);
+  // Initialize video media immediately so the video element is preloaded & ready
+  const [media] = useState<{video: string, audio?: string}>({ video: '/videoplayback.webm' });
   const [isLiteMode, setIsLiteMode] = useState(() => {
     if (typeof window === 'undefined') return false;
-    return /* eslint-disable-next-line react-doctor/js-cache-storage */ localStorage.getItem('scd_lite_mode') === 'true';
+    return localStorage.getItem('scd_lite_mode') === 'true';
   });
   const sectionRef = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(true);
-  const [hasStarted, setHasStarted] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    const isBot = /bot|googlebot|crawler|spider|robot|crawling|lighthouse/i.test(navigator.userAgent);
-    if (isBot) return true;
-    const lastPlayed = localStorage.getItem('scd_intro_played');
-    const isRecent = lastPlayed && (Date.now() - parseInt(lastPlayed, 10) < 15000);
-    return !!isRecent;
-  });
 
+  // Safe play helper that guarantees playback in loop
+  const ensureVideoPlaying = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
 
-  useEffect(() => {
-    if (!hasStarted || isLiteMode) return;
-    setMedia({ video: '/videoplayback.webm' });
-  }, [hasStarted, isLiteMode]);
+    video.loop = true;
+    if (video.paused) {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // If browser restricts unmuted autoplay, mute and resume instantly
+          video.muted = true;
+          video.play().catch(() => {});
+        });
+      }
+    }
+  }, []);
 
-
-
+  // IntersectionObserver: automatically play when hero scrolls into view, pause when scrolled away
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold: 0 }
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          ensureVideoPlaying();
+        } else {
+          videoRef.current?.pause();
+        }
+      },
+      { threshold: 0.05 }
     );
+
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
     return () => observer.disconnect();
-  }, []);
+  }, [ensureVideoPlaying]);
+
+  // Window scroll listener: as user scrolls above to the top, automatically resume playback
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY < 650) {
+        ensureVideoPlaying();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [ensureVideoPlaying]);
+
+  // Handle visibility and page focus
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (!document.hidden && inView) {
+        ensureVideoPlaying();
+      } else if (document.hidden) {
+        videoRef.current?.pause();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("focus", handleVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("focus", handleVisibility);
+    };
+  }, [inView, ensureVideoPlaying]);
+
+  // Initial playback trigger & watchdog
+  useEffect(() => {
+    ensureVideoPlaying();
+
+    const watchdog = setInterval(() => {
+      if (inView && !document.hidden && videoRef.current && videoRef.current.paused) {
+        ensureVideoPlaying();
+      }
+    }, 2500);
+
+    return () => clearInterval(watchdog);
+  }, [inView, ensureVideoPlaying]);
 
   useEffect(() => {
-    if (videoRef.current) videoRef.current.volume = 0.55;
-    if (audioRef.current) audioRef.current.volume = 0.6;
-
     const handleGreenLight = () => {
-      setHasStarted(true);
       const lite = localStorage.getItem('scd_lite_mode') === 'true';
       setIsLiteMode(lite);
+      ensureVideoPlaying();
     };
 
     const handleToggleMute = () => {
-      let nextMuted = !isMuted;
+      const nextMuted = !isMuted;
       if (videoRef.current) {
-        nextMuted = !videoRef.current.muted;
         videoRef.current.muted = nextMuted;
       }
       if (audioRef.current) {
@@ -80,92 +131,10 @@ export const HeroSection = () => {
       window.removeEventListener("greenLight", handleGreenLight);
       window.removeEventListener("toggleMute", handleToggleMute);
     };
-  }, [isMuted]);
-
-  useEffect(() => {
-    const handleFocusChange = () => {
-      if (document.hidden || !document.hasFocus()) {
-        videoRef.current?.pause();
-        audioRef.current?.pause();
-      } else if (hasStarted && inView) {
-        videoRef.current?.play().catch(() => {});
-        audioRef.current?.play().catch(() => {});
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleFocusChange);
-    window.addEventListener("blur", handleFocusChange);
-    window.addEventListener("focus", handleFocusChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleFocusChange);
-      window.removeEventListener("blur", handleFocusChange);
-      window.removeEventListener("focus", handleFocusChange);
-    };
-  }, [hasStarted, inView]);
-
-  useEffect(() => {
-    if (hasStarted) {
-      if (inView && !document.hidden && document.hasFocus()) {
-        const playVideo = videoRef.current?.play();
-        const playAudio = audioRef.current?.play();
-
-        if (playVideo !== undefined) {
-          playVideo.catch((e) => {
-            console.warn("Video blocked, attempting muted autoplay:", e);
-            if (videoRef.current) {
-              videoRef.current.muted = true;
-              videoRef.current.play().catch(console.error);
-            }
-            if (audioRef.current) {
-              audioRef.current.muted = true;
-            }
-            globalIsMuted = true;
-            setIsMuted(true);
-            window.dispatchEvent(new CustomEvent("muteStateChange", { detail: true }));
-          });
-        }
-        
-        if (playAudio !== undefined) {
-          playAudio.catch((e) => {
-            console.warn("Audio blocked:", e);
-          });
-        }
-      } else {
-        videoRef.current?.pause();
-        audioRef.current?.pause();
-      }
-    }
-  }, [inView, hasStarted]);
-
-  // Watchdog checker to ensure video plays if it's supposed to be playing
-  useEffect(() => {
-    if (!hasStarted || !inView || document.hidden || !document.hasFocus()) return;
-
-    const checkInterval = setInterval(() => {
-      if (videoRef.current && videoRef.current.paused) {
-        console.warn("Watchdog: Hero video was paused unexpectedly! Attempting to resume...");
-        videoRef.current.play().catch(e => {
-          console.warn("Watchdog video resume failed, trying muted:", e);
-          if (videoRef.current) {
-            videoRef.current.muted = true;
-            videoRef.current.play().catch(() => {});
-            globalIsMuted = true;
-            setIsMuted(true);
-          }
-        });
-      }
-      if (audioRef.current && audioRef.current.paused && !isMuted) {
-        console.warn("Watchdog: Hero audio was paused unexpectedly! Attempting to resume...");
-        audioRef.current.play().catch(e => console.warn("Watchdog audio resume failed:", e));
-      }
-    }, 2000);
-
-    return () => clearInterval(checkInterval);
-  }, [hasStarted, inView, isMuted]);
+  }, [isMuted, ensureVideoPlaying]);
 
   return (
-    <section ref={sectionRef} className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden border-b border-white/5 z-10 px-4 sm:px-12 lg:px-24 pt-24 pb-12">
+    <section ref={sectionRef} className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden border-b border-white/5 z-10 px-4 sm:px-12 lg:px-24 pt-24 pb-12" aria-label="Hero Section">
       <motion.div
         style={{ y, opacity }}
         className="absolute inset-0 z-0 pointer-events-none bg-[#050505]"
@@ -176,33 +145,20 @@ export const HeroSection = () => {
             alt="Hero Background"
             className="w-full h-full object-cover opacity-60 mix-blend-screen mix-blend-lighten"
           />
-        ) : media && (
-          <>
-            <video
-              ref={videoRef}
-              preload="auto"
-              autoPlay
-              loop
-              muted={isMuted}
-              playsInline
-              className="w-full h-full object-cover opacity-60 mix-blend-screen mix-blend-lighten"
-              src={media.video}
-            >
-              <track kind="captions" />
-            </video>
-            {media.audio && (
-              <audio
-                ref={audioRef}
-                preload="auto"
-                autoPlay
-                loop
-                muted={isMuted}
-                src={media.audio}
-              >
-                <track kind="captions" />
-              </audio>
-            )}
-          </>
+        ) : (
+          <video
+            ref={videoRef}
+            preload="auto"
+            autoPlay
+            loop
+            muted={isMuted}
+            playsInline
+            onEnded={ensureVideoPlaying}
+            className="w-full h-full object-cover opacity-60 mix-blend-screen mix-blend-lighten"
+            src={media.video}
+          >
+            <track kind="captions" />
+          </video>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
         <div className="absolute -right-20 top-0 w-[500px] h-[500px] bg-aws-orange/5 blur-[150px]" />
@@ -252,7 +208,6 @@ export const HeroSection = () => {
             className="max-w-2xl text-sm lg:text-base opacity-70 font-medium leading-relaxed"
           >
              <i><b>AWS Student Community Day Kolhapur 2026</b></i> is the largest student-led cloud event in Western Maharashtra, bringing together students, developers, AWS Heroes, Community Builders, UG Leaders, and industry experts under one roof. Supported by the global AWS community, the event offers cutting-edge cloud learning, inspiring technical sessions, and valuable networking opportunities to help the next generation of technology leaders learn, connect, and grow. 
-
           </motion.p>
 
           <motion.div
@@ -333,4 +288,3 @@ export const HeroSection = () => {
     </section>
   );
 };
-

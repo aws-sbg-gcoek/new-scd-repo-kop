@@ -2,10 +2,11 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { useMemo, useState, useEffect, useRef } from 'react';
 import { galleryFiles as localGalleryFiles } from 'virtual:event-gallery';
+import { CLUB_GALLERY_IMAGES } from '../data/eventsData';
 import { SectionHeader } from './LayoutElements';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const galleryFiles = localGalleryFiles;
+const galleryFiles = Array.from(new Set([...CLUB_GALLERY_IMAGES, ...localGalleryFiles]));
 /* ─── helpers ─────────────────────────────────────────────────── */
 
 const VIDEO_EXT = /\.(mp4|mov|webm|ogg)$/i;
