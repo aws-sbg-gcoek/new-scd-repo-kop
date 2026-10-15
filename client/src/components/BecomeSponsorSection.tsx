@@ -8,7 +8,7 @@ export const BecomeSponsorSection = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText("info@aws-scd-kolhapur.tech");
+    navigator.clipboard.writeText("awssbggcoek@gmail.com");
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
@@ -138,7 +138,7 @@ export const BecomeSponsorSection = () => {
                   className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 text-white font-mono text-[10px] uppercase tracking-widest hover:border-white/30 hover:bg-white/10 transition-colors"
                 >
                   <Mail size={12} className="text-aws-orange" />
-                  {copiedEmail ? "Copied to clipboard!" : "info@aws-scd-kolhapur.tech"}
+                  {copiedEmail ? "Copied to clipboard!" : "awssbggcoek@gmail.com"}
                 </button>
               </div>
 

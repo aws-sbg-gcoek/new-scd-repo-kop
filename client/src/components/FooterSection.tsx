@@ -1,4 +1,4 @@
-import { Mail, Linkedin, Twitter, Instagram } from 'lucide-react';
+import { Mail, Linkedin, Twitter, Instagram, Github, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const quickLinks = [
@@ -47,6 +47,10 @@ export const FooterSection = () => {
          <div className="flex flex-col max-w-sm">
            <div className="text-white font-sans font-black italic text-2xl sm:text-4xl mb-2 uppercase tracking-tighter">AWS SCD<br/>KOLHAPUR 2026.</div>
            <div className="text-white/60 text-xs sm:text-sm font-sans mb-6 sm:mb-8">Powering the next generation of cloud innovators. Organized by AWS Student Builder Group GCOEK.</div>
+           <div className="flex items-start gap-2 text-white/50 font-mono text-[10px] sm:text-xs mb-4">
+             <MapPin size={14} className="text-aws-orange shrink-0 mt-0.5" />
+             <span>Govt. College of Engineering, Vidyanagar, Kolhapur, Maharashtra 416004</span>
+           </div>
            <a href="mailto:awssbggcoek@gmail.com" className="inline-flex max-w-max items-center font-mono text-[10px] sm:text-xs text-aws-orange hover:text-white transition-colors mb-2 uppercase tracking-widest gap-2 break-all">
              <Mail size={14} className="shrink-0" /> awssbggcoek@gmail.com
            </a>
@@ -65,9 +69,11 @@ export const FooterSection = () => {
             <div className="flex flex-col">
                <span className="font-sans font-black italic text-base sm:text-lg uppercase text-white mb-3 sm:mb-4">Community Socials</span>
                <ul className="flex flex-col gap-3 font-mono text-[10px] sm:text-xs opacity-70 uppercase tracking-wider sm:tracking-widest">
-                  <li><a href="https://linkedin.com/company/aws-sbg-gcoek" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#0a66c2] transition-colors"><Linkedin size={14} /> LinkedIn</a></li>
+                  <li><a href="https://www.linkedin.com/company/aws-cloud-club-gcoe-kolhapur/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#0a66c2] transition-colors"><Linkedin size={14} /> LinkedIn</a></li>
                   <li><a href="https://x.com/aws_gcoek" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors"><Twitter size={14} /> X / Twitter</a></li>
-                  <li><a href="https://www.instagram.com/aws_gcoek/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#e1306c] transition-colors"><Instagram size={14} /> Instagram</a></li>
+                  <li><a href="https://www.instagram.com/aws.sbg.gcoe.kolhapur/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#e1306c] transition-colors"><Instagram size={14} /> Instagram</a></li>
+                  <li><a href="https://www.meetup.com/aws-sbg-at-government-college-of-engineering-kolhapur/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#e0393e] transition-colors"><span className="w-3.5 h-3.5 flex items-center justify-center font-bold text-xs">M</span> Meetup</a></li>
+                  <li><a href="https://github.com/AWSCloudClubGCOE" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors"><Github size={14} /> GitHub</a></li>
                </ul>
             </div>
          </div>

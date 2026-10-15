@@ -15,7 +15,7 @@ function extractHtmlFromMime(mime: string) {
 }
 
 const DEFAULT_THEME_MIME = `From: AWS Student Community Day Kolhapur 2026 <no-reply@aws-scd-kolhapur.tech>
-Reply-To: info@aws-scd-kolhapur.tech
+Reply-To: awssbggcoek@gmail.com
 To: {{attendee_email}}
 Subject: 🎟️ Your Ticket is Confirmed — AWS Student Community Day Kolhapur 2026
 MIME-Version: 1.0
@@ -291,9 +291,9 @@ Content-Type: text/html; charset=UTF-8
                   <td style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px 20px;text-align:center;">
                     <p style="margin:0;font-size:13px;color:#6b7280;">
                       Questions? Reach us at
-                      <a href="mailto:info@aws-scd-kolhapur.tech"
+                      <a href="mailto:awssbggcoek@gmail.com"
                          style="color:#FF9900;font-weight:700;text-decoration:none;">
-                        info@aws-scd-kolhapur.tech
+                        awssbggcoek@gmail.com
                       </a>
                     </p>
                   </td>
