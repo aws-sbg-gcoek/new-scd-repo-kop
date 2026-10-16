@@ -121,7 +121,7 @@ export const HeaderSection = () => {
           }}
         />
         <Link to="/" className="flex items-center mt-1 sm:gap-4 group">
-          <img src="/scd-kolhapur-logo.png" alt="Student Community Day" className="h-10 sm:h-12 lg:h-14 w-auto max-w-[210px] sm:max-w-[270px] object-contain group-hover:scale-105 transition-transform" fetchPriority="high" />
+          <img src="/aws-logo-white.svg" alt="AWS" className="h-8 sm:h-10 lg:h-12 w-auto max-w-[210px] sm:max-w-[270px] object-contain group-hover:scale-105 transition-transform" fetchPriority="high" />
         </Link>
 
         {/* Desktop nav */}

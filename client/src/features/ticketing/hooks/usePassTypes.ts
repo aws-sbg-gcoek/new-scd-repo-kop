@@ -60,12 +60,11 @@ function mapConfigToPasses(config: TicketSystemConfig): PassType[] {
       badgeColor: '#FF9900',
       defaultBadge: 'POPULAR CHOICE',
       perks: [
-        'Priority Seating & Fast-Track Check-In',
-        'Full Day Keynotes, Tech Sessions & AI Demos',
-        'Exclusive Event Swag Bag & Lanyard Badge',
-        'Networking Lunch & Afternoon High Tea',
-        'Direct Access to Sponsor & Career Booths',
-        'Verified Certificate of Participation'
+        'Full Day All-Track Conference Access',
+        'Official Event Swag Kit & Badge',
+        'Networking High Tea & Catered Lunch',
+        'Verified Certificate of Participation',
+        'Access to Keynotes & Hands-on Tech Demos'
       ]
     },
     {
@@ -79,10 +78,10 @@ function mapConfigToPasses(config: TicketSystemConfig): PassType[] {
       defaultBadge: 'STANDARD ENTRY',
       perks: [
         'Full Day All-Track Conference Access',
-        'Official Attendee Badge & Swags',
-        'Lunch & Networking Refreshments',
+        'Official Event Swag Kit & Badge',
+        'Networking High Tea & Catered Lunch',
         'Verified Certificate of Participation',
-        'Access to Sponsor Exhibits & Q&A Sessions'
+        'Access to Keynotes & Hands-on Tech Demos'
       ]
     }
   ];

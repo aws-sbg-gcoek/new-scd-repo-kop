@@ -20,7 +20,7 @@ export default function EventsPage() {
       {/* Sticky Header */}
       <header className="sticky top-0 z-50 bg-[#070707]/90 backdrop-blur-md border-b border-white/10 px-4 sm:px-12 lg:px-24 py-4 flex items-center justify-between shadow-xl">
         <Link to="/" className="flex items-center gap-3 group">
-          <img src="/scd-kolhapur-logo.png" alt="Student Community Day" className="h-9 sm:h-11 w-auto max-w-[220px] object-contain group-hover:scale-105 transition-transform" />
+          <img src="/aws-logo-white.svg" alt="AWS" className="h-8 sm:h-10 w-auto max-w-[220px] object-contain group-hover:scale-105 transition-transform" />
         </Link>
 
         <Link

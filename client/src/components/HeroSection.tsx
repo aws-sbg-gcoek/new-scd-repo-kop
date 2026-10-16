@@ -31,11 +31,10 @@ export const HeroSection = () => {
     video.loop = true;
     const isPreloaderActive = typeof document !== 'undefined' && document.body.classList.contains('preloader-active');
 
-    // While preloader is active, keep the video muted so engine-start.mp3 plays first exclusively
+    // While preloader is active, keep video strictly paused at 0:00 — play only when green lights disappear!
     if (isPreloaderActive && !forceUnmute) {
-      video.muted = true;
-      video.volume = 0;
-      video.play().catch(() => {});
+      video.pause();
+      try { video.currentTime = 0; } catch (e) {}
       return;
     }
 
@@ -55,6 +54,7 @@ export const HeroSection = () => {
           
           // As soon as the user scrolls, clicks, or touches anywhere, instantly unmute and unleash engine roar!
           const unlockSound = () => {
+            if (typeof document !== 'undefined' && document.body.classList.contains('preloader-active')) return;
             if (videoRef.current) {
               videoRef.current.muted = false;
               videoRef.current.volume = 0.65;
@@ -152,57 +152,34 @@ export const HeroSection = () => {
     return () => clearInterval(watchdog);
   }, [inView, ensureVideoPlaying]);
 
-  // Preloader homeEntered listener - engine-start.mp3 continues playing after homepage opens for 4 seconds, then stops and F1 video sound roars
+  // Preloader complete / green lights disappear listener — plays video from start (0:00) with video sound active!
   useEffect(() => {
-    let homeTimer: any = null;
-
-    const handleHomeEntered = () => {
+    const handleStartPlayback = () => {
       const lite = localStorage.getItem('scd_lite_mode') === 'true';
       setIsLiteMode(lite);
       if (lite) return;
 
+      // Stop the one-time start engine audio completely so the video sound is active
       const starterAudio = typeof window !== 'undefined' ? (window as any).__scd_starter_audio : null;
+      if (starterAudio) {
+        starterAudio.pause();
+        try { starterAudio.currentTime = 0; } catch (e) {}
+        (window as any).__scd_starter_audio = null;
+      }
 
-      if (starterAudio && !starterAudio.paused) {
-        // While starter engine is running on homepage, keep video muted for 4 seconds
-        if (videoRef.current) {
-          videoRef.current.muted = true;
-          videoRef.current.volume = 0;
-          videoRef.current.play().catch(() => {});
-        }
+      globalIsMuted = false;
+      setIsMuted(false);
 
-        if (homeTimer) clearTimeout(homeTimer);
-        homeTimer = setTimeout(() => {
-          // After 4 seconds on homepage: smoothly fade out and stop engine-start.mp3
-          const fadeInterval = setInterval(() => {
-            if (starterAudio.volume > 0.1) {
-              starterAudio.volume = Math.max(0, starterAudio.volume - 0.15);
-            } else {
-              starterAudio.pause();
-              try { starterAudio.currentTime = 0; } catch (e) {}
-              (window as any).__scd_starter_audio = null;
-              clearInterval(fadeInterval);
-            }
-          }, 60);
-
-          // Now unleash the roaring F1 car video sound!
-          globalIsMuted = false;
-          setIsMuted(false);
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.muted = false; // Video sound is active!
+        videoRef.current.volume = 0.65;
+        videoRef.current.play().catch(() => {
           if (videoRef.current) {
-            videoRef.current.muted = false;
-            videoRef.current.volume = 0.65;
+            videoRef.current.muted = true;
             videoRef.current.play().catch(() => {});
           }
-        }, 4000);
-      } else {
-        // If starter audio wasn't active (e.g. returning visitor), start F1 video sound directly
-        globalIsMuted = false;
-        setIsMuted(false);
-        if (videoRef.current) {
-          videoRef.current.muted = false;
-          videoRef.current.volume = 0.65;
-          videoRef.current.play().catch(() => {});
-        }
+        });
       }
     };
 
@@ -210,14 +187,15 @@ export const HeroSection = () => {
       toggleSound();
     };
 
-    window.addEventListener("homeEntered", handleHomeEntered);
+    window.addEventListener("homeEntered", handleStartPlayback);
+    window.addEventListener("greenLightsDisappear", handleStartPlayback);
     window.addEventListener("toggleMute", handleExternalToggleMute);
     return () => {
-      if (homeTimer) clearTimeout(homeTimer);
-      window.removeEventListener("homeEntered", handleHomeEntered);
+      window.removeEventListener("homeEntered", handleStartPlayback);
+      window.removeEventListener("greenLightsDisappear", handleStartPlayback);
       window.removeEventListener("toggleMute", handleExternalToggleMute);
     };
-  }, [ensureVideoPlaying]);
+  }, []);
 
   return (
     <section ref={sectionRef} className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden border-b border-white/5 z-10 px-4 sm:px-12 lg:px-24 pt-24 pb-12" aria-label="Hero Section">
@@ -235,7 +213,6 @@ export const HeroSection = () => {
           <video
             ref={videoRef}
             preload="auto"
-            autoPlay
             loop
             muted={isMuted}
             playsInline

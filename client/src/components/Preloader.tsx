@@ -108,6 +108,12 @@ export const Preloader = ({ onComplete }: { onComplete: () => void; key?: string
               setTimeout(() => {
                 localStorage.setItem('scd_intro_played', Date.now().toString());
                 sessionStorage.setItem('scd_session_intro_played', 'true');
+                if (engineAudioRef.current) {
+                  engineAudioRef.current.pause();
+                  try { engineAudioRef.current.currentTime = 0; } catch (e) {}
+                  (window as any).__scd_starter_audio = null;
+                }
+                window.dispatchEvent(new Event('greenLightsDisappear'));
                 onComplete();
               }, 1200);
             }, 500);
@@ -136,9 +142,9 @@ export const Preloader = ({ onComplete }: { onComplete: () => void; key?: string
     osc.start();
     osc.stop(audioCtxRef.current.currentTime + 0.001);
 
-    // Load engine audio on click (user gesture needed), play after 1.5s delay
+    // Load engine audio on click (user gesture needed), plays only one time at start
     const audio = new Audio('/engine-start.mp3');
-    audio.loop = true;
+    audio.loop = false;
     (window as any).__scd_starter_audio = audio;
     audio.volume = 0.85;
     engineAudioRef.current = audio;

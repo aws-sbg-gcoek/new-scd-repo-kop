@@ -60,6 +60,16 @@ const coreCrew: TeamMember[] = [
     skills: "Management, Coordination, Community Building"
   },
   {
+    name: "Anas Pathan",
+    role: "Project Lead",
+    department: "Technical Dept",
+    description: "Leading project development, coordinating the team, and building scalable applications with modern cloud technologies.",
+    image: "https://i.ibb.co/YBDxDXfV/Chat-GPT-Image-Sep-4-2026-12-44-21-AM.png",
+    linkedin: "https://www.linkedin.com/in/anas-pathan-91a6b3368",
+    email: "pathananas2007@gmail.com",
+    skills: "AWS, Project Leadership, Cloud Development, Node.js, Docker"
+  },
+  {
     name: "Yash Nawal",
     role: "Technical Associate",
     department: "Technical Dept",
