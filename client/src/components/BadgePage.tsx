@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   Image as ImageIcon,
 } from "lucide-react";
-import { toPng } from "html-to-image";
 import { motion } from "motion/react";
 
 export const BadgePage = () => {
@@ -32,6 +31,9 @@ export const BadgePage = () => {
     if (!badgeRef.current) return;
     setIsGenerating(true);
     try {
+      // Dynamic import to keep initial BadgePage load instantaneous
+      const { toPng } = await import("html-to-image");
+
       // Delay to ensure any DOM painting / image loading is settled
       await new Promise((resolve) => setTimeout(resolve, 150));
 
@@ -67,7 +69,7 @@ export const BadgePage = () => {
   };
 
   return (
-    <div className="h-[110vh] bg-[#050505] text-[#e0e0e0] flex flex-col font-sans relative overflow-x-hidden overflow-y-auto">
+    <div className="min-h-screen bg-[#050505] text-[#e0e0e0] flex flex-col font-sans relative overflow-x-hidden">
       {/* Background aesthetics */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-f1-red/10 blur-[120px] rounded-full mix-blend-screen" />
@@ -133,8 +135,9 @@ export const BadgePage = () => {
                   {/* Right Logos - Single Line */}
                   <div className="flex items-center gap-2">
                     <img
-                      src="/AWS_Builder.png"
-                      alt="AWS Builder"
+                      src="/AWS_Builder.webp"
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/AWS_Builder.png'; }}
+                      alt="AWS Builder Kolhapur"
                       className="h-7 w-auto object-contain"
                     />
                   </div>

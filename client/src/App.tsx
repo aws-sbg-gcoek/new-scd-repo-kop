@@ -29,7 +29,7 @@ import { FooterSection } from './components/FooterSection';
 const SponsorPage = lazy(() => import('./components/SponsorPage').then(module => ({ default: module.SponsorPage })));
 const NotFoundPage = lazy(() => import('./components/NotFoundPage').then(module => ({ default: module.NotFoundPage })));
 const StatusPage = lazy(() => import('./components/StatusPage').then(module => ({ default: module.StatusPage })));
-const BadgePage = lazy(() => import('./components/BadgePage').then(module => ({ default: module.BadgePage })));
+import { BadgePage } from './components/BadgePage';
 const CodeOfConductPage = lazy(() => import('./components/CodeOfConductPage').then(module => ({ default: module.CodeOfConductPage })));
 const TeamPage = lazy(() => import('./pages/TeamPage'));
 import { BackToTop } from './components/BackToTop';

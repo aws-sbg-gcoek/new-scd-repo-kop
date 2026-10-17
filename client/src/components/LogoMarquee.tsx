@@ -1,98 +1,104 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import React from "react";
 
 export const LogoMarquee = () => {
-  const marqueeRef = useRef<HTMLDivElement>(null);
-  const tweenRef = useRef<gsap.core.Tween | null>(null);
-
-  useEffect(() => {
-    if (!marqueeRef.current) return;
-
-    tweenRef.current = gsap.to(marqueeRef.current, {
-      xPercent: -50,
-      ease: "none",
-      duration: 15,
-      repeat: -1,
-    });
-
-    // Pause on hover (desktop) — handled via CSS pause-animation below
-    const el = marqueeRef.current.parentElement;
-    if (el) {
-      const pause = () => tweenRef.current?.pause();
-      const resume = () => tweenRef.current?.resume();
-      el.addEventListener("mouseenter", pause);
-      el.addEventListener("mouseleave", resume);
-
-      return () => {
-        tweenRef.current?.kill();
-        el.removeEventListener("mouseenter", pause);
-        el.removeEventListener("mouseleave", resume);
-      };
-    }
-
-    return () => tweenRef.current?.kill();
-  }, []);
-
-  // Listen for tap events from touchHover.ts (mobile marquee pause)
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (detail?.pause) {
-        tweenRef.current?.pause();
-      } else {
-        tweenRef.current?.resume();
-      }
-    };
-    window.addEventListener("marquee-tap", handler);
-    return () => window.removeEventListener("marquee-tap", handler);
-  }, []);
+  const logos = [
+    {
+      src: "/AWS_logo1.avif",
+      alt: "AWS Logo",
+      className: "h-10 sm:h-12 w-auto object-contain opacity-90 hover:opacity-100 hover:scale-105 transition-all duration-300 drop-shadow-[0_0_10px_rgba(255,153,0,0.2)]",
+    },
+    {
+      src: "/partner-logo.png",
+      alt: "Community Partner Logo",
+      className: "h-11 sm:h-14 w-auto object-contain opacity-95 hover:opacity-100 hover:scale-110 transition-all duration-300 drop-shadow-[0_0_15px_rgba(168,85,247,0.4)]",
+    },
+    {
+      src: "/AWS_Builder.webp",
+      fallbackSrc: "/AWS_Builder.png",
+      alt: "AWS Student Builder Group at Kolhapur",
+      className: "h-10 sm:h-12 w-auto object-contain rounded-md opacity-95 hover:opacity-100 hover:scale-105 transition-all duration-300 border border-purple-500/30 shadow-[0_0_16px_rgba(168,85,247,0.25)]",
+    },
+  ];
 
   return (
-    <div className="w-full border-b border-white/10 bg-[#050505] py-6 sm:py-10 overflow-hidden relative flex z-20">
-      {/* Left fade */}
-      <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none" />
+    <div className="w-full border-b border-white/10 bg-[#050505] py-6 sm:py-9 overflow-hidden relative flex z-20 group">
+      {/* Left gradient fade */}
+      <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent z-10 pointer-events-none" />
 
-      {/* Right fade */}
-      <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none" />
+      {/* Right gradient fade */}
+      <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-l from-[#050505] via-[#050505]/80 to-transparent z-10 pointer-events-none" />
 
-      <div ref={marqueeRef} className="flex items-center whitespace-nowrap min-w-max">
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            className="flex items-center space-x-12 sm:space-x-24 px-6 sm:px-12"
-          >
-            {/* marquee-logo class is targeted by touchHover.ts */}
-            <img
-              src="/AWS_logo1.avif"
-              alt="AWS Logo"
-              width={120}
-              height={48}
-              loading="lazy"
-              decoding="async"
-              className="marquee-logo h-12 object-contain grayscale-0 opacity-100 sm:grayscale sm:opacity-60 sm:hover:grayscale-0 sm:hover:opacity-100 sm:focus:grayscale-0 sm:focus:opacity-100 transition-all duration-300"
-            />
+      {/* Inline styles for 100% reliable hardware-accelerated infinite marquee */}
+      <style>{`
+        @keyframes continuousMarquee {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          100% {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+        .continuous-marquee-track {
+          display: flex;
+          align-items: center;
+          width: max-content;
+          will-change: transform;
+          animation: continuousMarquee 28s linear infinite;
+        }
+        .continuous-marquee-track:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
 
-            <img
-              src="/partner-logo.png"
-              alt="Community Logo"
-              width={120}
-              height={64}
-              loading="lazy"
-              decoding="async"
-              className="marquee-logo h-14 object-contain grayscale-0 opacity-100 sm:grayscale sm:opacity-60 sm:hover:grayscale-0 sm:hover:opacity-100 sm:focus:grayscale-0 sm:focus:opacity-100 transition-all duration-300"
-            />
+      {/* Marquee Track (Repeated twice for seamless infinite -50% loop) */}
+      <div className="continuous-marquee-track">
+        {/* Set 1 */}
+        <div className="flex items-center space-x-12 sm:space-x-20 px-6 sm:px-10">
+          {[...Array(4)].map((_, groupIdx) => (
+            <React.Fragment key={`set1-${groupIdx}`}>
+              {logos.map((logo, logoIdx) => (
+                <div key={`s1-${groupIdx}-${logoIdx}`} className="shrink-0 flex items-center justify-center">
+                  <img
+                    src={logo.src}
+                    onError={(e) => {
+                      if (logo.fallbackSrc) {
+                        (e.currentTarget as HTMLImageElement).src = logo.fallbackSrc;
+                      }
+                    }}
+                    alt={logo.alt}
+                    loading="lazy"
+                    decoding="async"
+                    className={logo.className}
+                  />
+                </div>
+              ))}
+            </React.Fragment>
+          ))}
+        </div>
 
-            <img
-              src="/AWS_Builder.png"
-              alt="AWS Builder Logo"
-              width={120}
-              height={48}
-              loading="lazy"
-              decoding="async"
-              className="marquee-logo h-12 object-contain grayscale-0 opacity-100 sm:grayscale sm:opacity-60 sm:hover:grayscale-0 sm:hover:opacity-100 sm:focus:grayscale-0 sm:focus:opacity-100 transition-all duration-300"
-            />
-          </div>
-        ))}
+        {/* Set 2 (Identical duplicate for seamless wrap) */}
+        <div className="flex items-center space-x-12 sm:space-x-20 px-6 sm:px-10">
+          {[...Array(4)].map((_, groupIdx) => (
+            <React.Fragment key={`set2-${groupIdx}`}>
+              {logos.map((logo, logoIdx) => (
+                <div key={`s2-${groupIdx}-${logoIdx}`} className="shrink-0 flex items-center justify-center">
+                  <img
+                    src={logo.src}
+                    onError={(e) => {
+                      if (logo.fallbackSrc) {
+                        (e.currentTarget as HTMLImageElement).src = logo.fallbackSrc;
+                      }
+                    }}
+                    alt={logo.alt}
+                    loading="lazy"
+                    decoding="async"
+                    className={logo.className}
+                  />
+                </div>
+              ))}
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );
