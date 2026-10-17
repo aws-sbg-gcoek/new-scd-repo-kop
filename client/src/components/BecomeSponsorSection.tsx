@@ -99,16 +99,16 @@ export const BecomeSponsorSection = () => {
               {/* Grid of Outreach Metrics */}
               <div className="grid grid-cols-2 gap-6 mb-8 bg-white/[0.02] border border-white/5 p-4 rounded-xl font-mono text-left">
                 <div>
-                  <span className="text-[9px] uppercase text-white/40 block tracking-wider mb-1">Target Outreach</span>
-                  <span className="text-sm font-black text-white">4,000+ Students</span>
+                  <span className="text-[9px] uppercase text-white/40 block tracking-wider mb-1">Community Reach</span>
+                  <span className="text-sm font-black text-white">1,000+ Members</span>
                 </div>
                 <div>
-                  <span className="text-[9px] uppercase text-white/40 block tracking-wider mb-1">Expected Attendance</span>
-                  <span className="text-sm font-black text-white">400+ Builders</span>
+                  <span className="text-[9px] uppercase text-white/40 block tracking-wider mb-1">Expected Participants</span>
+                  <span className="text-sm font-black text-white">250–300 Builders</span>
                 </div>
                 <div>
-                  <span className="text-[9px] uppercase text-white/40 block tracking-wider mb-1">Key Topics</span>
-                  <span className="text-sm font-black text-white">Cloud, AI, DevOps</span>
+                  <span className="text-[9px] uppercase text-white/40 block tracking-wider mb-1">Date</span>
+                  <span className="text-sm font-black text-white">1st November 2026</span>
                 </div>
                 <div>
                   <span className="text-[9px] uppercase text-white/40 block tracking-wider mb-1">Venue</span>

@@ -33,11 +33,20 @@ import {
 } from 'lucide-react';
 
 interface TicketScannerProps {
-  registrations: StudentRegistration[];
+  registrations?: StudentRegistration[];
   onCheckInChange?: () => void;
 }
 
-export default function TicketScanner({ registrations, onCheckInChange }: TicketScannerProps) {
+export default function TicketScanner({ registrations: propRegistrations, onCheckInChange }: TicketScannerProps) {
+  const [internalRegistrations, setInternalRegistrations] = useState<StudentRegistration[]>([]);
+
+  useEffect(() => {
+    if (!propRegistrations) {
+      setInternalRegistrations(loadRegistrations());
+    }
+  }, [propRegistrations]);
+
+  const registrations = propRegistrations ?? internalRegistrations;
   const [isScanning, setIsScanning] = useState(false);
   const [isStartingCamera, setIsStartingCamera] = useState(false);
   const [facingMode, setFacingMode] = useState<'environment' | 'user'>('environment');

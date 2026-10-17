@@ -11,16 +11,24 @@ import {
   Phone,
   Globe,
   MessageSquare,
-  Tag,
   Upload,
   Check,
   X,
   Sparkles,
-  Award,
-  Layers,
   ArrowDown,
   Briefcase,
   Store,
+  Calendar,
+  MapPin,
+  Users,
+  Award,
+  ExternalLink,
+  Flame,
+  CheckCircle2,
+  ShieldCheck,
+  Radio,
+  Eye,
+  Megaphone,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -34,91 +42,130 @@ export interface SponsorTierItem {
   price: string;
   amount: number;
   highlight: boolean;
+  tag: string;
   perks: string[];
 }
 
 export const sponsorTiers: SponsorTierItem[] = [
   {
-    name: 'Title Sponsor',
-    price: '₹75,000',
-    amount: 75000,
+    name: 'Platinum Sponsor',
+    price: '₹35,000 - ₹45,000',
+    amount: 35000,
     highlight: true,
+    tag: '★ Title Partner Tier',
     perks: [
-      'Exclusive Main stage naming & branding',
-      'Prime 10x10 expo stall at entrance',
-      '20-min Keynote tech speaking slot',
-      'VIP student lanyards & pass branding',
-      'Social media campaigns & PR coverage',
-      'Direct recruitment & resume book access',
+      'Largest logo on every asset (banners, slides, stage backdrop)',
+      'Stage mention (opening & closing) — Named as Platinum Sponsor',
+      'Premium stall space — largest area in the hall',
+      'Dedicated social media post + all-event mentions',
+      'Branding on official attendee certificates',
+      'Largest logo on event registration page & website',
     ],
   },
   {
     name: 'Gold Sponsor',
-    price: '₹40,000',
-    amount: 40000,
+    price: '₹15,000 - ₹20,000',
+    amount: 15000,
     highlight: false,
+    tag: 'Flagship Partner',
     perks: [
-      'Premium 8x8 expo booth space',
-      'Stage backdrop & event banner branding',
-      'Social media feature announcements',
-      'Participant kit & swag distribution',
-      'VIP networking lunch access',
+      'Prominent logo placement on main event assets',
+      'Stage mention during opening and closing ceremonies',
+      'Priority stall space spot in exhibition area',
+      'Dedicated social media feature post',
+      'Branding on official attendee certificates',
+      'Standard logo on event registration page & website',
     ],
   },
   {
     name: 'Silver Sponsor',
-    price: '₹20,000',
-    amount: 20000,
+    price: '₹8,000 - ₹12,000',
+    amount: 8000,
     highlight: false,
+    tag: 'Community Supporter',
     perks: [
-      'Dedicated sponsor exhibition table',
-      'Logo on event sponsor wall & website',
-      'Brochures & promotional flyers in kit',
-      'Social media mention',
+      'Standard logo placement on banners and presentation slides',
+      'Standard spot stall space for direct engagement',
+      'Shared social media shoutout post',
+      'Small logo on event registration page & website',
     ],
   },
   {
     name: 'Bronze Sponsor',
-    price: '₹15,000',
-    amount: 15000,
+    price: '₹3,000 - ₹5,000',
+    amount: 3000,
     highlight: false,
+    tag: 'Ecosystem Backer',
     perks: [
-      'Brand display table in expo alley',
-      'Logo placement on website & handbook',
-      'Product flyers distribution',
+      'Listed on event banner & presentation slides',
+      'Mention in official sponsor list social media post',
+      'Listed on event registration page & website',
     ],
   },
+];
+
+const REACH_METRICS = [
   {
-    name: 'Startup Showcase',
-    price: '₹12,000',
-    amount: 12000,
-    highlight: false,
-    perks: [
-      'Dedicated startup demo kiosk',
-      'Live product showcase to 400+ builders',
-      'Founder networking access',
-      'Social media spotlight',
-    ],
+    label: 'Expected Event Participants',
+    value: '250 - 300',
+    desc: 'Passionate student developers, cloud engineers & AI builders',
   },
   {
-    name: 'Community Partner',
-    price: '₹7,500',
-    amount: 7500,
-    highlight: false,
-    perks: [
-      'Community partner logo on website',
-      'Banner display in developer hub',
-      'Student builder outreach opportunities',
-    ],
+    label: 'Meetup Community Members',
+    value: '1,000+',
+    desc: 'Active student builders across Kolhapur & Western Maharashtra',
+  },
+  {
+    label: 'AWS Builder Center Sign-ups',
+    value: '400+',
+    desc: 'Registered builders actively exploring hands-on cloud skills',
+  },
+  {
+    label: 'LinkedIn Followers',
+    value: '430+',
+    desc: 'Growing network of students, alumni, and tech professionals',
+  },
+];
+
+const WHY_SPONSOR_POINTS = [
+  {
+    title: 'Direct Talent Access',
+    desc: 'Direct access to 250+ engaged student developers, emerging tech talent, and future cloud architects.',
+    icon: Users,
+  },
+  {
+    title: 'Massive Brand Exposure',
+    desc: 'Brand exposure to 1,000+ community members and 430+ LinkedIn followers through banners, slides, social shoutouts, and event recaps.',
+    icon: Megaphone,
+  },
+  {
+    title: 'Live Booth & Stall Space',
+    desc: 'Dedicated booth / stall space for live, face-to-face demonstrations, recruitment discussions, and product showcases.',
+    icon: Store,
+  },
+  {
+    title: 'Prestigious AWS Association',
+    desc: 'Direct association with the AWS Student Builder Community and its flagship Student Community Day initiative.',
+    icon: ShieldCheck,
+  },
+  {
+    title: 'Long-Tail Content Visibility',
+    desc: 'Long-tail visibility through post-event content, high-res photos, video recaps, and testimonials shared across channels for weeks.',
+    icon: Eye,
+  },
+  {
+    title: 'Wide Regional Reach',
+    desc: "Students from Kolhapur as well as outside the city are expected to attend, extending your brand's visibility well beyond the local campus crowd.",
+    icon: Globe,
   },
 ];
 
 const SHOWCASE_OPTIONS = [
   '🎪 Product Expo Stall & Booth',
-  '🎤 Speaking Slot / Keynote Tech Demo',
+  '🎤 Speaking Slot / Tech Demo',
   '🎁 Distribute Goodies / Swag / Kits',
   '🏷️ Logo on Stage Backdrop & Banners',
-  '🎫 Student Pass Lanyards & Badges Branding',
+  '🎫 Student Pass Lanyards & Badges',
   '💼 Direct Student Talent Hiring & Internships',
   '💻 Software / Developer Tool Trials',
   '🏆 Hackathon / Challenge Prize Sponsorship',
@@ -131,7 +178,7 @@ export const SponsorPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const [selectedTier, setSelectedTier] = useState<string>('Title Sponsor');
+  const [selectedTier, setSelectedTier] = useState<string>('Platinum Sponsor');
   const [company, setCompany] = useState('');
   const [contactName, setContactName] = useState('');
   const [email, setEmail] = useState('');
@@ -230,7 +277,7 @@ export const SponsorPage = () => {
   const currentTierObj = sponsorTiers.find(t => t.name === selectedTier) || sponsorTiers[0];
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#e0e0e0] font-sans">
+    <div className="min-h-screen bg-[#050505] text-[#e0e0e0] font-sans selection:bg-aws-orange selection:text-black">
       {/* Background radial grid */}
       <div
         className="fixed inset-0 opacity-[0.03] pointer-events-none"
@@ -252,73 +299,221 @@ export const SponsorPage = () => {
           </Link>
           <div className="flex items-center gap-3">
             <span className="font-mono text-[10px] text-aws-orange tracking-widest uppercase hidden sm:inline">
-              Sponsorship Circuit 2026
+              AWS SBG GCOEK • SCD 2026
             </span>
             <button
               type="button"
               onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-aws-orange text-black font-black italic uppercase text-xs px-3.5 py-1.5 rounded tracking-wider hover:bg-white transition-all cursor-pointer"
             >
-              Apply Now ↓
+              Apply to Sponsor ↓
             </button>
           </div>
         </div>
       </div>
 
-      {/* Hero Section */}
+      {/* Hero Header Section */}
       <section className="relative py-16 sm:py-24 px-4 sm:px-8 lg:px-12 overflow-hidden border-b border-white/5">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-aws-orange/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#E10600]/5 rounded-full blur-[140px] pointer-events-none" />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-aws-orange/10 border border-aws-orange/30 text-aws-orange text-xs font-mono tracking-widest uppercase">
-            <Sparkles size={12} />
-            <span>05.PRTN / Official Sponsorship Packages</span>
+        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-5">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-aws-orange/10 border border-aws-orange/30 text-aws-orange text-xs font-mono tracking-widest uppercase font-bold">
+            <Sparkles size={13} />
+            <span>Sponsorship Proposal • AWS Student Community Day 2026</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black italic tracking-tighter uppercase text-white leading-none">
-            Constructors &amp;<br />
+
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black italic tracking-tighter uppercase text-white leading-none">
+            AWS Student Community Day 2026<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-aws-orange via-amber-400 to-[#E10600]">
-              Brand Partners
+              Sponsorship Proposal
             </span>
           </h1>
-          <p className="text-sm sm:text-base text-white/60 font-medium max-w-2xl mx-auto leading-relaxed">
-            Showcase your company, products, and services to over 400+ passionate student cloud engineers, developers, and tech builders at Western Maharashtra's premier AWS conference.
+
+          <p className="text-sm sm:text-base font-mono uppercase tracking-widest text-aws-orange font-bold">
+            AWS Student Builder Group, GCOEK Kolhapur
           </p>
 
-          <div className="pt-2 flex flex-wrap justify-center gap-3 font-mono text-xs">
-            <span className="bg-[#111] border border-white/10 px-3.5 py-1.5 rounded-full text-slate-300">
-              👥 4,000+ Student Outreach
-            </span>
-            <span className="bg-[#111] border border-white/10 px-3.5 py-1.5 rounded-full text-slate-300">
-              🎯 400+ Confirmed In-Person Builders
-            </span>
-            <span className="bg-[#111] border border-white/10 px-3.5 py-1.5 rounded-full text-slate-300">
-              📍 V.T. Patil Hall, Kolhapur
-            </span>
+          <p className="text-sm sm:text-base text-white/70 max-w-3xl mx-auto leading-relaxed">
+            We're inviting your organization to be part of that moment as a sponsor of SCD 2026 and in return, get direct, high-visibility access to a fast-growing, highly engaged student tech community that's actively building in cloud, AI, and open source.
+          </p>
+
+          {/* Date & Venue Badges */}
+          <div className="pt-3 flex flex-wrap justify-center gap-3 sm:gap-4 font-mono text-xs sm:text-sm">
+            <div className="flex items-center gap-2 bg-[#111] border border-white/10 px-4 py-2 rounded-xl text-white">
+              <Calendar size={15} className="text-aws-orange shrink-0" />
+              <span><strong>Date:</strong> 1st November 2026</span>
+            </div>
+            <div className="flex items-center gap-2 bg-[#111] border border-white/10 px-4 py-2 rounded-xl text-white">
+              <MapPin size={15} className="text-aws-orange shrink-0" />
+              <span><strong>Venue:</strong> V. T. Patil Convention Hall, Rajarampuri, Kolhapur</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Sponsorship Packages Grid */}
-      <section className="py-14 sm:py-20 px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto">
+      {/* The Opportunity Section */}
+      <section className="py-14 sm:py-20 px-4 sm:px-8 lg:px-12 max-w-5xl mx-auto">
+        <div className="p-6 sm:p-10 rounded-2xl bg-gradient-to-br from-[#121620] via-[#0c0f16] to-[#07090e] border border-white/10 relative overflow-hidden shadow-2xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-aws-orange/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-aws-orange via-amber-400 to-[#E10600]" />
+
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-aws-orange font-bold">
+              <Flame size={14} />
+              <span>Flagship Annual Initiative</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black italic uppercase tracking-tight text-white">
+              The Opportunity
+            </h2>
+
+            <div className="space-y-4 text-xs sm:text-sm text-white/80 leading-relaxed font-sans">
+              <p>
+                AWS Student Community Day (SCD) is the biggest event our AWS Student Builder Group organizes each year. SCD is the flagship annual event of our AWS Student Builder Group. Unlike a typical single topic meetup, SCD brings together multiple tracks, expert speakers, hands-on workshops, games and activities in one large-scale event, drawing students, developers, and tech enthusiasts from across the region.
+              </p>
+              <p>
+                For AWS, it represents the most ambitious event a Student Builder Group can run in a year. For us, it's a chance to bring that experience to Kolhapur and put our college and community on the map as one of the most active student tech chapters in the country.
+              </p>
+              <p className="text-white font-medium border-l-2 border-aws-orange pl-3 py-1 bg-white/[0.02]">
+                We're inviting your organization to be part of that moment as a sponsor of SCD 2026 and in return, get direct, high-visibility access to a fast-growing, highly engaged student tech community that's actively building in cloud, AI, and open source.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Reach Section */}
+      <section className="py-10 px-4 sm:px-8 lg:px-12 max-w-6xl mx-auto">
+        <div className="text-center mb-8">
+          <div className="font-mono text-xs text-aws-orange uppercase tracking-widest mb-1 font-bold">
+            Community Footprint
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black italic tracking-tight uppercase text-white">
+            Our Reach
+          </h2>
+          <p className="text-white/60 text-xs sm:text-sm mt-1">
+            Verified engagement metrics across our builder channels and student network.
+          </p>
+        </div>
+
+        {/* Reach Metric Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {REACH_METRICS.map((metric, i) => (
+            <motion.div
+              key={metric.label}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              className="p-5 rounded-xl bg-[#0c0e14] border border-white/10 flex flex-col justify-between"
+            >
+              <div>
+                <span className="font-mono text-[11px] text-white/50 uppercase tracking-wider block mb-1">
+                  {metric.label}
+                </span>
+                <div className="text-3xl font-black italic text-transparent bg-clip-text bg-gradient-to-r from-aws-orange to-amber-300 font-mono">
+                  {metric.value}
+                </div>
+              </div>
+              <p className="text-[11px] text-white/60 mt-3 pt-3 border-t border-white/5 leading-snug">
+                {metric.desc}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Reach Summary Table */}
+        <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#090b10]">
+          <table className="w-full text-left text-xs font-mono">
+            <thead className="bg-[#121622] text-white/80 uppercase tracking-wider text-[11px] border-b border-white/10">
+              <tr>
+                <th className="py-3 px-5">Metric</th>
+                <th className="py-3 px-5 text-right sm:text-left text-aws-orange">Value</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5 text-white/70">
+              <tr>
+                <td className="py-3 px-5 font-sans font-medium text-white">Expected event participants</td>
+                <td className="py-3 px-5 font-bold text-amber-300 text-right sm:text-left">250-300</td>
+              </tr>
+              <tr>
+                <td className="py-3 px-5 font-sans font-medium text-white">Meetup community members</td>
+                <td className="py-3 px-5 font-bold text-amber-300 text-right sm:text-left">1,000+</td>
+              </tr>
+              <tr>
+                <td className="py-3 px-5 font-sans font-medium text-white">AWS Builder Center sign-ups</td>
+                <td className="py-3 px-5 font-bold text-amber-300 text-right sm:text-left">400+</td>
+              </tr>
+              <tr>
+                <td className="py-3 px-5 font-sans font-medium text-white">LinkedIn followers</td>
+                <td className="py-3 px-5 font-bold text-amber-300 text-right sm:text-left">430+</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Why Sponsor SCD 2026? Section */}
+      <section className="py-14 sm:py-20 px-4 sm:px-8 lg:px-12 max-w-6xl mx-auto">
+        <div className="text-center mb-10">
+          <div className="font-mono text-xs text-aws-orange uppercase tracking-widest mb-1 font-bold">
+            Value Proposition
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black italic tracking-tight uppercase text-white">
+            Why Sponsor SCD 2026?
+          </h2>
+          <p className="text-white/60 text-xs sm:text-sm mt-1 max-w-xl mx-auto">
+            High-impact returns on investment designed to drive brand recall, recruitment, and live engagement.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {WHY_SPONSOR_POINTS.map((pt, i) => {
+            const Icon = pt.icon;
+            return (
+              <motion.div
+                key={pt.title}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="p-6 rounded-xl bg-[#0b0e14] border border-white/10 hover:border-aws-orange/40 transition-all group flex flex-col justify-start"
+              >
+                <div className="w-10 h-10 rounded-lg bg-aws-orange/10 border border-aws-orange/30 flex items-center justify-center text-aws-orange mb-4 group-hover:scale-110 transition-transform">
+                  <Icon size={20} />
+                </div>
+                <h3 className="text-base font-bold text-white mb-2 font-sans group-hover:text-aws-orange transition-colors">
+                  {pt.title}
+                </h3>
+                <p className="text-xs text-white/70 leading-relaxed font-sans">
+                  {pt.desc}
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Suggested Sponsorship Tiers Cards */}
+      <section className="py-14 sm:py-20 px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto border-t border-white/5">
         <div className="text-center sm:text-left mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <div className="font-mono text-xs text-aws-orange uppercase tracking-widest mb-1">
-              Select Your Tier
+            <div className="font-mono text-xs text-aws-orange uppercase tracking-widest mb-1 font-bold">
+              Investment Options
             </div>
             <h2 className="font-sans text-3xl sm:text-4xl font-black italic tracking-tight uppercase text-white">
-              Sponsorship Packages
+              Suggested Sponsorship Tiers
             </h2>
             <p className="text-white/50 text-xs sm:text-sm mt-1">
-              Click any tier below to automatically select it and customize your company exhibition proposal.
+              Select your tier below to auto-fill the exhibition application form.
             </p>
           </div>
           <span className="font-mono text-[11px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-lg self-start">
-            ⚡ 1-Click Package Selection
+            ⚡ Click any tier to select
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {sponsorTiers.map((tier, idx) => {
             const isSelected = selectedTier === tier.name;
             return (
@@ -351,7 +546,7 @@ export const SponsorPage = () => {
                           : 'bg-white/5 text-slate-400 border border-white/10'
                       }`}
                     >
-                      {tier.highlight ? '★ Premier Partner' : 'Standard Tier'}
+                      {tier.tag}
                     </span>
                     {isSelected && (
                       <span className="text-[10px] font-mono font-bold text-aws-orange flex items-center gap-1 animate-pulse">
@@ -360,11 +555,11 @@ export const SponsorPage = () => {
                     )}
                   </div>
 
-                  <h3 className="font-sans font-black italic tracking-tight text-2xl uppercase text-white">
+                  <h3 className="font-sans font-black italic tracking-tight text-xl uppercase text-white">
                     {tier.name}
                   </h3>
 
-                  <div className="font-mono text-2xl font-bold text-amber-400 mt-2 mb-4">
+                  <div className="font-mono text-xl font-bold text-amber-400 mt-2 mb-4">
                     {tier.price}
                   </div>
 
@@ -391,13 +586,253 @@ export const SponsorPage = () => {
                         : 'bg-white/10 text-white hover:bg-white hover:text-black'
                     }`}
                   >
-                    <span>{isSelected ? 'Selected (Fill Form Below ↓)' : 'Select Package & Apply'}</span>
+                    <span>{isSelected ? 'Selected (Apply Below ↓)' : 'Select Tier'}</span>
                     <ArrowDown size={14} />
                   </button>
                 </div>
               </motion.div>
             );
           })}
+        </div>
+      </section>
+
+      {/* Sponsorship Matrix / Comparison Table */}
+      <section className="py-10 px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto">
+        <div className="text-center mb-8">
+          <div className="font-mono text-xs text-aws-orange uppercase tracking-widest mb-1 font-bold">
+            Full Breakdown
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-black italic tracking-tight uppercase text-white">
+            Sponsorship Benefits Comparison
+          </h2>
+          <p className="text-white/60 text-xs sm:text-sm mt-1">
+            Compare deliverables, branding sizes, stage time, and booth entitlements across tiers.
+          </p>
+        </div>
+
+        <div className="overflow-x-auto rounded-2xl border border-white/10 bg-[#090c12] shadow-2xl">
+          <table className="w-full text-left text-xs sm:text-sm min-w-[700px]">
+            <thead className="bg-[#121724] border-b border-white/10 text-xs font-mono uppercase tracking-wider">
+              <tr>
+                <th className="py-4 px-5 text-white/90">Benefit</th>
+                <th className="py-4 px-5 text-amber-300 font-bold bg-aws-orange/10 border-x border-aws-orange/20">
+                  Platinum
+                </th>
+                <th className="py-4 px-5 text-amber-400 font-bold">Gold</th>
+                <th className="py-4 px-5 text-slate-300 font-bold">Silver</th>
+                <th className="py-4 px-5 text-slate-400 font-bold">Bronze</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5 font-sans text-xs">
+              {/* Contribution */}
+              <tr className="hover:bg-white/[0.02]">
+                <td className="py-3.5 px-5 font-bold text-white font-mono uppercase text-[11px]">
+                  Contribution
+                </td>
+                <td className="py-3.5 px-5 font-mono font-bold text-amber-300 bg-aws-orange/5 border-x border-aws-orange/20">
+                  ₹35,000 - ₹45,000
+                </td>
+                <td className="py-3.5 px-5 font-mono font-bold text-amber-400">
+                  ₹15,000 - ₹20,000
+                </td>
+                <td className="py-3.5 px-5 font-mono font-bold text-white/90">
+                  ₹8,000 - ₹12,000
+                </td>
+                <td className="py-3.5 px-5 font-mono font-bold text-white/70">
+                  ₹3,000 - ₹5,000
+                </td>
+              </tr>
+
+              {/* Logo placement */}
+              <tr className="hover:bg-white/[0.02]">
+                <td className="py-3.5 px-5 font-medium text-white/90">Logo placement</td>
+                <td className="py-3.5 px-5 text-white bg-aws-orange/5 border-x border-aws-orange/20">
+                  <strong>Largest</strong>, on every asset (banners, slides, stage backdrop)
+                </td>
+                <td className="py-3.5 px-5 text-white/80">
+                  <strong>Prominent</strong>, on main assets
+                </td>
+                <td className="py-3.5 px-5 text-white/70">
+                  Standard, on banners/slides
+                </td>
+                <td className="py-3.5 px-5 text-white/60">
+                  Listed on banner/slides
+                </td>
+              </tr>
+
+              {/* Stage mention */}
+              <tr className="hover:bg-white/[0.02]">
+                <td className="py-3.5 px-5 font-medium text-white/90">Stage mention</td>
+                <td className="py-3.5 px-5 text-white bg-aws-orange/5 border-x border-aws-orange/20">
+                  <div className="flex items-center gap-1.5 text-emerald-400 font-bold mb-0.5">
+                    <CheckCircle2 size={14} /> (opening &amp; closing)
+                  </div>
+                  <span className="text-[11px] text-white/80">Named as Platinum Sponsor</span>
+                </td>
+                <td className="py-3.5 px-5 text-emerald-400 font-bold">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 size={14} /> Yes
+                  </div>
+                </td>
+                <td className="py-3.5 px-5 text-white/30 font-mono">--</td>
+                <td className="py-3.5 px-5 text-white/30 font-mono">--</td>
+              </tr>
+
+              {/* Stall space */}
+              <tr className="hover:bg-white/[0.02]">
+                <td className="py-3.5 px-5 font-medium text-white/90">Stall space</td>
+                <td className="py-3.5 px-5 text-white bg-aws-orange/5 border-x border-aws-orange/20">
+                  <strong>Premium spot</strong>, largest area
+                </td>
+                <td className="py-3.5 px-5 text-white/80">
+                  <strong>Priority spot</strong>
+                </td>
+                <td className="py-3.5 px-5 text-white/70">
+                  Standard spot
+                </td>
+                <td className="py-3.5 px-5 text-white/30 font-mono">--</td>
+              </tr>
+
+              {/* Social media */}
+              <tr className="hover:bg-white/[0.02]">
+                <td className="py-3.5 px-5 font-medium text-white/90">Social media</td>
+                <td className="py-3.5 px-5 text-white bg-aws-orange/5 border-x border-aws-orange/20">
+                  <strong>Dedicated post + all-event mentions</strong>
+                </td>
+                <td className="py-3.5 px-5 text-white/80">
+                  Dedicated post
+                </td>
+                <td className="py-3.5 px-5 text-white/70">
+                  Shared shoutout post
+                </td>
+                <td className="py-3.5 px-5 text-white/60">
+                  Mention in sponsor list post
+                </td>
+              </tr>
+
+              {/* Branding on certificates */}
+              <tr className="hover:bg-white/[0.02]">
+                <td className="py-3.5 px-5 font-medium text-white/90">Branding on certificates</td>
+                <td className="py-3.5 px-5 text-emerald-400 font-bold bg-aws-orange/5 border-x border-aws-orange/20">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 size={14} /> Yes
+                  </div>
+                </td>
+                <td className="py-3.5 px-5 text-emerald-400 font-bold">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 size={14} /> Yes
+                  </div>
+                </td>
+                <td className="py-3.5 px-5 text-white/30 font-mono">--</td>
+                <td className="py-3.5 px-5 text-white/30 font-mono">--</td>
+              </tr>
+
+              {/* Logo on registration page/website */}
+              <tr className="hover:bg-white/[0.02]">
+                <td className="py-3.5 px-5 font-medium text-white/90">
+                  Logo on registration page / website
+                </td>
+                <td className="py-3.5 px-5 text-white font-bold bg-aws-orange/5 border-x border-aws-orange/20">
+                  Largest
+                </td>
+                <td className="py-3.5 px-5 text-white/80 font-medium">Standard</td>
+                <td className="py-3.5 px-5 text-white/70">Small</td>
+                <td className="py-3.5 px-5 text-white/60">Listed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Let's Build The Future Together & Contact Section */}
+      <section className="py-14 sm:py-20 px-4 sm:px-8 lg:px-12 max-w-5xl mx-auto">
+        <div className="p-6 sm:p-10 rounded-2xl bg-gradient-to-r from-[#111] via-[#161a24] to-[#111] border border-aws-orange/30 shadow-2xl relative overflow-hidden">
+          <div className="text-center max-w-3xl mx-auto space-y-4">
+            <span className="font-mono text-xs uppercase tracking-widest text-aws-orange font-bold">
+              Call For Partnerships
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black italic tracking-tight uppercase text-white">
+              Let's Build The Future Together
+            </h2>
+            <p className="text-xs sm:text-base text-white/80 leading-relaxed font-sans">
+              AWS Student Community Day 2026 is our chance to prove what a student community can build when given the right support. We'd love to have you as part of that story.
+            </p>
+
+            {/* Direct Core Contacts */}
+            <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
+              <a
+                href="tel:7020926643"
+                className="p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-aws-orange transition-all flex items-center gap-3 text-left group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-aws-orange/10 flex items-center justify-center text-aws-orange group-hover:scale-110 transition-transform">
+                  <Phone size={18} />
+                </div>
+                <div>
+                  <span className="font-sans font-bold text-white text-sm block">Bhushan Jadhav</span>
+                  <span className="font-mono text-xs text-amber-300">7020926643</span>
+                </div>
+              </a>
+
+              <a
+                href="tel:7620900361"
+                className="p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-aws-orange transition-all flex items-center gap-3 text-left group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-aws-orange/10 flex items-center justify-center text-aws-orange group-hover:scale-110 transition-transform">
+                  <Phone size={18} />
+                </div>
+                <div>
+                  <span className="font-sans font-bold text-white text-sm block">Tushant Tagade</span>
+                  <span className="font-mono text-xs text-amber-300">7620900361</span>
+                </div>
+              </a>
+            </div>
+
+            {/* Official Community Channels */}
+            <div className="pt-6 border-t border-white/10">
+              <span className="text-xs font-mono uppercase tracking-widest text-white/50 block mb-3 font-semibold">
+                Official Community Channels
+              </span>
+              <div className="flex flex-wrap items-center justify-center gap-3 font-mono text-xs">
+                <a
+                  href="https://www.meetup.com/aws-sbg-at-government-college-of-engineeringkolhapur/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/80 hover:text-white hover:border-aws-orange transition-all flex items-center gap-1.5"
+                >
+                  <span>Meetup Page</span>
+                  <ExternalLink size={12} className="text-aws-orange" />
+                </a>
+
+                <a
+                  href="https://www.linkedin.com/company/aws-sbg-gcoe-kolhapur/home/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/80 hover:text-white hover:border-aws-orange transition-all flex items-center gap-1.5"
+                >
+                  <span>LinkedIn Page</span>
+                  <ExternalLink size={12} className="text-aws-orange" />
+                </a>
+
+                <a
+                  href="https://www.instagram.com/aws.sbg.gcoe.kolhapur?stkn=eGl0bG5kbjJvbjN1"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/80 hover:text-white hover:border-aws-orange transition-all flex items-center gap-1.5"
+                >
+                  <span>Instagram</span>
+                  <ExternalLink size={12} className="text-aws-orange" />
+                </a>
+
+                <a
+                  href="mailto:awssbggcoek@gmail.com"
+                  className="px-3.5 py-1.5 rounded-lg bg-aws-orange/10 border border-aws-orange/30 text-aws-orange hover:bg-aws-orange hover:text-black transition-all flex items-center gap-1.5 font-bold"
+                >
+                  <Mail size={12} />
+                  <span>awssbggcoek@gmail.com</span>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -410,7 +845,7 @@ export const SponsorPage = () => {
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
-            <div className="font-mono text-xs text-aws-orange uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
+            <div className="font-mono text-xs text-aws-orange uppercase tracking-widest mb-2 flex items-center justify-center gap-2 font-bold">
               <Store size={14} />
               <span>Sponsor Exhibition &amp; Partnership Application</span>
             </div>
@@ -418,7 +853,7 @@ export const SponsorPage = () => {
               Lock In Your Brand's Grid Slot
             </h2>
             <p className="text-white/60 text-xs sm:text-sm max-w-lg mx-auto mt-2">
-              Select your package, share details about your business and stall requirements, and upload photos of your company, showroom, or products.
+              Select your tier, share details about your business and stall requirements, and upload photos of your company, showroom, or products.
             </p>
 
             {/* Currently Selected Tier Badge */}
@@ -490,8 +925,8 @@ export const SponsorPage = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Tier Selection Radio / Dropdown */}
                 <div className="space-y-2">
-                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-300">
-                    Sponsorship Tier &amp; Amount *
+                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 font-bold">
+                    Sponsorship Tier &amp; Contribution *
                   </label>
                   <select
                     required
@@ -510,22 +945,22 @@ export const SponsorPage = () => {
                 {/* Company & Industry */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5 font-bold">
                       <Building2 size={13} className="text-aws-orange" />
-                      <span>Company / Business Name *</span>
+                      <span>Company / Organization Name *</span>
                     </label>
                     <input
                       required
                       type="text"
                       value={company}
                       onChange={e => setCompany(e.target.value)}
-                      placeholder="e.g. Nexus Cloud Solutions Pvt Ltd"
+                      placeholder="e.g. Apex Cloud Solutions Pvt Ltd"
                       className="w-full bg-[#080C14] border border-[#243044] rounded-lg px-3.5 py-2.5 text-white text-xs sm:text-sm font-sans focus:border-aws-orange outline-none"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5 font-bold">
                       <Briefcase size={13} className="text-aws-orange" />
                       <span>Industry / Business Category *</span>
                     </label>
@@ -550,7 +985,7 @@ export const SponsorPage = () => {
                 {/* Contact Name & Designation */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5 font-bold">
                       <User size={13} className="text-aws-orange" />
                       <span>Contact Person *</span>
                     </label>
@@ -565,7 +1000,7 @@ export const SponsorPage = () => {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5 font-bold">
                       <Mail size={13} className="text-aws-orange" />
                       <span>Official Email *</span>
                     </label>
@@ -580,7 +1015,7 @@ export const SponsorPage = () => {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5 font-bold">
                       <Phone size={13} className="text-aws-orange" />
                       <span>Phone / WhatsApp *</span>
                     </label>
@@ -597,9 +1032,9 @@ export const SponsorPage = () => {
 
                 {/* Website URL */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5 font-bold">
                     <Globe size={13} className="text-aws-orange" />
-                    <span>Company Website or Social / LinkedIn Link</span>
+                    <span>Company Website or LinkedIn Link</span>
                   </label>
                   <input
                     type="url"
@@ -613,7 +1048,7 @@ export const SponsorPage = () => {
                 {/* Company / Shop / Stall Photo Upload */}
                 <div className="space-y-2 pt-2 border-t border-[#1E293B]">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5 font-bold">
                       <Upload size={13} className="text-amber-400" />
                       <span>Photo of Company Logo, Showroom, Stall or Products</span>
                     </label>
@@ -671,7 +1106,7 @@ export const SponsorPage = () => {
 
                 {/* What they want to showcase */}
                 <div className="space-y-2 pt-2 border-t border-[#1E293B]">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300 block">
+                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300 block font-bold">
                     What would you like to showcase or feature in the event? (Select all that apply)
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -703,7 +1138,7 @@ export const SponsorPage = () => {
                       rows={2}
                       value={customShowcase}
                       onChange={e => setCustomShowcase(e.target.value)}
-                      placeholder="e.g. We want to exhibit our new gaming laptops and host a 15-minute developer speed coding mini-contest..."
+                      placeholder="e.g. We want to exhibit our developer tools and host a hands-on live demo for student participants..."
                       className="w-full bg-[#080C14] border border-[#243044] rounded-lg p-3 text-white text-xs font-sans focus:border-aws-orange outline-none resize-none"
                     />
                   </div>
@@ -711,9 +1146,9 @@ export const SponsorPage = () => {
 
                 {/* Additional Details */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5 font-bold">
                     <MessageSquare size={13} className="text-aws-orange" />
-                    <span>Additional Goals, Requirements or Questions</span>
+                    <span>Additional Goals, Stall Requirements or Questions</span>
                   </label>
                   <textarea
                     rows={3}
@@ -748,7 +1183,7 @@ export const SponsorPage = () => {
       {/* Footer */}
       <footer className="border-t border-white/5 py-8 px-4 sm:px-8 lg:px-12 bg-[#030303]">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-mono text-slate-500">
-          <span>© 2026 AWS Student Builder Group. All rights reserved.</span>
+          <span>© 2026 AWS Student Builder Group, GCOEK Kolhapur. All rights reserved.</span>
           <Link to="/" className="text-aws-orange hover:text-white transition-colors">
             ← Return to SCD 2026 Home
           </Link>

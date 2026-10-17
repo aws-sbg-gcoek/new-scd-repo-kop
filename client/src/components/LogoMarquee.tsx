@@ -73,13 +73,13 @@ export const LogoMarquee = () => {
             />
 
             <img
-              src="/ARIF-white.png"
-              alt="ARIF Logo"
+              src="/partner-logo.png"
+              alt="Community Logo"
               width={120}
               height={64}
               loading="lazy"
               decoding="async"
-              className="marquee-logo h-16 object-contain grayscale-0 opacity-100 sm:grayscale sm:opacity-60 sm:hover:grayscale-0 sm:hover:opacity-100 sm:focus:grayscale-0 sm:focus:opacity-100 transition-all duration-300"
+              className="marquee-logo h-14 object-contain grayscale-0 opacity-100 sm:grayscale sm:opacity-60 sm:hover:grayscale-0 sm:hover:opacity-100 sm:focus:grayscale-0 sm:focus:opacity-100 transition-all duration-300"
             />
 
             <img

@@ -124,8 +124,8 @@ export const FAQSection = () => {
 
       <div className="max-w-5xl mx-auto relative z-10">
         <SectionHeader 
-          title="Briefing Room" 
-          subtitle="Frequently asked questions about AWS Student Community Day Kolhapur. Everything you need to know before lights out." 
+          title="Frequently Asked Questions (FAQs)" 
+          subtitle="AWS Student Community Day Kolhapur" 
           sysId="10.FAQ" 
         />
 

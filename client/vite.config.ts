@@ -52,6 +52,7 @@ function eventGalleryPlugin(): Plugin {
 
 export default defineConfig(() => {
   return {
+    root: fs.realpathSync(process.cwd()),
     plugins: [react(), tailwindcss(), eventGalleryPlugin()],
     resolve: {
       alias: {
