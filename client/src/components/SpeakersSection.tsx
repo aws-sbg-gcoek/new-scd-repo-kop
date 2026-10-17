@@ -1,423 +1,494 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { SectionHeader } from './LayoutElements';
-import { Mic, Sparkles, ArrowRight, Radio, Layers, Linkedin, ArrowUpRight } from 'lucide-react';
+import { User, X, Terminal, Sparkles } from 'lucide-react';
 
-interface SpeakerItem {
-  id: string;
+interface Speaker {
+  id: number;
   name: string;
+  image: string;
   designation: string;
-  company: string;
+  role: string;
+  sessionType: string;
   sessionTitle: string;
-  time: string;
-  image?: string;
-  isAnnounced: boolean;
-  linkedin?: string;
-  badge: string;
+  topic: string;
+  shortDescription: string;
+  category: string;
+  featured: boolean;
 }
 
-const SPEAKERS: SpeakerItem[] = [
+const DEFAULT_SPEAKERS: Speaker[] = [
   {
-    id: "jessica-gilmore",
-    name: "Jessica Gilmore",
-    designation: "Manager, Community Groups",
-    company: "@Amazon",
-    sessionTitle: "Keynote: Empowering Global Builders & Community Growth",
-    time: "10:45 – 11:15 AM",
-    image: "/Speakers/jessica-gilmore.jpg",
-    isAnnounced: true,
-    linkedin: "https://www.linkedin.com/in/dr-jessica-k-gilmore/",
-    badge: "AWS KEYNOTE"
+    "id": 1,
+    "name": "Jessica Gilmore",
+    "image": "jessica-gilmore.jpg",
+    "designation": "Manager, Community Groups @ Amazon",
+    "role": "AWS Global Community Leader | Keynote Speaker",
+    "sessionType": "AWS Keynote",
+    "sessionTitle": "Empowering Global Builders & Community Growth",
+    "topic": "AWS Community, Builder Growth, Cloud Ecosystem",
+    "shortDescription": "Discover how AWS empowers student builders, community-led initiatives, and cloud innovation worldwide, sharing career insights and leadership strategies for the next generation of builders.",
+    "category": "AWS Keynote",
+    "featured": true
   },
   {
-    id: "speaker-01",
-    name: "Speaker 01",
-    designation: "Principal Cloud Architect",
-    company: "@AWS Ecosystem",
-    sessionTitle: "Technical Session 01: Event-Driven Systems & Serverless at Scale",
-    time: "11:15 – 12:00 PM",
-    isAnnounced: false,
-    badge: "TECH KEYNOTE"
+    "id": 2,
+    "name": "Bhaskar Pathak",
+    "image": "1783840884280.png",
+    "designation": "Senior Solutions Architect at AWS",
+    "role": "AWS Solutions Architect",
+    "sessionType": "Community Keynote",
+    "sessionTitle": "Community Growth, Career Opportunities & AWS Certifications",
+    "topic": "AWS Community, Career Growth, Certifications",
+    "shortDescription": "Explore how active community participation, continuous learning, and AWS certifications can accelerate your cloud career while creating meaningful impact within the AWS ecosystem.",
+    "category": "Community Keynote",
+    "featured": true
   },
   {
-    id: "speaker-01-workshop",
-    name: "Speaker 01",
-    designation: "Cloud Solutions Specialist",
-    company: "@AWS Ecosystem",
-    sessionTitle: "Hands-on Workshop 01: Practical Serverless Implementation",
-    time: "12:00 – 12:45 PM",
-    isAnnounced: false,
-    badge: "WORKSHOP"
+    "id": 3,
+    "name": "Pushkar Thakur",
+    "image": "1667990794682.jpeg",
+    "designation": "SDE II @ Procedure",
+    "role": "Co-Organizer, AWS User Group Nashik | AWS Community Builder",
+    "sessionType": "Technical Keynote",
+    "sessionTitle": "Building Modern Applications on AWS",
+    "topic": "AWS Cloud, Containers, Serverless, Databases, AI & Career Opportunities",
+    "shortDescription": "Explore modern AWS application architectures using containers, serverless, managed databases, and AI services while gaining insights into cloud career opportunities.",
+    "category": "Keynote Speaker",
+    "featured": true
   },
   {
-    id: "speaker-02",
-    name: "Speaker 02",
-    designation: "Head of Cloud & DevOps",
-    company: "@Enterprise Cloud",
-    sessionTitle: "Career Guidance: Navigating Cloud Careers, DevOps & Hiring",
-    time: "13:45 – 14:30 PM",
-    isAnnounced: false,
-    badge: "CAREER SESSION"
+    "id": 4,
+    "name": "Ameya Vaidya",
+    "image": "1780647595003.png",
+    "designation": "Trainer & Tech Speaker",
+    "role": "AWS Community Builder | AWS User Group Pune Leader",
+    "sessionType": "Technical Session",
+    "sessionTitle": "AWS Storage & Databases Deep Dive",
+    "topic": "Amazon S3, Amazon RDS, Amazon DynamoDB",
+    "shortDescription": "Learn how AWS storage and database services power scalable, reliable, and cost-effective cloud applications.",
+    "category": "Cloud Architect",
+    "featured": false
   },
   {
-    id: "speaker-03",
-    name: "Speaker 03",
-    designation: "Staff AI Solutions Architect",
-    company: "@AWS Builder Circle",
-    sessionTitle: "Hands-on Generative AI with Amazon Bedrock & Multi-Agent Systems",
-    time: "15:30 – 17:00 PM",
-    isAnnounced: false,
-    badge: "AI WORKSHOP"
+    "id": 5,
+    "name": "Nilesh Vaghela",
+    "image": "1714482688164.jpeg",
+    "designation": "CEO, ElectroMech & CloudKida",
+    "role": "AWS Community Hero | AWS User Group Ahmedabad Leader | Former AAI & RHCI",
+    "sessionType": "Technical Session",
+    "sessionTitle": "DevOps on AWS",
+    "topic": "CI/CD, Infrastructure as Code, Automation",
+    "shortDescription": "Discover modern DevOps practices using AWS services, CI/CD pipelines, Infrastructure as Code, and automation.",
+    "category": "DevOps Leader",
+    "featured": false
   },
   {
-    id: "speaker-panel",
-    name: "Community Leaders & Mentors",
-    designation: "AWS User Group Leaders & Ambassadors",
-    company: "@AWS SBG GCOEK",
-    sessionTitle: "Closing Panel: The Future of Student Builders & Community Innovation",
-    time: "17:30 – 18:00 PM",
-    isAnnounced: false,
-    badge: "COMMUNITY PANEL"
+    "id": 6,
+    "name": "Dimple Vaghela",
+    "image": "1746945573251.jpeg",
+    "designation": "Director, ElectroMech Cloudtech Pvt. Ltd.",
+    "role": "AWS Community Hero | AWS User Group Leader",
+    "sessionType": "Technical Session & Women in Tech Panel",
+    "sessionTitle": "DevOps on AWS & Tech Leadership",
+    "topic": "CI/CD, Infrastructure as Code, Leadership",
+    "shortDescription": "Explore modern DevOps practices on AWS, including CI/CD pipelines, Infrastructure as Code, and automation, followed by insights on leadership and community building during the Women in Tech Panel.",
+    "category": "AWS Community Hero",
+    "featured": false
+  },
+  {
+    "id": 7,
+    "name": "Abhijeet Chinchole",
+    "image": "1726836394723.jpeg",
+    "designation": "Platform & Product Engineering Leader",
+    "role": "CTO, Cloudlytics by Blazeclan | AWS Community Builder",
+    "sessionType": "Technical Session",
+    "sessionTitle": "Generative AI with AWS",
+    "topic": "Amazon Bedrock, Kiro",
+    "shortDescription": "Learn how to build enterprise-ready AI applications using Amazon Bedrock and Kiro through practical use cases and modern development workflows.",
+    "category": "AI Specialist",
+    "featured": false
+  },
+  {
+    "id": 8,
+    "name": "Abhishek Maurya",
+    "image": "1701733317510.jpeg",
+    "designation": "Senior Cloud Engineer at Orange Business India",
+    "role": "AWS Community Builder | CKA",
+    "sessionType": "Technical Session",
+    "sessionTitle": "Cloud Security on AWS",
+    "topic": "IAM, AWS WAF, GuardDuty, Security Best Practices",
+    "shortDescription": "Learn AWS security fundamentals and best practices for securing cloud workloads using AWS native security services.",
+    "category": "Security Expert",
+    "featured": false
+  },
+  {
+    "id": 9,
+    "name": "Vipul Chaudhary",
+    "image": "1764430670931.jpeg",
+    "designation": "Site Reliability Engineer @ Intangles",
+    "role": "Site Reliability Engineer",
+    "sessionType": "Technical Session",
+    "sessionTitle": "AWS Compute Services",
+    "topic": "EC2, Lambda, ECS, EKS",
+    "shortDescription": "Gain practical insights into Amazon EC2, AWS Lambda, Amazon ECS, and Amazon EKS, and learn how these services work together to power modern cloud applications at scale.",
+    "category": "Cloud Architect",
+    "featured": false
+  },
+  {
+    "id": 10,
+    "name": "Afreen Bano",
+    "image": "1724876847469.jpeg",
+    "designation": "Cloud Engineer & Strategic Technologist",
+    "role": "Lead, Women in Tech - India",
+    "sessionType": "Women in Tech Panel",
+    "sessionTitle": "Women in Tech & Cloud Leadership",
+    "topic": "Cloud Careers, Diversity, Tech Leadership",
+    "shortDescription": "Join an engaging discussion featuring accomplished women leaders sharing their experiences, career journeys, leadership insights, and perspectives on building an inclusive technology ecosystem.",
+    "category": "Panelist",
+    "featured": false
+  },
+  {
+    "id": 11,
+    "name": "Anjali Mishra",
+    "image": "1764430660887.png",
+    "designation": "DevOps Engineer at VirtueCloud",
+    "role": "DevOps Engineer",
+    "sessionType": "Women in Tech Panel",
+    "sessionTitle": "Women in Tech & Cloud Engineering",
+    "topic": "DevOps, Cloud Infrastructure, Career Growth",
+    "shortDescription": "Join an engaging discussion featuring accomplished women leaders sharing their experiences, career journeys, leadership insights, and perspectives on building an inclusive technology ecosystem.",
+    "category": "Panelist",
+    "featured": false
+  },
+  {
+    "id": 12,
+    "name": "Sanika Kotgire",
+    "image": "1744946870635.jpeg",
+    "designation": "Cloud Data Engineer @ ZS",
+    "role": "AWS Community Builder",
+    "sessionType": "Women in Tech Panel",
+    "sessionTitle": "Women in Tech & Cloud Data Engineering",
+    "topic": "Cloud Data, Big Data, Community Mentorship",
+    "shortDescription": "Join an inspiring panel discussion featuring women leaders in technology as they share their career journeys, leadership experiences, and insights on building a successful career in cloud and tech.",
+    "category": "Panelist",
+    "featured": false
   }
 ];
 
+const SECTOR_TAGS = ["SECTOR-A1", "SECTOR-B2", "SECTOR-C3", "SECTOR-D4", "SECTOR-E5"];
+
 export const SpeakersSection = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const leftItemRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const leftListRef = useRef<HTMLDivElement>(null);
-  const isClickingRef = useRef(false);
+  const [speakers, setSpeakers] = useState<Speaker[]>(DEFAULT_SPEAKERS);
+  const [selectedSpeaker, setSelectedSpeaker] = useState<Speaker | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // Desktop Pinned Scroll
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 24,
-    restDelta: 0.001
-  });
-
+  /* eslint-disable-next-line react-doctor/no-fetch-in-effect */
   useEffect(() => {
-    const unsubscribe = smoothProgress.on("change", (latest) => {
-      if (isClickingRef.current) return;
-      const count = SPEAKERS.length;
-      const idx = Math.min(Math.floor(latest * count), count - 1);
-      if (idx !== activeIndex && idx >= 0 && idx < count) {
-        setActiveIndex(idx);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [activeIndex, smoothProgress]);
-
-  useEffect(() => {
-    const itemEl = leftItemRefs.current[activeIndex];
-    if (itemEl && leftListRef.current) {
-      itemEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  }, [activeIndex]);
-
-  const handleSpeakerSelect = (index: number) => {
-    setActiveIndex(index);
-    isClickingRef.current = true;
-
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      const currentScrollY = window.scrollY;
-      const containerTop = currentScrollY + rect.top;
-      const scrollableDistance = containerRef.current.offsetHeight - window.innerHeight;
-      const targetScrollY = containerTop + (index / (SPEAKERS.length - 1)) * scrollableDistance;
-
-      window.scrollTo({
-        top: targetScrollY,
-        behavior: 'smooth'
+    fetch('/Speakers/details.json')
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Failed to fetch speaker details: ${res.statusText}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setSpeakers(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching speakers details:', err);
+        setLoading(false);
       });
+  }, []);
+
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (selectedSpeaker) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
     }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedSpeaker]);
 
-    setTimeout(() => {
-      isClickingRef.current = false;
-    }, 500);
-  };
-
-  const activeSpeaker = SPEAKERS[activeIndex] || SPEAKERS[0];
+  // Close modal on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedSpeaker(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
-    <section id="speakers" className="relative bg-[#050505] overflow-visible" aria-label="Speakers section">
-      {/* Track Lines and Background Glow */}
-      <div className="absolute top-1/3 left-1/4 w-[450px] h-[450px] bg-aws-orange/[0.03] rounded-full blur-[140px] pointer-events-none" />
+    <section id="speakers" className="relative py-20 sm:py-28 px-4 sm:px-12 lg:px-24 bg-[#050505] overflow-hidden" aria-label="Speakers lineup">
+      {/* Decorative track line behind speakers */}
+      <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-y-1/2 pointer-events-none"></div>
 
-      {/* Section Header outside the pinned container so it scrolls naturally */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-16 pb-4">
-        <SectionHeader
-          title="Speakers"
-          subtitle="Meet our lineup of AWS leaders, architects, and community pioneers shaping the cloud racing grid."
-          sysId="02.SPK"
-          action={
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded bg-white/[0.03] font-mono text-xs text-white/50 border border-white/10">
-                <span className="text-aws-orange font-bold">0{activeIndex + 1}</span>
-                <span>/</span>
-                <span>0{SPEAKERS.length}</span>
-              </div>
-              <a
-                href="#schedule"
-                className="inline-flex items-center gap-1.5 px-4 py-2 border border-aws-orange/40 bg-aws-orange/10 hover:bg-aws-orange hover:text-black text-aws-orange font-sans font-bold text-xs uppercase tracking-wider skew-x-[-10deg] transition-all group"
-              >
-                <span className="skew-x-[10deg] flex items-center gap-1.5">
-                  <span>View All Sessions</span>
-                  <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </span>
-              </a>
-            </div>
-          }
+      {/* Header */}
+      <div className="mb-12">
+        <SectionHeader 
+          title="Speakers" 
+          subtitle="Meet our world-class lineup of AWS Heroes, cloud architects, community pioneers, and industry leaders taking the stage at AWS Community Day." 
+          sysId="02.SPK" 
         />
       </div>
 
-      {/* ── 1. PINNED SCROLL SECTION (Locks in place while scrolling speakers) ── */}
-      <div ref={containerRef} className="relative h-[280vh]">
-        
-        {/* Sticky wrapper: sticks near top so the entire showcase card stays in full view */}
-        <div className="sticky top-16 sm:top-20 z-20 w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-2">
-          
-          {/* Main Showcase Box */}
-          <div className="relative bg-[#090909] border border-white/10 rounded-2xl p-4 sm:p-6 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
-            {/* Tech grid texture */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808003_1px,transparent_1px),linear-gradient(to_bottom,#80808003_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-
-            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-              
-              {/* ── LEFT COLUMN: Speaker List ── */}
-              <div
-                ref={leftListRef}
-                className="lg:col-span-7 flex flex-col gap-2.5 max-h-[460px] sm:max-h-[500px] overflow-y-auto pr-2 custom-scrollbar"
-              >
-                {SPEAKERS.map((speaker, index) => {
-                  const isActive = index === activeIndex;
-
-                  return (
-                    <div
-                      key={speaker.id}
-                      data-speaker-id={speaker.id}
-                      ref={(el) => { leftItemRefs.current[index] = el; }}
-                      onClick={() => handleSpeakerSelect(index)}
-                      className={`relative rounded-xl transition-all duration-200 cursor-pointer border text-left p-3.5 sm:p-4 ${
-                        isActive
-                          ? 'bg-white/[0.05] border-aws-orange/60 shadow-[0_0_20px_rgba(255,153,0,0.15)]'
-                          : 'bg-[#111]/40 border-white/5 hover:border-white/15 hover:bg-white/[0.02]'
-                      }`}
-                    >
-                      {/* AWS Orange vertical accent for active item */}
-                      {isActive && (
-                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-aws-orange rounded-l-xl" />
-                      )}
-
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-1 flex-1 min-w-0">
-                          {speaker.isAnnounced ? (
-                            <>
-                              <div className="flex items-center gap-2">
-                                <h4 className="font-sans font-black italic uppercase text-lg sm:text-xl text-white tracking-tight">
-                                  {speaker.name}
-                                </h4>
-                                <span className="w-2 h-2 rounded-full bg-[#00ff00] animate-pulse" title="Confirmed Speaker" />
-                              </div>
-                              <p className="font-mono text-xs font-bold uppercase tracking-wider text-aws-orange">
-                                {speaker.designation} <span className="text-white/60">{speaker.company}</span>
-                              </p>
-                              <p className="font-sans text-xs text-white/70 line-clamp-1">
-                                {speaker.sessionTitle}
-                              </p>
-                            </>
-                          ) : (
-                            <>
-                              <h4 className="font-sans font-black italic uppercase text-base text-white/90">
-                                {speaker.sessionTitle.split(':')[0]}
-                              </h4>
-                              <div className="w-40 sm:w-52 h-2 bg-white/10 rounded my-1" />
-                              <p className="font-sans text-xs text-white/50 line-clamp-1">
-                                {speaker.sessionTitle}
-                              </p>
-                            </>
-                          )}
-                        </div>
-
-                        <div className="shrink-0 flex flex-col items-end justify-between gap-2">
-                          {speaker.isAnnounced ? (
-                            speaker.linkedin && (
-                              <a
-                                href={speaker.linkedin}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={(e) => e.stopPropagation()}
-                                className="w-6 h-6 rounded bg-white/5 hover:bg-[#0A66C2] border border-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors"
-                                title="LinkedIn Profile"
-                              >
-                                <Linkedin size={12} />
-                              </a>
-                            )
-                          ) : (
-                            <span className="font-mono text-[9px] uppercase font-bold tracking-widest text-white/40 bg-white/5 px-2 py-0.5 rounded border border-white/10">
-                              TO BE ANNOUNCED
-                            </span>
-                          )}
-
-                          <span className="font-mono text-[10px] text-white/40 tracking-wider">
-                            {speaker.time}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* ── RIGHT COLUMN: Full-Height Image with Bottom Overlay ── */}
-              <div className="lg:col-span-5 relative h-[460px] sm:h-[500px] rounded-xl overflow-hidden bg-[#111] border border-white/10 shadow-2xl">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeSpeaker.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="relative w-full h-full flex flex-col justify-end"
-                  >
-                    {/* Speaker Image */}
-                    {activeSpeaker.image ? (
-                      <img
-                        src={activeSpeaker.image}
-                        alt={activeSpeaker.name}
-                        className="absolute inset-0 w-full h-full object-cover object-[center_18%]"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-[#111] via-[#090909] to-aws-orange/[0.05]">
-                        <Radio size={28} className="text-aws-orange mb-2 animate-pulse" />
-                        <span className="font-mono text-xs uppercase tracking-widest text-white/80 font-bold">
-                          SPEAKER TO BE ANNOUNCED
-                        </span>
-                        <span className="font-mono text-[10px] text-white/40 mt-1">
-                          Official reveal during community briefing
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Dark gradient overlay at bottom */}
-                    <div className="absolute inset-x-0 bottom-0 pt-32 pb-5 px-5 bg-gradient-to-t from-[#090909] via-[#090909]/85 to-transparent flex flex-col justify-end space-y-2 z-10 text-left">
-                      {/* Badge & LinkedIn Row */}
-                      <div className="flex items-center justify-between">
-                        <span className="px-2.5 py-0.5 rounded bg-aws-orange/15 border border-aws-orange/30 text-aws-orange font-mono text-[10px] font-bold uppercase tracking-wider">
-                          {activeSpeaker.badge}
-                        </span>
-
-                        {activeSpeaker.linkedin && (
-                          <a
-                            href={activeSpeaker.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-black/60 hover:bg-[#0A66C2] text-white border border-white/20 font-mono text-xs font-bold transition-all"
-                          >
-                            <Linkedin size={12} />
-                            <span>LinkedIn</span>
-                          </a>
-                        )}
-                      </div>
-
-                      {/* Name, Role & Short Intro */}
-                      <div className="space-y-0.5">
-                        <h3 className="font-sans font-black italic uppercase text-2xl sm:text-3xl text-white tracking-tight leading-tight">
-                          {activeSpeaker.name}
-                        </h3>
-
-                        <p className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-aws-orange">
-                          <span>{activeSpeaker.designation}</span>{' '}
-                          <span className="text-white/60">{activeSpeaker.company}</span>
-                        </p>
-
-                        <p className="font-sans text-xs sm:text-sm text-white/80 leading-snug pt-1 line-clamp-2">
-                          {activeSpeaker.sessionTitle}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Scroll hint */}
-          <div className="text-center mt-3 font-mono text-[10px] text-white/30 tracking-widest uppercase">
-            <span>Scroll down to navigate speakers</span>
-          </div>
-
-        </div>
-      </div>
-
-      {/* ── 2. THIRD CARD: Standby Announcement & CFP (Preserved) ── */}
-      <div className="max-w-4xl mx-auto relative z-10 py-16 px-4 sm:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="relative bg-[#090909]/90 border border-white/10 rounded-2xl p-8 sm:p-14 text-center overflow-hidden backdrop-blur-sm shadow-[0_0_50px_rgba(0,0,0,0.6)]"
-        >
-          {/* Futuristic corner brackets */}
-          <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-aws-orange/40" />
-          <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-aws-orange/40" />
-          <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-aws-orange/40" />
-          <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-aws-orange/40" />
-
-          {/* Laser scanning line */}
-          <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-aws-orange/30 to-transparent animate-[scan_3s_ease-in-out_infinite]" />
-
-          {/* Status HUD Pill */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-aws-orange font-mono text-[9px] sm:text-[10px] tracking-widest uppercase mb-6">
-            <span className="w-2 h-2 rounded-full bg-aws-orange animate-ping" />
-            <Radio size={12} className="text-aws-orange" />
-            <span>PADDOCK STATUS // LINEUP IN ASSEMBLY</span>
-          </div>
-
-          {/* Icon HUD */}
-          <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-dashed border-aws-orange/30 flex items-center justify-center mb-6 bg-gradient-to-b from-aws-orange/10 to-transparent">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-aws-orange shadow-[0_0_20px_rgba(255,153,0,0.2)]">
-              <Mic className="w-6 h-6 sm:w-7 sm:h-7" />
-            </div>
-          </div>
-
-          <h3 className="font-sans font-black italic text-2xl sm:text-4xl uppercase tracking-tight text-white mb-3">
-            Speaker Lineup Revealing Soon
-          </h3>
-
-          <p className="font-sans text-xs sm:text-sm text-white/50 max-w-lg mx-auto leading-relaxed mb-8">
-            We are assembling an inspiring roster of AWS heroes, community champions, and cloud innovators. 
-            Keynotes, deep-dive technical talks, and panel sessions will be announced here shortly.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to="/cfp"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-aws-orange text-black font-sans font-black italic uppercase text-[11px] tracking-wider skew-x-[-10deg] hover:bg-white transition-all shadow-[0_0_20px_rgba(255,153,0,0.25)] group"
+      {/* Speaker Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 lg:gap-10 max-w-7xl mx-auto relative z-10">
+        {loading ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="animate-pulse bg-[#0d0d0d] min-h-[300px] sm:min-h-[400px] rounded-xl border border-white/5" />
+          ))
+        ) : (
+          speakers.map((speaker, i) => (
+            <motion.div
+              key={speaker.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.6 }}
+              className="group relative cursor-pointer h-full"
+              onClick={() => setSelectedSpeaker(speaker)}
             >
-              <span className="skew-x-[10deg] flex items-center gap-2">
-                <Sparkles size={13} />
-                <span>Call For Speakers (CFP)</span>
-                <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
-              </span>
-            </Link>
+              {/* Card Body */}
+              <div className="relative bg-[#0d0d0d] border border-white/5 h-full overflow-hidden flex flex-col justify-start p-4 sm:p-6 transition-all duration-500 hover:border-aws-orange/40 hover:shadow-[0_0_30px_rgba(255,153,0,0.1)] rounded-xl">
+                
+                {/* Background gradient that shifts on hover */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-[#FF9900]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-            <span className="font-mono text-[10px] text-white/30 tracking-widest uppercase flex items-center gap-1.5">
-              <Layers size={11} className="text-aws-orange/60" />
-              <span>SUBMISSIONS OPEN FOR CLOUD BUILDERS</span>
-            </span>
-          </div>
-        </motion.div>
+                {/* Top - Grid Position */}
+                <div className="relative z-10 flex justify-between items-center font-mono text-[7px] sm:text-[9px] text-white/30 uppercase tracking-widest">
+                  <span>Staging Grid // 0{speaker.id}</span>
+                  <span className="font-bold text-aws-orange/60 group-hover:text-aws-orange transition-colors">
+                    {SECTOR_TAGS[(speaker.id - 1) % SECTOR_TAGS.length]}
+                  </span>
+                </div>
+
+                {/* Center - Tech Scanner Avatar HUD */}
+                <div className="relative z-10 flex-1 flex items-center justify-center my-4 sm:my-6">
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border border-white/10 flex items-center justify-center relative bg-white/[0.01] shrink-0">
+                    {/* Rotating dashed borders */}
+                    <div className="absolute inset-[-4px] rounded-full border border-transparent border-t-aws-orange/40 group-hover:animate-[spin_6s_linear_infinite]" />
+                    <div className="absolute inset-[-8px] rounded-full border border-transparent border-b-f1-red/30 group-hover:animate-[spin_4s_linear_reverse_infinite]" />
+                    
+                    {/* Speaker Image with fallback */}
+                    <div className="w-full h-full rounded-full overflow-hidden border border-white/5 relative bg-[#050505]">
+                      {speaker.image ? (
+                        <img 
+                          src={`/Speakers/${speaker.image}`} 
+                          alt={speaker.name} 
+                          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            const fallback = e.currentTarget.parentElement?.querySelector('.fallback-icon');
+                            if (fallback) fallback.classList.remove('hidden');
+                          }}
+                        />
+                      ) : null}
+                      <User className="fallback-icon absolute inset-0 m-auto text-white/10 group-hover:text-aws-orange group-hover:scale-105 transition-all duration-500 w-5 h-5 sm:w-9 sm:h-9 hidden" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom - Info */}
+                <div className="relative z-10 border-t border-white/5 pt-3 sm:pt-4 text-left mt-auto flex flex-col justify-start">
+                  <h3 className="font-sans font-black italic text-sm sm:text-xl uppercase tracking-tighter text-white/80 group-hover:text-white transition-colors break-words">
+                    {speaker.name}
+                  </h3>
+                  <p className="font-mono text-[8px] sm:text-xs text-white/50 tracking-wider mt-1 flex items-start gap-1.5 font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-aws-orange animate-pulse shrink-0 mt-[0.3rem]" />
+                    <span className="break-words leading-tight">{speaker.designation}</span>
+                  </p>
+
+                  {/* AWS Community Roles / Titles */}
+                  <div className="flex flex-wrap gap-1.5 mt-2 sm:mt-3">
+                    {speaker.role.split('|').map((part, idx) => {
+                      const text = part.trim();
+                      const isAWS = text.toLowerCase().includes('aws') || 
+                                    text.toLowerCase().includes('community') || 
+                                    text.toLowerCase().includes('hero') || 
+                                    text.toLowerCase().includes('builder') || 
+                                    text.toLowerCase().includes('lead') || 
+                                    text.toLowerCase().includes('organizer') || 
+                                    text.toLowerCase().includes('cto');
+                      if (!isAWS) return null;
+                      return (
+                        <span 
+                          key={idx} 
+                          className="text-[6.5px] sm:text-[9.5px] font-mono px-1.5 sm:px-2 py-0.5 sm:py-1 bg-aws-orange/10 border border-aws-orange/20 text-aws-orange rounded uppercase font-bold tracking-wider"
+                        >
+                          {text}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Scanning laser line effect */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-aws-orange opacity-0 group-hover:opacity-100 group-hover:animate-[scan_2s_ease-in-out_infinite] shadow-[0_0_10px_#FF9900]"></div>
+              </div>
+            </motion.div>
+          ))
+        )}
       </div>
 
+      {/* Telemetry Detail Modal */}
+      {createPortal(
+        <AnimatePresence>
+          {selectedSpeaker && (
+            <div 
+              className="fixed inset-0 z-[999] flex items-center justify-center p-4 sm:p-6 md:p-10"
+              role="dialog" aria-label="Modal" /* eslint-disable-next-line react-doctor/prefer-html-dialog, react-doctor/prefer-tag-over-role */
+              aria-modal="true"
+            >
+            {/* Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedSpeaker(null)}
+              className="absolute inset-0 bg-black/85 backdrop-blur-sm"
+            />
+
+            {/* Modal Box */}
+            <motion.div
+              data-lenis-prevent
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", duration: 0.5, bounce: 0.15 }}
+              className="relative w-full max-w-4xl bg-[#0b0b0b] border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8),0_0_30px_rgba(255,153,0,0.05)] z-10 flex flex-col max-h-[90vh] md:max-h-[85vh]"
+            >
+              {/* Scanline overlay for cyber effect */}
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[size:100%_4px,6px_100%] pointer-events-none opacity-40"></div>
+
+              {/* Top Cyber HUD Bar */}
+              <div className="relative border-b border-white/5 bg-[#0e0e0e] px-6 py-3 flex justify-between items-center text-[10px] font-mono tracking-widest text-white/40">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-aws-orange animate-ping" />
+                  <span className="text-aws-orange font-bold">SPEAKER TELEMETRY // {selectedSpeaker.id}</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="hidden sm:inline">SECTOR: {selectedSpeaker.category.toUpperCase()}</span>
+                  <button type="button" 
+                    onClick={() => setSelectedSpeaker(null)}
+                    className="p-1 hover:text-white text-white/50 transition-colors border border-white/5 hover:border-aws-orange/30 rounded bg-white/[0.02] cursor-pointer"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto p-6 md:p-8">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                  
+                  {/* Left Column: Image & Tech HUD */}
+                  <div className="md:col-span-4 flex flex-col items-center">
+                    <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-full p-2 bg-gradient-to-tr from-f1-red/20 via-transparent to-aws-orange/20 border border-white/5">
+                      {/* Concentric rotating design lines */}
+                      <div className="absolute inset-0 rounded-full border border-dashed border-aws-orange/30 animate-[spin_12s_linear_infinite]" />
+                      <div className="absolute inset-1 rounded-full border border-dashed border-f1-red/25 animate-[spin_8s_linear_reverse_infinite]" />
+                      
+                      <div className="w-full h-full rounded-full overflow-hidden relative border-2 border-aws-orange/40 shadow-[0_0_20px_rgba(255,153,0,0.15)] bg-[#050505]">
+                        <img 
+                          src={`/Speakers/${selectedSpeaker.image}`} 
+                          alt={selectedSpeaker.name} 
+                          className="w-full h-full object-cover"
+                        />
+                        {/* Laser line scanner animation */}
+                        <div className="absolute inset-0 w-full h-[2px] bg-aws-orange shadow-[0_0_8px_#FF9900] animate-[scan_2s_ease-in-out_infinite] pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* Quick Telemetry Stats */}
+                    <div className="w-full mt-6 bg-white/[0.02] border border-white/5 rounded-lg p-3 font-mono text-[9px] text-white/40 flex flex-col gap-1.5">
+                      <div className="flex justify-between">
+                        <span>CONNECTION:</span>
+                        <span className="text-emerald-400 font-semibold">STABLE</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>STREAM RATE:</span>
+                        <span className="text-white/70">100% // LIVE</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>CATEGORY:</span>
+                        <span className="text-aws-orange font-semibold">{selectedSpeaker.category}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Information */}
+                  <div className="md:col-span-8 flex flex-col text-left">
+                    <div className="mb-4">
+                      <span className="text-[10px] font-mono tracking-widest text-aws-orange uppercase bg-aws-orange/10 border border-aws-orange/20 px-2 py-0.5 rounded">
+                        {selectedSpeaker.category}
+                      </span>
+                    </div>
+
+                    <h2 className="font-sans font-black italic text-3xl sm:text-4xl md:text-5xl uppercase tracking-tighter text-white leading-none mb-2">
+                      {selectedSpeaker.name}
+                    </h2>
+
+                    <div className="font-mono text-xs text-white/80 font-bold mb-4 flex items-center gap-1.5">
+                      <Terminal size={12} className="text-aws-orange" />
+                      {selectedSpeaker.designation}
+                    </div>
+
+                    <p className="text-white/60 text-sm leading-relaxed mb-6 font-sans">
+                      {selectedSpeaker.role}
+                    </p>
+
+                    {/* Session Box */}
+                    <div className="bg-[#121212] border border-white/5 rounded-xl p-4 sm:p-5 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-aws-orange/5 rounded-full blur-2xl pointer-events-none" />
+                      
+                      <div className="font-mono text-[8px] sm:text-[9px] uppercase tracking-widest text-white/30 mb-2 flex items-center gap-1.5">
+                        <Sparkles size={10} className="text-aws-orange" /> Session Parameters
+                      </div>
+                      
+                      <span className="text-[9px] font-mono tracking-wider text-aws-orange border border-aws-orange/30 bg-aws-orange/5 px-2 py-0.5 rounded uppercase inline-block mb-2">
+                        {selectedSpeaker.sessionType}
+                      </span>
+
+                      <h3 className="font-sans font-black italic text-lg sm:text-xl uppercase tracking-tight text-white mb-3">
+                        {selectedSpeaker.sessionTitle}
+                      </h3>
+
+                      <p className="text-white/70 text-xs sm:text-sm leading-relaxed font-sans">
+                        {selectedSpeaker.shortDescription}
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              {/* Bottom Cyber HUD Footer */}
+              <div className="border-t border-white/5 bg-[#0e0e0e] px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+                <span className="font-mono text-[8px] tracking-widest text-white/20">SYSTEMS ACTIVE // READY FOR FORMATION LAP</span>
+                <button type="button"
+                  onClick={() => setSelectedSpeaker(null)}
+                  className="w-full sm:w-auto px-5 py-2.5 bg-aws-orange text-black font-sans font-black italic uppercase text-[10px] tracking-widest skew-x-[-12deg] hover:bg-white hover:text-black transition-all shadow-[0_0_15px_rgba(255,153,0,0.2)] cursor-pointer text-center"
+                >
+                  <span className="skew-x-[12deg] block">Close Telemetry</span>
+                </button>
+              </div>
+
+            </motion.div>
+          </div>
+        )}
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   );
 };
