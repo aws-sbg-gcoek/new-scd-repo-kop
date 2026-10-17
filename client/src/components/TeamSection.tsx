@@ -86,17 +86,6 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
   },
   {
     department: "Technical Dept",
-    id: "anas",
-    name: "Anas Pathan",
-    role: "Project Lead",
-    bio: "Leading project development, coordinating the student builder team, and building scalable applications with modern cloud technologies.",
-    skills: "AWS, Project Leadership, Cloud Development, Node.js, Docker",
-    email: "pathananas2007@gmail.com",
-    linkedin: "https://www.linkedin.com/in/anas-pathan-91a6b3368",
-    image: "https://i.ibb.co/YBDxDXfV/Chat-GPT-Image-Sep-4-2026-12-44-21-AM.png"
-  },
-  {
-    department: "Technical Dept",
     id: "Yash",
     name: "Yash Nawal",
     role: "Technical Associate",
@@ -105,6 +94,17 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     email: "yashsanjaynawal810@gmail.com",
     linkedin: "https://www.linkedin.com/in/yash-nawal-51b5a228b/",
     image: "https://i.ibb.co/gFrBmXJv/Whats-App-Image-2026-04-18-at-8-14-43-AM-2.jpg"
+  },
+  {
+    department: "Technical Dept",
+    id: "anas",
+    name: "Anas Pathan",
+    role: "Project Lead",
+    bio: "Leading project development, coordinating the student builder team, and building scalable applications with modern cloud technologies.",
+    skills: "AWS, Project Leadership, Cloud Development, Node.js, Docker",
+    email: "pathananas2007@gmail.com",
+    linkedin: "https://www.linkedin.com/in/anas-pathan-91a6b3368",
+    image: "https://i.ibb.co/YBDxDXfV/Chat-GPT-Image-Sep-4-2026-12-44-21-AM.png"
   },
   {
     department: "Technical Dept",
