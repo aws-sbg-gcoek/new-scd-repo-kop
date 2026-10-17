@@ -3,23 +3,20 @@ import { motion, useScroll, useTransform, useSpring } from 'motion/react';
 import { SectionHeader } from './LayoutElements';
 
 const schedule = [
-  { time: "09:00 - 10:00", type: "Pit Lane", title: "Registration, Networking & Breakfast", detail: "Check-in, attendee networking, sponsor booths", isPit: true, flag: "red" },
-  { time: "10:00 - 10:15", type: "Lights Out", title: "Opening Ceremony", detail: "Event inauguration", isPit: false, flag: "gray" },
-  { time: "10:15 - 10:25", type: "Formation Lap", title: "Welcome Note", detail: "AWS Student Builder Club GCOEK", isPit: false, flag: "gray" },
-  { time: "10:25 - 10:45", type: "Green Flag", title: "Community Keynote", detail: "Community growth, opportunities, certifications", isPit: false, flag: "green" },
-  { time: "10:45 - 11:30", type: "Green Flag", title: "Technical Keynote", detail: "AWS Cloud, Containers, Serverless, Databases, AI & Career Opportunities", isPit: false, flag: "green" },
-  { time: "11:30 - 12:00", type: "Green Flag", title: "Tech Session 1", detail: "AWS Compute Services (EC2, Lambda, ECS, EKS)", isPit: false, flag: "green" },
-  { time: "12:00 - 12:30", type: "Green Flag", title: "Tech Session 2", detail: "AWS Storage & Databases (S3, RDS, DynamoDB)", isPit: false, flag: "green" },
-  { time: "12:30 - 12:45", type: "Safety Car", title: "Fun Activities", detail: "Quiz, Kahoot, giveaways", isPit: false, flag: "yellow" },
-  { time: "12:45 - 14:00", type: "Pit Lane", title: "Lunch & Networking", detail: "Networking with speakers and attendees", isPit: true, flag: "red" },
-  { time: "14:00 - 14:30", type: "Green Flag", title: "Tech Session 3", detail: "DevOps on AWS (CI/CD, IaC, Automation)", isPit: false, flag: "green" },
-  { time: "14:30 - 15:00", type: "Green Flag", title: "Tech Session 4", detail: "Generative AI with AWS (Amazon Bedrock, Amazon Q)", isPit: false, flag: "green" },
-  { time: "15:00 - 15:30", type: "Green Flag", title: "Tech Session 5", detail: "Cloud Security on AWS (IAM, WAF, GuardDuty, Security Best Practices)", isPit: false, flag: "green" },
-  { time: "15:30 - 15:45", type: "Safety Car", title: "Fun Activities", detail: "AI challenge, rapid-fire quiz, swag distribution", isPit: false, flag: "yellow" },
-  { time: "15:45 - 16:30", type: "Green Flag", title: "Panel Discussion", detail: "Careers, Community, Certifications & Industry Insights", isPit: false, flag: "green" },
-  { time: "16:30 - 16:40", type: "Formation Lap", title: "Sponsor & Community Announcements", detail: "Community partners, upcoming programs", isPit: false, flag: "gray" },
-  { time: "16:40 - 16:50", type: "Chequered Flag", title: "Concluding Session", detail: "Vote of Thanks by SBG Volunteers", isPit: false, flag: "gray" },
-  { time: "16:50 - 17:00", type: "Race End", title: "Group Photo & Networking", detail: "Speakers, organizers, attendees", isPit: false, flag: "red" },
+  { time: "09:00 - 10:00", type: "Pit Lane", title: "Registration, Networking & Breakfast", detail: "Attendee check-in, badge distribution, networking", isPit: true, flag: "red" },
+  { time: "10:00 - 10:45", type: "Lights Out", title: "Opening Ceremony & Inauguration", detail: "Welcome address, ceremonial inauguration, event introduction", isPit: false, flag: "gray" },
+  { time: "10:45 - 11:15", type: "Green Flag", title: "Keynote Address", detail: "Cloud computing, innovation, technology trends & opportunities", isPit: false, flag: "green" },
+  { time: "11:15 - 12:00", type: "Green Flag", title: "Technical Session 01", detail: "Expert-led technical session by Speaker 01", isPit: false, flag: "green" },
+  { time: "12:00 - 12:45", type: "Green Flag", title: "Hands-on Workshop 01", detail: "Practical workshop and guided implementation by Speaker 01", isPit: false, flag: "green" },
+  { time: "12:45 - 13:45", type: "Pit Lane", title: "Lunch & Networking", detail: "Lunch, speaker interactions & community networking", isPit: true, flag: "red" },
+  { time: "13:45 - 14:30", type: "Green Flag", title: "Career Guidance Session", detail: "Career pathways, industry expectations, skills & professional growth by Speaker 02", isPit: false, flag: "green" },
+  { time: "14:30 - 15:15", type: "Safety Car", title: "Live Trivia Challenge", detail: "Interactive tech quiz, audience participation, rapid-fire questions & exciting challenges", isPit: false, flag: "yellow" },
+  { time: "15:15 - 15:30", type: "Pit Lane", title: "Tea Break", detail: "Refreshments & networking", isPit: true, flag: "red" },
+  { time: "15:30 - 16:15", type: "Green Flag", title: "Technical Session 03", detail: "Expert-led technical session by Speaker 03", isPit: false, flag: "green" },
+  { time: "16:15 - 17:00", type: "Green Flag", title: "Hands-on Workshop 03", detail: "Practical learning, guided activities & real-world implementation by Speaker 03", isPit: false, flag: "green" },
+  { time: "17:00 - 17:30", type: "Pit Lane", title: "High Tea & Community Networking", detail: "Refreshments, speaker interactions & community connections", isPit: true, flag: "red" },
+  { time: "17:30 - 17:45", type: "Safety Car", title: "Final Trivia Round & Prize Distribution", detail: "Remaining trivia questions, winner announcements & giveaways", isPit: false, flag: "yellow" },
+  { time: "17:45 - 18:00", type: "Chequered Flag", title: "Closing Ceremony & Vote of Thanks", detail: "Acknowledgements, closing remarks & official conclusion of AWS Student Community Day Kolhapur", isPit: false, flag: "gray" },
 ];
 
 const getFlagColors = (flag: string) => {
@@ -150,7 +147,7 @@ export const TimelineSection = () => {
         <div className="relative z-10 flex flex-col">
           <SectionHeader
             title="Race Weekend Timeline"
-            subtitle="Twelve sectors. One full day on the cloud racing calendar — from opening lights to the final chequered flag."
+            subtitle="Fourteen sectors. One full day on the cloud racing calendar — from opening lights to the final chequered flag."
             sysId="04.STRAT"
           />
 

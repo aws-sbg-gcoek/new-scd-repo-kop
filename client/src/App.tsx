@@ -18,10 +18,8 @@ import { LogoMarquee } from './components/LogoMarquee';
 import { WhatYouGetSection } from './components/WhatYouGetSection';
 import { DriversSection } from './components/DriversSection';
 import { TimelineSection } from './components/TimelineSection';
-import { EventsSection } from './components/EventsSection';
 
 import { BecomeSponsorSection } from './components/BecomeSponsorSection';
-import { CommunityPartnersSection } from './components/CommunityPartnersSection';
 import { TicketsSection } from './components/TicketsSection';
 import { SpeakersSection } from './components/SpeakersSection';
 import { GallerySection } from './components/GallerySection';
@@ -34,7 +32,6 @@ const StatusPage = lazy(() => import('./components/StatusPage').then(module => (
 const BadgePage = lazy(() => import('./components/BadgePage').then(module => ({ default: module.BadgePage })));
 const CodeOfConductPage = lazy(() => import('./components/CodeOfConductPage').then(module => ({ default: module.CodeOfConductPage })));
 const TeamPage = lazy(() => import('./pages/TeamPage'));
-const EventsPage = lazy(() => import('./pages/EventsPage'));
 import { BackToTop } from './components/BackToTop';
 import { CustomCursor } from './components/CustomCursor';
 import { SmoothScroll } from './components/SmoothScroll';
@@ -81,12 +78,8 @@ function HomePage() {
             <TicketsSection />
             <TimelineSection />
 
-            {/* Community Milestones & Meetups */}
-            <EventsSection />
-
             {/* Act 3: The Team & Tickets */}
             <BecomeSponsorSection />
-            <CommunityPartnersSection />
             <DriversSection />
 
             {/* Act 4: Venue & Logistics */}
@@ -138,7 +131,6 @@ export default function App() {
         <Route path="/badge" element={<BadgePage />} />
         <Route path="/codeofconduct" element={<CodeOfConductPage />} />
         <Route path="/team" element={<TeamPage />} />
-        <Route path="/events" element={<EventsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>

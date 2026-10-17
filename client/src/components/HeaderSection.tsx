@@ -9,9 +9,7 @@ const navLinks = [
   { label: 'Agenda', href: '#schedule' },
   { label: 'Sponsors', href: '#sponsors' },
   { label: 'Tickets', href: '#tickets' },
-  { label: 'Events', href: '/events' },
   { label: 'Team', href: '#team' },
-  { label: 'Refer & Win', href: '/refertowin' },
   { label: 'Badge', href: '/badge' },
 ];
 
@@ -128,15 +126,7 @@ export const HeaderSection = () => {
         <div className="hidden md:flex gap-6 lg:gap-8 items-center">
           <nav className="flex gap-4 lg:gap-6 items-center">
             {navLinks.map((link) => (
-              link.label === 'Refer & Win' ? (
-                <Link
-                  key={link.label}
-                  to={link.href}
-                  className="relative px-3 py-1 rounded border border-aws-orange/40 bg-aws-orange/5 font-mono text-[10px] lg:text-xs font-black uppercase tracking-widest text-aws-orange hover:text-white transition-all duration-300 animate-pulse-border refer-shimmer"
-                >
-                  {link.label}
-                </Link>
-              ) : link.href.startsWith('/') ? (
+              link.href.startsWith('/') ? (
                 <Link
                   key={link.label}
                   to={link.href}
@@ -195,16 +185,7 @@ export const HeaderSection = () => {
 
             <div className="flex flex-col gap-2 font-mono text-xs uppercase tracking-widest text-white/60 text-left px-2 pt-2">
               {navLinks.map((link) => (
-                link.label === 'Refer & Win' ? (
-                  <Link
-                    key={link.label}
-                    to={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="relative my-1 max-w-max px-3 py-1.5 rounded border border-aws-orange/40 bg-aws-orange/5 font-mono text-[10px] font-black uppercase tracking-widest text-aws-orange transition-all duration-300 animate-pulse-border refer-shimmer flex items-center gap-1.5"
-                  >
-                    {link.label}
-                  </Link>
-                ) : link.href.startsWith('/') ? (
+                link.href.startsWith('/') ? (
                   <Link key={link.label} to={link.href} onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-aws-orange transition-colors">
                     {link.label}
                   </Link>
