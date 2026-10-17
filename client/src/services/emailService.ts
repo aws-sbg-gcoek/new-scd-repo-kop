@@ -576,7 +576,7 @@ export async function sendTicketEmailViaResend(
   }
 
   const html = generateTicketEmailHtml(student);
-  const text = `Congratulations ${student.fullName}!\n\nYour registration for AWS Student Community Day Kolhapur 2026 is confirmed!\nTicket Pass Code: ${student.ticketCode || student.bookingId}\nBooking ID: ${student.bookingId}\nTier: ${student.ticketTier}\nCollege: ${student.collegeName}\n\nVenue: V.T. Patil Hall, Kolhapur\nDate: Saturday, October 24, 2026\n\nPlease present this ticket pass QR code at the check-in desk.`;
+  const text = `Congratulations ${student.fullName}!\n\nYour registration for AWS Student Community Day Kolhapur 2026 is confirmed!\nTicket Pass Code: ${student.ticketCode || student.bookingId}\nBooking ID: ${student.bookingId}\nTier: ${student.ticketTier}\nCollege: ${student.collegeName}\n\nVenue: V.T. Patil Hall, Kolhapur\nDate: Sunday, November 01, 2026\n\nPlease present this ticket pass QR code at the check-in desk.`;
 
   return dispatchEmailWithFallbacks({
     gmailUser,
@@ -589,3 +589,250 @@ export async function sendTicketEmailViaResend(
     html,
   });
 }
+
+/**
+ * Generates official HTML email sent immediately when a student submits their registration form.
+ * Informs the student that their form is received and will be confirmed after inspection.
+ */
+export function generateApplicationReceivedEmailHtml(student: StudentRegistration): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Received - AWS Student Community Day Kolhapur 2026</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #030712; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #FFFFFF;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #030712; padding: 30px 10px;">
+    <tr>
+      <td align="center">
+        <!-- Main Container -->
+        <table width="640" border="0" cellspacing="0" cellpadding="0" style="background-color: #070D18; border-radius: 16px; border: 2px solid #F59E0B; overflow: hidden; box-shadow: 0 0 35px rgba(245, 158, 11, 0.25);">
+          
+          <!-- TOP HEADER BANNER -->
+          <tr>
+            <td style="padding: 28px 32px; background: linear-gradient(135deg, #0A1424 0%, #070D18 100%); border-bottom: 1px solid rgba(255,255,255,0.08);">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td valign="middle">
+                    <table border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td style="font-size: 26px; font-weight: 900; color: #FFFFFF; letter-spacing: -1px; padding-right: 10px;">
+                          aws
+                        </td>
+                        <td style="border-left: 2px solid #F59E0B; padding-left: 10px;">
+                          <div style="font-size: 10px; font-weight: 800; color: #FFFFFF; letter-spacing: 1px; text-transform: uppercase; line-height: 1.2;">
+                            STUDENT
+                          </div>
+                          <div style="font-size: 10px; font-weight: 800; color: #FFFFFF; letter-spacing: 1px; text-transform: uppercase; line-height: 1.2;">
+                            COMMUNITY DAY
+                          </div>
+                          <div style="font-size: 11px; font-weight: 900; color: #FF9900; letter-spacing: 2px; text-transform: uppercase; line-height: 1.2;">
+                            KOLHAPUR 2026
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td align="right" valign="middle">
+                    <div style="background-color: rgba(245, 158, 11, 0.15); border: 1px solid #F59E0B; border-radius: 20px; padding: 6px 14px; display: inline-block;">
+                      <span style="font-family: monospace; font-size: 10px; font-weight: 800; color: #FBBF24; letter-spacing: 1.5px; text-transform: uppercase;">
+                        ⏳ INSPECTION PENDING
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- MAIN CONTENT BODY -->
+          <tr>
+            <td style="padding: 32px 32px 24px;">
+              <h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 900; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.5px;">
+                Application Received!
+              </h1>
+              
+              <p style="margin: 0 0 16px; font-size: 14px; line-height: 1.6; color: #E2E8F0;">
+                Hello <strong style="color: #FFFFFF;">${student.fullName}</strong>,
+              </p>
+
+              <p style="margin: 0 0 20px; font-size: 14px; line-height: 1.6; color: #CBD5E1;">
+                Thank you for applying to attend <strong>AWS Student Community Day Kolhapur 2026</strong>! We have successfully received your registration form and payment details.
+              </p>
+
+              <!-- APPLICATION ID HIGHLIGHT CARD -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 0 0 24px; background-color: #0A1322; border: 1px solid #1E3A5F; border-radius: 12px; padding: 18px 20px;">
+                <tr>
+                  <td>
+                    <div style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #94A3B8; font-weight: 700; margin-bottom: 6px;">
+                      YOUR OFFICIAL APPLICATION ID
+                    </div>
+                    <div style="font-family: monospace; font-size: 24px; font-weight: 900; color: #F59E0B; letter-spacing: 2px;">
+                      ${student.bookingId}
+                    </div>
+                    <div style="font-size: 11px; color: #94A3B8; margin-top: 6px;">
+                      Save this Application ID to track your registration and check approval status online.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- INSPECTION & VERIFICATION NOTICE -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 0 0 26px; background-color: rgba(245, 158, 11, 0.08); border-left: 4px solid #F59E0B; border-radius: 6px; padding: 14px 18px;">
+                <tr>
+                  <td>
+                    <div style="font-size: 13px; font-weight: 800; color: #FBBF24; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px;">
+                      🔍 What Happens Next?
+                    </div>
+                    <p style="margin: 0; font-size: 12px; line-height: 1.6; color: #E2E8F0;">
+                      Our organizing committee will inspect your submitted payment reference (UTR: <strong style="color: #F59E0B;">${student.transactionId}</strong>) and student credentials against our official event records within <strong>24 to 48 hours</strong>. Once verified, your registration will be <strong>CONFIRMED</strong> and you will receive your official <strong>Participant Pass with Entry QR Code</strong> directly on this email.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- APPLICATION SUMMARY -->
+              <div style="font-size: 12px; font-weight: 800; color: #94A3B8; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;">
+                Submitted Details Summary
+              </div>
+
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #050B14; border: 1px solid #142236; border-radius: 10px; margin-bottom: 26px; font-size: 13px;">
+                <tr>
+                  <td style="padding: 10px 16px; border-bottom: 1px solid #0E1A2C; color: #64748B; width: 40%;">Participant:</td>
+                  <td style="padding: 10px 16px; border-bottom: 1px solid #0E1A2C; color: #FFFFFF; font-weight: 700;">${student.fullName}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 16px; border-bottom: 1px solid #0E1A2C; color: #64748B;">College / Institute:</td>
+                  <td style="padding: 10px 16px; border-bottom: 1px solid #0E1A2C; color: #FFFFFF; font-weight: 700;">${student.collegeName}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 16px; border-bottom: 1px solid #0E1A2C; color: #64748B;">PRN / Roll Number:</td>
+                  <td style="padding: 10px 16px; border-bottom: 1px solid #0E1A2C; color: #FFFFFF; font-family: monospace;">${student.prnRollNo}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 16px; border-bottom: 1px solid #0E1A2C; color: #64748B;">Ticket Tier / Amount:</td>
+                  <td style="padding: 10px 16px; border-bottom: 1px solid #0E1A2C; color: #FF9900; font-weight: 800;">₹${student.amount} (${student.ticketTier})</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 16px; border-bottom: 1px solid #0E1A2C; color: #64748B;">Submitted UTR / Ref:</td>
+                  <td style="padding: 10px 16px; border-bottom: 1px solid #0E1A2C; color: #10B981; font-family: monospace; font-weight: 700;">${student.transactionId}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 16px; color: #64748B;">Event Date & Venue:</td>
+                  <td style="padding: 10px 16px; color: #E2E8F0; font-weight: 700;">Sunday, 01 Nov 2026 · V.T. Patil Hall, Kolhapur</td>
+                </tr>
+              </table>
+
+              <!-- TRACK STATUS BUTTON -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px;">
+                <tr>
+                  <td align="center">
+                    <a href="https://aws-scd-kolhapur.vercel.app/ticket" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #FF9900 0%, #E10600 100%); color: #000000; font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; padding: 14px 32px; border-radius: 8px; box-shadow: 0 4px 18px rgba(255, 153, 0, 0.4);">
+                      Track Application Status Online →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #64748B; text-align: center;">
+                If you have questions or made a mistake in your UTR submission, reply directly to this email or contact us at <a href="mailto:Awssbggcoek@gmail.com" style="color: #FF9900; text-decoration: none;">Awssbggcoek@gmail.com</a>.
+              </p>
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="padding: 18px 32px; background-color: #03060C; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 11px; color: #475569;">
+              AWS Student Community Day Kolhapur 2026 · Organized by AWS Student Builder Group GCOEK
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+}
+
+/**
+ * Plain-text fallback for application received email
+ */
+export function generateApplicationReceivedEmailText(student: StudentRegistration): string {
+  return `Hello ${student.fullName},
+
+Thank you for applying to attend AWS Student Community Day Kolhapur 2026! We have successfully received your registration form and payment details.
+
+YOUR OFFICIAL APPLICATION ID: ${student.bookingId}
+(Keep this Application ID to track your registration status online)
+
+CURRENT STATUS: INSPECTION PENDING // UNDER REVIEW
+Our organizing committee will inspect your submitted payment reference (UTR: ${student.transactionId}) and student credentials within 24-48 hours. Once verified and approved, you will receive your official Confirmed Participant Pass with Entry QR Code directly on this email.
+
+SUBMITTED REGISTRATION DETAILS:
+- Application ID: ${student.bookingId}
+- Participant Name: ${student.fullName}
+- College: ${student.collegeName}
+- PRN / Roll No: ${student.prnRollNo}
+- Ticket Tier / Amount: ₹${student.amount} (${student.ticketTier})
+- Submitted UTR: ${student.transactionId}
+- Event Date: Sunday, 01 November 2026 (09:00 AM IST)
+- Venue: V.T. Patil Hall, Kolhapur
+
+Track your application status anytime at:
+https://aws-scd-kolhapur.vercel.app/ticket
+
+Best regards,
+AWS Student Community Day Kolhapur 2026 Organizing Committee
+Email: Awssbggcoek@gmail.com
+`;
+}
+
+/**
+ * Sends initial application received email with Application ID to student
+ */
+export async function sendApplicationReceivedEmail(
+  student: StudentRegistration,
+  apiKey?: string,
+  fromEmail?: string
+): Promise<SendEmailResult> {
+  const localGmailUser = typeof window !== 'undefined' ? localStorage.getItem('AWS_ADMIN_GMAIL_USER') || '' : '';
+  const localGmailPass = typeof window !== 'undefined' ? localStorage.getItem('AWS_ADMIN_GMAIL_PASS') || '' : '';
+  const localResendKey = typeof window !== 'undefined' ? localStorage.getItem('AWS_ADMIN_RESEND_KEY') || '' : '';
+  const localFromEmail = typeof window !== 'undefined' ? localStorage.getItem('AWS_ADMIN_FROM_EMAIL') || '' : '';
+
+  const gmailUser = localGmailUser || import.meta.env.VITE_GMAIL_USER || DEFAULT_GMAIL_USER;
+  const gmailPass = localGmailPass || import.meta.env.VITE_GMAIL_APP_PASSWORD || DEFAULT_GMAIL_PASS;
+  const activeKey = apiKey || localResendKey || import.meta.env.VITE_RESEND_API_KEY || '';
+
+  const sender =
+    fromEmail ||
+    localFromEmail ||
+    import.meta.env.VITE_RESEND_FROM_EMAIL ||
+    (gmailUser ? gmailUser : 'onboarding@resend.dev');
+
+  if (!gmailUser && !activeKey) {
+    return {
+      success: false,
+      error: 'No email service configured.',
+    };
+  }
+
+  const html = generateApplicationReceivedEmailHtml(student);
+  const text = generateApplicationReceivedEmailText(student);
+
+  return dispatchEmailWithFallbacks({
+    gmailUser,
+    gmailPass,
+    apiKey: activeKey,
+    from: sender.includes('<') ? sender : `AWS SCD 2026 <${sender}>`,
+    to: student.email,
+    subject: `📋 Application Received: AWS Student Community Day Kolhapur 2026 [ID: ${student.bookingId}]`,
+    text,
+    html,
+  });
+}
+

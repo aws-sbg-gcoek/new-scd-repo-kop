@@ -8,6 +8,7 @@ import { PassTypeSelector } from '../components/PassTypeSelector';
 import { RegistrationForm, RegistrationFormData } from '../components/RegistrationForm';
 import { PaymentEmbed } from '../components/PaymentEmbed';
 import { submitNewRegistration, findRegistrationAsync, StudentRegistration } from '../../../utils/registrationStore';
+import { sendApplicationReceivedEmail } from '../../../services/emailService';
 import OfficialTicketPass from '../../../components/OfficialTicketPass';
 
 const stepLabels = ['Select Pass', 'Register Details', 'UPI Payment', 'Confirmation'];
@@ -112,6 +113,11 @@ export function TicketsPurchasePage() {
         paymentScreenshotName: screenshotName,
         ticketTier: selectedPass.name,
         amount: selectedPass.price,
+      });
+
+      // Dispatch application acknowledgment email with Application ID to student immediately
+      sendApplicationReceivedEmail(record).catch((err) => {
+        console.warn('Failed to send application confirmation email:', err);
       });
 
       setSubmittedRecord(record);
@@ -265,21 +271,21 @@ export function TicketsPurchasePage() {
 
                     <div>
                       <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400 block mb-1 font-bold">
-                        REGISTRATION SUBMITTED SUCCESSFULLY
+                        REGISTRATION FORM SUBMITTED
                       </span>
                       <h3 className="font-sans font-black italic text-2xl uppercase tracking-tight text-white">
-                        Under Surveillance / Verification
+                        Under Committee Inspection
                       </h3>
-                      <p className="font-mono text-xs text-white/50 mt-2 max-w-md mx-auto">
-                        Your UPI payment transaction is currently being verified against our official event bank accounts.
+                      <p className="font-mono text-xs text-white/60 mt-2 max-w-md mx-auto">
+                        An acknowledgment email with your <strong className="text-aws-orange">Application ID</strong> has been dispatched to <strong className="text-white">{submittedRecord.email}</strong>.
                       </p>
                     </div>
 
                     {/* Booking ID box */}
                     <div className="p-4 bg-[#111] border border-white/15 rounded-lg flex items-center justify-between text-left">
                       <div>
-                        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">
-                          Your Booking Reference ID
+                        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block font-bold">
+                          Official Application / Reference ID
                         </span>
                         <span className="font-mono text-lg font-black text-aws-orange">
                           {submittedRecord.bookingId}
@@ -293,6 +299,17 @@ export function TicketsPurchasePage() {
                         {copiedRef ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
                         {copiedRef ? 'Copied' : 'Copy'}
                       </button>
+                    </div>
+
+                    {/* Verification Notice Banner */}
+                    <div className="p-3.5 bg-amber-500/10 border border-amber-500/25 rounded-lg text-left text-xs font-mono text-amber-300">
+                      <div className="flex items-center gap-2 font-bold mb-1">
+                        <span className="text-base">⏳</span>
+                        <span className="uppercase tracking-wider">Inspection & Verification in Progress</span>
+                      </div>
+                      <p className="text-[11px] text-amber-200/80 leading-relaxed">
+                        Our committee will inspect your submitted payment reference (UTR: <strong className="text-white">{submittedRecord.transactionId}</strong>) within 24-48 hours. After inspection, we will confirm your registration and email your official Event Pass with Entry QR Code.
+                      </p>
                     </div>
 
                     {/* Summary Card */}
@@ -315,7 +332,7 @@ export function TicketsPurchasePage() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-white/40">Status:</span>
-                        <span className="text-amber-400 font-bold uppercase">Under Surveillance</span>
+                        <span className="text-amber-400 font-bold uppercase">Inspection Pending</span>
                       </div>
                     </div>
 
