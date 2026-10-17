@@ -32,18 +32,35 @@ export const BadgePage = () => {
     if (!badgeRef.current) return;
     setIsGenerating(true);
     try {
-      // Small delay to ensure any CSS transitions finish
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      const dataUrl = await toPng(badgeRef.current, {
-        pixelRatio: 3,
-        backgroundColor: "#050505",
-      });
+      // Delay to ensure any DOM painting / image loading is settled
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      let dataUrl: string;
+      try {
+        dataUrl = await toPng(badgeRef.current, {
+          pixelRatio: 2,
+          backgroundColor: "#050505",
+          cacheBust: true,
+        });
+      } catch (err) {
+        console.warn("Primary toPng failed, retrying with skipFonts fallback:", err);
+        dataUrl = await toPng(badgeRef.current, {
+          pixelRatio: 2,
+          backgroundColor: "#050505",
+          skipFonts: true,
+        });
+      }
+
+      const safeName = (name.trim() || "Attendee").replace(/[^a-zA-Z0-9_-]/g, "_");
       const link = document.createElement("a");
-      link.download = "SCD_Kolhapur_2026_Badge.png";
+      link.download = `SCD_Kolhapur_2026_Badge_${safeName}.png`;
       link.href = dataUrl;
+      document.body.appendChild(link);
       link.click();
-    } catch (error) {
+      document.body.removeChild(link);
+    } catch (error: any) {
       console.error("Error generating badge:", error);
+      alert("Failed to download badge. Please ensure your photo is loaded and try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -109,18 +126,16 @@ export const BadgePage = () => {
                 <div className="absolute top-0 left-0 w-full h-[70px] bg-[#050505] z-30 flex justify-between items-center px-5 border-b border-white/10 shadow-md">
                   {/* Left Logo */}
                   <img
-                    src="/scd-kolhapur-logo.png?v=4"
+                    src="/scd-kolhapur-logo.png"
                     alt="SCD Kolhapur"
-                    className="h-20 sm:h-11 w-auto max-w-[220px] object-contain"
-                    crossOrigin="anonymous"
+                    className="h-10 sm:h-11 w-auto max-w-[200px] object-contain"
                   />
                   {/* Right Logos - Single Line */}
                   <div className="flex items-center gap-2">
                     <img
                       src="/AWS_Builder.png"
                       alt="AWS Builder"
-                      className="h-6 w-auto object-contain"
-                      crossOrigin="anonymous"
+                      className="h-7 w-auto object-contain"
                     />
                   </div>
                 </div>
@@ -132,7 +147,6 @@ export const BadgePage = () => {
                       src={image}
                       alt="User"
                       className="w-full h-full object-contain object-center"
-                      crossOrigin="anonymous"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-white/5">
@@ -173,13 +187,13 @@ export const BadgePage = () => {
                   </div>
 
                   {/* Stats / Event Info Row */}
-                  <div className="w-[90%] mx-auto backdrop-blur-md bg-f1-red/90 rounded-xl px-5 py-3 flex justify-between items-center border border-white/20 shadow-[0_10px_20px_rgba(225,6,0,0.3)]">
+                  <div className="w-[90%] mx-auto backdrop-blur-md bg-f1-red/90 rounded-xl px-4 py-2.5 sm:px-5 sm:py-3 flex justify-between items-center border border-white/20 shadow-[0_10px_20px_rgba(225,6,0,0.3)]">
                     <div className="flex flex-col items-center">
                       <span className="text-[9px] font-mono tracking-widest uppercase text-white/80">
-                        Aug
+                        Date
                       </span>
-                      <span className="text-xl font-black text-white leading-none mt-1">
-                        14
+                      <span className="text-base sm:text-lg font-black text-white leading-none mt-1">
+                        01 NOV
                       </span>
                     </div>
                     <div className="flex flex-col items-center">
@@ -187,22 +201,22 @@ export const BadgePage = () => {
                         Year
                       </span>
                       <span className="text-xl font-black text-white leading-none mt-1">
-                        26
+                        2026
                       </span>
                     </div>
                     <div className="flex flex-col items-center">
                       <span className="text-[9px] font-mono tracking-widest uppercase text-white/80">
                         City
                       </span>
-                      <span className="text-xl font-black text-white leading-none mt-1">
-                        DHL
+                      <span className="text-xs sm:text-sm font-black text-white leading-none mt-1 tracking-tight">
+                        KOLHAPUR
                       </span>
                     </div>
                     <div className="flex flex-col items-center">
                       <span className="text-[9px] font-mono tracking-widest uppercase text-white/80">
                         Role
                       </span>
-                      <span className="text-xl font-black text-white leading-none uppercase mt-1">
+                      <span className="text-xs sm:text-sm font-black text-white leading-none uppercase mt-1">
                         {role || "ATTENDEE"}
                       </span>
                     </div>

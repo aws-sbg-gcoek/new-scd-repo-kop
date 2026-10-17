@@ -176,7 +176,7 @@ export const SpeakersSection = () => {
       <div className="mb-12 max-w-7xl mx-auto">
         <SectionHeader 
           title="Speakers" 
-          subtitle="Our speaker lineup is currently being assembled in the paddock. To see who takes the stage, attend AWS Community Day Dhule live!" 
+          subtitle="Our speaker lineup is currently being assembled in the paddock. To see who takes the stage, attend AWS Student Community Day Kolhapur live!" 
           sysId="02.SPK" 
         />
       </div>
@@ -315,7 +315,7 @@ export const SpeakersSection = () => {
                 Want to See Who Takes The Stage?
               </h4>
               <p className="font-sans text-xs sm:text-sm text-white/60 leading-relaxed mb-6">
-                All 8+ keynotes, technical deep-dives, and hands-on workshops will be revealed and delivered live on stage at AWS Community Day Dhule. Secure your event pass now!
+                All 8+ keynotes, technical deep-dives, and hands-on workshops will be revealed and delivered live on stage at AWS Student Community Day Kolhapur. Secure your event pass now!
               </p>
             </div>
             <div>
@@ -455,7 +455,7 @@ export const SpeakersSection = () => {
                         </div>
                         <div className="flex justify-between">
                           <span>REVEAL VENUE:</span>
-                          <span className="text-white/80 font-semibold">DHULE COMMUNITY STAGE</span>
+                          <span className="text-white/80 font-semibold">KOLHAPUR COMMUNITY STAGE</span>
                         </div>
                       </div>
                     </div>
