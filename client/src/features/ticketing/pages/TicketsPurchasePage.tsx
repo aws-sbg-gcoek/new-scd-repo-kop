@@ -348,8 +348,8 @@ export function TicketsPurchasePage() {
                         rel="noreferrer"
                         className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/15 hover:border-aws-orange text-white text-xs font-mono uppercase tracking-wider transition-all"
                       >
-                        <Calendar size={13} className="text-aws-orange" />
-                        <span>Add event to Google Calendar</span>
+                        <Calendar size={14} className="text-aws-orange" />
+                        <span>Add date to Google Calendar</span>
                       </a>
                     </div>
 

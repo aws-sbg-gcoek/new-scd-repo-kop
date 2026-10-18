@@ -4,7 +4,6 @@ import { AngledButton } from "./LayoutElements";
 import { Zap, Calendar, MapPin, Volume2, VolumeX } from "lucide-react";
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { GOOGLE_CALENDAR_URL } from "../utils/eventConstants";
 
 let globalIsMuted = false;
 
@@ -305,7 +304,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 mt-2"
+            className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mt-2"
           >
             <Link to="/ticket">
               <AngledButton primary={true}>
@@ -316,15 +315,6 @@ export const HeroSection = () => {
               <AngledButton primary={false}>
                 <span>View Agenda</span>
               </AngledButton>
-            </a>
-            <a
-              href={GOOGLE_CALENDAR_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-4 py-3 border border-white/15 bg-white/5 hover:bg-white/10 hover:border-aws-orange text-white hover:text-aws-orange text-xs font-mono uppercase tracking-wider transition-all"
-            >
-              <Calendar size={13} className="text-aws-orange" />
-              <span>Add event to Google Calendar</span>
             </a>
           </motion.div>
         </div>
@@ -344,17 +334,6 @@ export const HeroSection = () => {
               <span className="font-sans text-lg sm:text-xl lg:text-2xl font-black text-white group-hover:text-f1-red transition-colors duration-300">
                 01 November 2026
               </span>
-              <div className="mt-2 font-mono text-[9px] uppercase tracking-widest relative z-20">
-                <a
-                  href={GOOGLE_CALENDAR_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-white/50 hover:text-aws-orange transition-colors"
-                >
-                  <Calendar size={11} className="text-aws-orange" />
-                  <span>Add event to Google Calendar</span>
-                </a>
-              </div>
             </div>
 
             <div className="flex flex-col group cursor-default">
