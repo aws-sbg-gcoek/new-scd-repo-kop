@@ -45,10 +45,10 @@ export const FooterSection = () => {
          
          <div className="flex flex-col max-w-sm">
            <div className="text-white font-sans font-black italic text-2xl sm:text-4xl mb-2 uppercase tracking-tighter">AWS SCD<br/>KOLHAPUR 2026.</div>
-           <div className="text-white/60 text-xs sm:text-sm font-sans mb-6 sm:mb-8">Powering the next generation of cloud innovators. Organized by AWS Student Builder Group GCOEK.</div>
+           <div className="text-white/60 text-xs sm:text-sm font-sans mb-6 sm:mb-8">Powering the next generation of cloud innovators. Organized by AWS Student Builder Group Kolhapur.</div>
            <div className="flex items-start gap-2 text-white/50 font-mono text-[10px] sm:text-xs mb-4">
              <MapPin size={14} className="text-aws-orange shrink-0 mt-0.5" />
-             <span>Govt. College of Engineering, Vidyanagar, Kolhapur, Maharashtra 416004</span>
+             <span>V.T. Patil Convention Hall, Rajarampuri, Kolhapur, Maharashtra 416008</span>
            </div>
            <a href="mailto:awssbggcoek@gmail.com" className="inline-flex max-w-max items-center font-mono text-[10px] sm:text-xs text-aws-orange hover:text-white transition-colors mb-2 uppercase tracking-widest gap-2 break-all">
              <Mail size={14} className="shrink-0" /> awssbggcoek@gmail.com
@@ -79,7 +79,7 @@ export const FooterSection = () => {
       </div>
 
       <div className="pt-6 sm:pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4">
-         <span className="font-mono text-[9px] sm:text-[10px] text-gray-500 uppercase tracking-widest text-center md:text-left">© 2026 AWS Student Builder Group GCOEK. All rights reserved.</span>
+         <span className="font-mono text-[9px] sm:text-[10px] text-gray-500 uppercase tracking-widest text-center md:text-left">© 2026 AWS Student Community Day Kolhapur. All rights reserved.</span>
          <div className="flex text-[9px] sm:text-[10px] tracking-widest font-mono text-gray-500 uppercase space-x-4">
             <span className="text-[#00ff00]">STATUS: ACTIVE // LIVE</span>
          </div>

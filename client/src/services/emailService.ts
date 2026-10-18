@@ -758,7 +758,7 @@ export function generateApplicationReceivedEmailHtml(student: StudentRegistratio
           <!-- FOOTER -->
           <tr>
             <td style="padding: 18px 32px; background-color: #03060C; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 11px; color: #475569;">
-              AWS Student Community Day Kolhapur 2026 · Organized by AWS Student Builder Group GCOEK
+              AWS Student Community Day Kolhapur 2026 · Organized by AWS Student Builder Group Kolhapur
             </td>
           </tr>
 

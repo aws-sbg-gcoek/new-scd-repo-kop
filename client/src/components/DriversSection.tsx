@@ -555,7 +555,7 @@ export const DriversSection = () => {
           </div>
           <div>
             <span className="font-mono text-xs font-bold text-white uppercase tracking-wider block">
-              AWS Student Builder Group GCOEK
+              AWS Student Builder Group Kolhapur
             </span>
             <span className="font-mono text-[11px] text-white/40">
               28 Builders across Leadership, Tech, Operations, Media, PR & Finance

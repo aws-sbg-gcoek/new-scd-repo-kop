@@ -592,7 +592,7 @@ function MemberCard({ member }: { member: TeamMember }) {
           </div>
 
           <span className="font-mono text-[8px] text-white/20 uppercase tracking-widest">
-            GCOEK // 2026
+            AWS SCD // 2026
           </span>
         </div>
       </div>

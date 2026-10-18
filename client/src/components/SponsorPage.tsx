@@ -1183,7 +1183,7 @@ export const SponsorPage = () => {
       {/* Footer */}
       <footer className="border-t border-white/5 py-8 px-4 sm:px-8 lg:px-12 bg-[#030303]">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-mono text-slate-500">
-          <span>© 2026 AWS Student Builder Group, GCOEK Kolhapur. All rights reserved.</span>
+          <span>© 2026 AWS Student Community Day Kolhapur. All rights reserved.</span>
           <Link to="/" className="text-aws-orange hover:text-white transition-colors">
             ← Return to SCD 2026 Home
           </Link>
