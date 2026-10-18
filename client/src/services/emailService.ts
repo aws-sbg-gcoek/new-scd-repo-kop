@@ -229,8 +229,8 @@ export function generateTicketEmailHtml(student: StudentRegistration): string {
                           </a>
                         </td>
                         <td align="center" style="padding: 4px 8px;">
-                          <a href="${GOOGLE_CALENDAR_URL}" target="_blank" style="background-color: #0E1A2C; border: 1px solid #FF9900; color: #FF9900; font-family: monospace; font-weight: 700; font-size: 12px; text-decoration: none; padding: 11px 20px; border-radius: 8px; display: inline-block;">
-                            📅 Add event to Google Calendar
+                          <a href="${GOOGLE_CALENDAR_URL}" target="_blank" style="background: linear-gradient(135deg, #FF9900 0%, #E65100 100%); color: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 800; font-size: 12px; text-decoration: none; padding: 11px 20px; border-radius: 8px; display: inline-block; box-shadow: 0 4px 14px rgba(255, 153, 0, 0.35); text-transform: uppercase; letter-spacing: 0.5px;">
+                            📅 Add to Calendar
                           </a>
                         </td>
                       </tr>
