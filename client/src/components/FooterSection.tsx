@@ -1,4 +1,4 @@
-import { Mail, Linkedin, Instagram, Github, MapPin, PhoneCall } from 'lucide-react';
+import { Mail, Linkedin, Instagram, MapPin, PhoneCall } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const quickLinks = [
@@ -97,7 +97,6 @@ export const FooterSection = () => {
                   <li><a href="https://www.linkedin.com/company/aws-cloud-club-gcoe-kolhapur/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#0a66c2] transition-colors"><Linkedin size={14} /> LinkedIn</a></li>
                   <li><a href="https://www.instagram.com/aws.sbg.gcoe.kolhapur/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#e1306c] transition-colors"><Instagram size={14} /> Instagram</a></li>
                   <li><a href="https://www.meetup.com/aws-sbg-at-government-college-of-engineering-kolhapur" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#e0393e] transition-colors"><span className="w-3.5 h-3.5 flex items-center justify-center font-bold text-xs">M</span> Meetup</a></li>
-                  <li><a href="https://github.com/AWSCloudClubGCOE" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors"><Github size={14} /> GitHub</a></li>
                </ul>
             </div>
          </div>
