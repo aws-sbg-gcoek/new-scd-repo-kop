@@ -250,7 +250,7 @@ export function generateTicketEmailHtml(student: StudentRegistration): string {
                 Keep this email handy or save the QR code to your phone gallery. Pass allows strict 1-time gate entry.
               </p>
               <p style="margin: 0; font-size: 10px; color: #475569; font-family: monospace;">
-                AWS Student Community Day Kolhapur 2026 Organizing Committee · V.T. Patil Convention Hall, Kolhapur
+                AWS Student Community Day Kolhapur 2026 Organizing Committee · V.T. Patil Convention Hall, Tararani High School Compound, Rajarampuri, Kolhapur 416008
               </p>
             </td>
           </tr>
@@ -409,7 +409,7 @@ WHAT YOU SHOULD DO NEXT:
 
 Best regards,
 AWS Student Community Day Kolhapur 2026 Organizing Committee
-V.T. Patil Convention Hall, Kolhapur
+V.T. Patil Convention Hall, Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008
 `;
 }
 
@@ -582,7 +582,7 @@ export async function sendTicketEmailViaResend(
   }
 
   const html = generateTicketEmailHtml(student);
-  const text = `Congratulations ${student.fullName}!\n\nYour registration for AWS Student Community Day Kolhapur 2026 is confirmed!\nTicket Pass Code: ${student.ticketCode || student.bookingId}\nBooking ID: ${student.bookingId}\nTier: ${student.ticketTier}\nCollege: ${student.collegeName}\n\nVenue: V.T. Patil Convention Hall, Kolhapur\nDate: Sunday, November 01, 2026\n\nPlease present this ticket pass QR code at the check-in desk.\n\nAdd event to Google Calendar: ${GOOGLE_CALENDAR_URL}`;
+  const text = `Congratulations ${student.fullName}!\n\nYour registration for AWS Student Community Day Kolhapur 2026 is confirmed!\nTicket Pass Code: ${student.ticketCode || student.bookingId}\nBooking ID: ${student.bookingId}\nTier: ${student.ticketTier}\nCollege: ${student.collegeName}\n\nVenue: V.T. Patil Convention Hall, Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008\nDate: Sunday, November 01, 2026\n\nPlease present this ticket pass QR code at the check-in desk.\n\nAdd event to Google Calendar: ${GOOGLE_CALENDAR_URL}`;
 
   return dispatchEmailWithFallbacks({
     gmailUser,
@@ -727,7 +727,7 @@ export function generateApplicationReceivedEmailHtml(student: StudentRegistratio
                 </tr>
                 <tr>
                   <td style="padding: 10px 16px; color: #64748B;">Event Date & Venue:</td>
-                  <td style="padding: 10px 16px; color: #E2E8F0; font-weight: 700;">Sunday, 01 Nov 2026 · V.T. Patil Convention Hall, Kolhapur</td>
+                  <td style="padding: 10px 16px; color: #E2E8F0; font-weight: 700;">Sunday, 01 Nov 2026 · V.T. Patil Convention Hall, Tararani High School Compound, Rajarampuri, Kolhapur 416008</td>
                 </tr>
               </table>
 
@@ -793,7 +793,7 @@ SUBMITTED REGISTRATION DETAILS:
 - Ticket Tier / Amount: ₹${student.amount} (${student.ticketTier})
 - Submitted UTR: ${student.transactionId}
 - Event Date: Sunday, 01 November 2026 (09:00 AM IST)
-- Venue: V.T. Patil Convention Hall, Kolhapur
+- Venue: V.T. Patil Convention Hall, Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008
 - Add event to Google Calendar: ${GOOGLE_CALENDAR_URL}
 
 Track your application status anytime at:

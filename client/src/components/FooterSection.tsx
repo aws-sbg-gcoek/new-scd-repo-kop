@@ -48,7 +48,7 @@ export const FooterSection = () => {
            <div className="text-white/60 text-xs sm:text-sm font-sans mb-6 sm:mb-8">Powering the next generation of cloud innovators. Organized by AWS Student Builder Group Kolhapur.</div>
            <div className="flex items-start gap-2 text-white/50 font-mono text-[10px] sm:text-xs mb-4">
              <MapPin size={14} className="text-aws-orange shrink-0 mt-0.5" />
-             <span>V.T. Patil Convention Hall, Rajarampuri, Kolhapur, Maharashtra 416008</span>
+             <span>V.T. Patil Convention Hall, Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008</span>
            </div>
            <a href="mailto:awssbggcoek@gmail.com" className="inline-flex max-w-max items-center font-mono text-[10px] sm:text-xs text-aws-orange hover:text-white transition-colors mb-2 uppercase tracking-widest gap-2 break-all">
              <Mail size={14} className="shrink-0" /> awssbggcoek@gmail.com

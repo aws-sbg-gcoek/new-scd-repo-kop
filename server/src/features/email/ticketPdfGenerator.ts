@@ -94,8 +94,8 @@ export async function generateTicketPdf(params: {
 
       // Footer Text
       doc.undash();
-      doc.font('Courier').fontSize(8).fillColor('#6b7280').text('14 August 2026', 24, currentY);
-      doc.text("SVKM's IoT, Dhule", 24, currentY + 12);
+      doc.font('Courier').fontSize(8).fillColor('#6b7280').text('01 November 2026', 24, currentY);
+      doc.text('V.T. Patil Convention Hall, Kolhapur', 24, currentY + 12);
       doc.text('Show QR at gate', 24, currentY, { width: 292, align: 'right' });
 
       doc.end();

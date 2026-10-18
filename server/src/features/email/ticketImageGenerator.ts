@@ -88,8 +88,8 @@ export async function generateTicketImage(params: {
   <line x1="48" y1="940" x2="632" y2="940" stroke="rgba(255,255,255,0.1)" stroke-width="2" stroke-dasharray="10,10"/>
 
   <!-- Footer Text -->
-  <text x="48" y="1000" font-family="monospace" font-size="16" fill="rgba(255,255,255,0.3)">14 August 2026</text>
-  <text x="48" y="1030" font-family="monospace" font-size="16" fill="rgba(255,255,255,0.3)">SVKM's IoT, Dhule</text>
+  <text x="48" y="1000" font-family="monospace" font-size="16" fill="rgba(255,255,255,0.3)">01 November 2026</text>
+  <text x="48" y="1030" font-family="monospace" font-size="16" fill="rgba(255,255,255,0.3)">V.T. Patil Convention Hall, Kolhapur</text>
   <text x="632" y="1015" text-anchor="end" font-family="monospace" font-size="16" fill="rgba(255,255,255,0.2)">Show QR at gate</text>
 
 </svg>`;

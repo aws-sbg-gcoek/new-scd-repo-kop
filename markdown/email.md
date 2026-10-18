@@ -127,7 +127,7 @@
                           Venue
                         </td>
                         <td style="font-size:14px;color:#374151;">
-                          SVKM's Institute of Technology, Dhule
+                          V.T. Patil Convention Hall, Kolhapur
                         </td>
                       </tr>
                     </table>
@@ -150,23 +150,21 @@
                       <tr>
                         <td>
                           <p style="margin:0;font-size:15px;font-weight:700;color:#0f172a;">
-                            SVKM's Institute of Technology, Dhule
+                            V.T. Patil Convention Hall, Kolhapur
                           </p>
                           <p style="margin:4px 0 0;font-size:13px;color:#475569;line-height:1.6;">
-                            SVKM's Institute of Technology, Nardana Road,<br>
-                            Dhule, Maharashtra 424 001, India
+                            V.T. Patil Convention Hall, Tararani High School Compound,<br>
+                            Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008
                           </p>
                         </td>
                       </tr>
                     </table>
 
-                    
-
                     <!-- Direction buttons -->
                     <table cellpadding="0" cellspacing="0" border="0">
                       <tr>
                         <td style="padding-right:10px;">
-                          <a href="https://maps.google.com/?q=SVKM+Institute+of+Technology+Dhule"
+                          <a href="https://maps.google.com/?q=V.T.+Patil+Convention+Hall,+Tararani+High+School+Compound,+Poorvarang,+Mahalaxminagar,+Rajarampuri,+Kolhapur,+Maharashtra+416008"
                              target="_blank"
                              style="background:#ffffff;color:#374151;text-decoration:none;padding:9px 16px;border-radius:6px;font-size:13px;font-weight:600;display:inline-block;border:1px solid #e5e7eb;vertical-align:middle;">
                             <img src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"

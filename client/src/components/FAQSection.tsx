@@ -90,7 +90,7 @@ const faqCategories = [
     items: [
       {
         question: "When and where is the event?",
-        answer: "The event is scheduled for 1 November 2026 at V. T. Patil Convention Hall, Rajarampuri, Kolhapur. Check official announcements for any changes."
+        answer: "The event is scheduled for 1 November 2026 at V.T. Patil Convention Hall, Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008. Check official announcements for any changes."
       },
       {
         question: "What time should I arrive?",

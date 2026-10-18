@@ -307,11 +307,11 @@ The Circuit
 
 ## Venue Description
 
-SVKM’s Institute of Technology Campus transforms into the region’s premier cloud innovation arena featuring keynote stages, sponsor booths, networking zones, technical classrooms, and dedicated workshop laboratories.
+V.T. Patil Convention Hall transforms into Western Maharashtra’s premier cloud innovation arena featuring keynote stages, sponsor booths, networking zones, and technical workshop spaces.
 
 ## Venue Address
 
-Survey No. 499, Plot No. 2, Mumbai Agra Highway, Dhule, Maharashtra 424311
+V.T. Patil Convention Hall, Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008
 
 ---
 

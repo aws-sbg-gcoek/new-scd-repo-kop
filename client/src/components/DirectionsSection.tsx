@@ -15,13 +15,13 @@ const contentMap: Record<string, ReactNode> = {
     <div className="flex flex-col gap-4">
       <p className="font-sans text-sm sm:text-base text-white/70 leading-relaxed">
         <strong className="text-white text-base">V.T. Patil Convention Hall</strong><br />
-        Near Kawala Naka & Tarabai Park,<br />
-        CSMT Road, Kolhapur,<br />
-        Maharashtra 416003, India
+        Tararani High School Compound, Poorvarang,<br />
+        Mahalaxminagar, Rajarampuri, Kolhapur,<br />
+        Maharashtra 416008, India
       </p>
       <div className="flex flex-wrap gap-2.5 mt-2">
         <a 
-          href="https://maps.google.com/?q=V.T.+Patil+Convention+Hall,+Kolhapur" 
+          href="https://maps.google.com/?q=V.T.+Patil+Convention+Hall,+Tararani+High+School+Compound,+Poorvarang,+Mahalaxminagar,+Rajarampuri,+Kolhapur,+Maharashtra+416008" 
           target="_blank" 
           rel="noreferrer"
           className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-aws-orange hover:text-black border border-white/10 transition-colors font-mono text-[10px] uppercase tracking-widest"

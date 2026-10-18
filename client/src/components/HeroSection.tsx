@@ -352,9 +352,12 @@ export const HeroSection = () => {
               <span className="font-sans text-lg sm:text-xl lg:text-2xl font-black text-white leading-tight group-hover:text-aws-orange transition-colors duration-300">
                 V.T. Patil Convention Hall, Kolhapur
               </span>
+              <span className="font-sans text-xs text-white/60 mt-1 leading-relaxed">
+                Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008
+              </span>
               <div className="flex gap-4 mt-2 font-mono text-[9px] uppercase tracking-widest relative z-20">
                 <a 
-                  href="https://maps.google.com/?q=V.T.+Patil+Convention+Hall,+Kolhapur" 
+                  href="https://maps.google.com/?q=V.T.+Patil+Convention+Hall,+Tararani+High+School+Compound,+Poorvarang,+Mahalaxminagar,+Rajarampuri,+Kolhapur,+Maharashtra+416008" 
                   target="_blank" 
                   rel="noreferrer" 
                   className="text-white/40 hover:text-aws-orange transition-colors"

@@ -346,7 +346,7 @@ export const SponsorPage = () => {
             </div>
             <div className="flex items-center gap-2 bg-[#111] border border-white/10 px-4 py-2 rounded-xl text-white">
               <MapPin size={15} className="text-aws-orange shrink-0" />
-              <span><strong>Venue:</strong> V. T. Patil Convention Hall, Rajarampuri, Kolhapur</span>
+              <span><strong>Venue:</strong> V.T. Patil Convention Hall, Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008</span>
             </div>
           </div>
         </div>
