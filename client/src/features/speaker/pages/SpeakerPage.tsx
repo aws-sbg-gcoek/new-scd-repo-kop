@@ -792,7 +792,7 @@ export const SpeakerPage = () => {
       {/* Footer */}
       <footer className="border-t border-white/5 bg-[#030303] py-8 px-4 text-center text-xs font-mono text-slate-500">
         <p>© 2026 AWS Student Community Day Kolhapur. All rights reserved.</p>
-        <p className="text-[10px] text-slate-600 mt-1">Organized by student builders at V.T. Patil Hall, Kolhapur.</p>
+        <p className="text-[10px] text-slate-600 mt-1">Organized by student builders at V.T. Patil Convention Hall, Kolhapur.</p>
       </footer>
     </div>
   );

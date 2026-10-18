@@ -794,7 +794,7 @@ export const SponsorPage = () => {
               </span>
               <div className="flex flex-wrap items-center justify-center gap-3 font-mono text-xs">
                 <a
-                  href="https://www.meetup.com/aws-sbg-at-government-college-of-engineeringkolhapur/"
+                  href="https://www.meetup.com/aws-sbg-at-government-college-of-engineering-kolhapur"
                   target="_blank"
                   rel="noreferrer"
                   className="px-3.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/80 hover:text-white hover:border-aws-orange transition-all flex items-center gap-1.5"

@@ -1,9 +1,11 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'motion/react';
+import { Calendar } from 'lucide-react';
 import { SectionHeader } from './LayoutElements';
+import { GOOGLE_CALENDAR_URL } from '../utils/eventConstants';
 
 const schedule = [
-  { time: "09:00 - 10:00", type: "Pit Lane", title: "Registration, Networking & Breakfast", detail: "Attendee check-in, badge distribution, networking", isPit: true, flag: "red" },
+  { time: "09:00 - 10:00", type: "Pit Lane", title: "Registration & Networking", detail: "Attendee check-in, badge distribution & networking", isPit: true, flag: "red" },
   { time: "10:00 - 10:45", type: "Lights Out", title: "Opening Ceremony & Inauguration", detail: "Welcome address, ceremonial inauguration, event introduction", isPit: false, flag: "gray" },
   { time: "10:45 - 11:15", type: "Green Flag", title: "Keynote Address", detail: "Cloud computing, innovation, technology trends & opportunities", isPit: false, flag: "green" },
   { time: "11:15 - 12:00", type: "Green Flag", title: "Technical Session 01", detail: "Expert-led technical session by Speaker 01", isPit: false, flag: "green" },
@@ -151,10 +153,21 @@ export const TimelineSection = () => {
             sysId="04.STRAT"
           />
 
-          {/* Swipe Indicator Note */}
-          <div className="flex items-center gap-2 mt-2 text-[9px] font-mono text-aws-orange tracking-widest uppercase animate-pulse">
-            <span>Swipe horizontally to navigate timeline</span>
-            <span className="text-xs">➔</span>
+          {/* Action & Swipe Indicator Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-4 mt-3">
+            <div className="flex items-center gap-2 text-[9px] font-mono text-aws-orange tracking-widest uppercase animate-pulse">
+              <span>Swipe horizontally to navigate timeline</span>
+              <span className="text-xs">➔</span>
+            </div>
+            <a
+              href={GOOGLE_CALENDAR_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-aws-orange text-white text-xs font-mono uppercase tracking-wider transition-all"
+            >
+              <Calendar size={13} className="text-aws-orange" />
+              <span>Add event to Google Calendar</span>
+            </a>
           </div>
 
           {/* Swipe Track Wrapper */}

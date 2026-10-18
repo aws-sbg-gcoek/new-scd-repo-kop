@@ -44,7 +44,7 @@ const coreCrew: TeamMember[] = [
     role: "General Secretary",
     department: "Leadership Dept",
     description: "Managing club operations, institutional communication, and ensuring smooth execution of all community activities and conference logistics.",
-    image: "https://i.ibb.co/5W0h4c8y/Whats-App-Image-2026-03-17-at-9-01-47-AM.jpg",
+    image: "/team/vidula-powar.png",
     linkedin: "https://www.linkedin.com/in/vidula-p-372734294",
     email: "powarvidula11@gmail.com",
     skills: "Operations, Communication, Event Management"

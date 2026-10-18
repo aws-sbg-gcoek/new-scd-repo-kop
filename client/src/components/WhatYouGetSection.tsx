@@ -42,7 +42,7 @@ const perks = [
   },
   {
     title: "Premium Hospitality",
-    desc: "Fuel your learning with gourmet breakfast, hot lunch, and refreshments served throughout the day in the paddock.",
+    desc: "Fuel your learning with catered lunch, high-tea, and refreshments served throughout the day in the paddock.",
     icon: Utensils,
     color: "white"
   }

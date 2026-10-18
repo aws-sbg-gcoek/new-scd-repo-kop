@@ -47,7 +47,7 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     skills: "Operations, Communication, Event Management",
     email: "powarvidula11@gmail.com",
     linkedin: "https://www.linkedin.com/in/vidula-p-372734294",
-    image: "https://i.ibb.co/5W0h4c8y/Whats-App-Image-2026-03-17-at-9-01-47-AM.jpg"
+    image: "/team/vidula-powar.png"
   },
   {
     department: "Leadership Dept",
@@ -430,7 +430,7 @@ export default function TeamSection() {
 
           <p className="mt-4 text-xs sm:text-sm md:text-base text-white/60 max-w-2xl leading-relaxed">
             The passionate team of student organizers, cloud enthusiasts, guiding the largest 
-            AWS student community summit in Kolhapur at V.T. Patil Hall.
+            AWS student community summit in Kolhapur at V.T. Patil Convention Hall.
           </p>
         </div>
 

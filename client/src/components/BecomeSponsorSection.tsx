@@ -112,7 +112,7 @@ export const BecomeSponsorSection = () => {
                 </div>
                 <div>
                   <span className="text-[9px] uppercase text-white/40 block tracking-wider mb-1">Venue</span>
-                  <span className="text-sm font-black text-white">V.T. Patil Hall, Kolhapur</span>
+                  <span className="text-sm font-black text-white">V.T. Patil Convention Hall, Kolhapur</span>
                 </div>
               </div>
 

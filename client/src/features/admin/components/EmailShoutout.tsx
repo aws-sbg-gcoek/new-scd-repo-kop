@@ -157,7 +157,7 @@ Content-Type: text/html; charset=UTF-8
                           Venue
                         </td>
                         <td style="font-size:14px;color:#374151;">
-                          V.T. Patil Hall, Kolhapur
+                          V.T. Patil Convention Hall, Kolhapur
                         </td>
                       </tr>
                     </table>
@@ -180,11 +180,11 @@ Content-Type: text/html; charset=UTF-8
                       <tr>
                         <td>
                           <p style="margin:0;font-size:15px;font-weight:700;color:#0f172a;">
-                            V.T. Patil Hall, Kolhapur
+                            V.T. Patil Convention Hall, Kolhapur
                           </p>
                           <p style="margin:4px 0 0;font-size:13px;color:#475569;line-height:1.6;">
-                            V.T. Patil Hall, Kolhapur, Nardana Road,<br>
-                            Kolhapur, Maharashtra 416 003, India
+                            V.T. Patil Convention Hall, Rajarampuri,<br>
+                            Kolhapur, Maharashtra 416 008, India
                           </p>
                         </td>
                       </tr>
@@ -194,7 +194,7 @@ Content-Type: text/html; charset=UTF-8
                     <table cellpadding="0" cellspacing="0" border="0">
                       <tr>
                         <td style="padding-right:10px;">
-                          <a href="https://maps.google.com/?q=V.T.+Patil+Smruti+Bhavan,+Kolhapur"
+                          <a href="https://maps.google.com/?q=V.T.+Patil+Convention+Hall,+Kolhapur"
                              target="_blank"
                              style="background:#ffffff;color:#374151;text-decoration:none;padding:9px 16px;border-radius:6px;font-size:13px;font-weight:600;display:inline-block;border:1px solid #e5e7eb;vertical-align:middle;">
                             <img src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"

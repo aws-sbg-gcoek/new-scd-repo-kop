@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { StudentRegistration } from '../utils/registrationStore';
+import { GOOGLE_CALENDAR_URL } from '../utils/eventConstants';
 import {
   Calendar,
   MapPin,
@@ -1098,7 +1099,7 @@ export default function OfficialTicketPass({
                     <span className="text-[8px] text-[#38BDF8] uppercase block font-bold">
                       VENUE
                     </span>
-                    <strong className="text-white text-xs">Kolhapur, Maharashtra</strong>
+                    <strong className="text-white text-xs">V.T. Patil Convention Hall, Kolhapur</strong>
                   </div>
                 </div>
               </div>
@@ -1124,6 +1125,16 @@ export default function OfficialTicketPass({
           </div>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <a
+              href={GOOGLE_CALENDAR_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/15 text-white font-mono font-bold text-xs px-4 py-2.5 rounded-xl border border-white/15 hover:border-aws-orange transition-all cursor-pointer"
+            >
+              <Calendar className="w-3.5 h-3.5 text-aws-orange" />
+              <span>Add event to Google Calendar</span>
+            </a>
+
             <button
               type="button"
               onClick={handleShareWhatsApp}

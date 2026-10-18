@@ -1,4 +1,5 @@
 import { StudentRegistration } from '../utils/registrationStore';
+import { GOOGLE_CALENDAR_URL } from '../utils/eventConstants';
 
 export interface SendEmailResult {
   success: boolean;
@@ -227,6 +228,11 @@ export function generateTicketEmailHtml(student: StudentRegistration): string {
                             📱 Save Gate QR Code
                           </a>
                         </td>
+                        <td align="center" style="padding: 4px 8px;">
+                          <a href="${GOOGLE_CALENDAR_URL}" target="_blank" style="background-color: #0E1A2C; border: 1px solid #FF9900; color: #FF9900; font-family: monospace; font-weight: 700; font-size: 12px; text-decoration: none; padding: 11px 20px; border-radius: 8px; display: inline-block;">
+                            📅 Add event to Google Calendar
+                          </a>
+                        </td>
                       </tr>
                     </table>
                   </td>
@@ -244,7 +250,7 @@ export function generateTicketEmailHtml(student: StudentRegistration): string {
                 Keep this email handy or save the QR code to your phone gallery. Pass allows strict 1-time gate entry.
               </p>
               <p style="margin: 0; font-size: 10px; color: #475569; font-family: monospace;">
-                AWS Student Community Day Kolhapur 2026 Organizing Committee · V.T. Patil Hall, Kolhapur
+                AWS Student Community Day Kolhapur 2026 Organizing Committee · V.T. Patil Convention Hall, Kolhapur
               </p>
             </td>
           </tr>
@@ -361,7 +367,7 @@ export function generateRejectionEmailHtml(
           <!-- Footer -->
           <tr>
             <td style="padding: 16px; background-color: #050811; border-top: 1px solid #1A2436; text-align: center; font-size: 11px; color: #64748B;">
-              AWS Student Community Day Kolhapur 2026 Organizing Committee · V.T. Patil Hall, Kolhapur
+              AWS Student Community Day Kolhapur 2026 Organizing Committee · V.T. Patil Convention Hall, Kolhapur
             </td>
           </tr>
         </table>
@@ -403,7 +409,7 @@ WHAT YOU SHOULD DO NEXT:
 
 Best regards,
 AWS Student Community Day Kolhapur 2026 Organizing Committee
-V.T. Patil Hall, Kolhapur
+V.T. Patil Convention Hall, Kolhapur
 `;
 }
 
@@ -576,7 +582,7 @@ export async function sendTicketEmailViaResend(
   }
 
   const html = generateTicketEmailHtml(student);
-  const text = `Congratulations ${student.fullName}!\n\nYour registration for AWS Student Community Day Kolhapur 2026 is confirmed!\nTicket Pass Code: ${student.ticketCode || student.bookingId}\nBooking ID: ${student.bookingId}\nTier: ${student.ticketTier}\nCollege: ${student.collegeName}\n\nVenue: V.T. Patil Hall, Kolhapur\nDate: Sunday, November 01, 2026\n\nPlease present this ticket pass QR code at the check-in desk.`;
+  const text = `Congratulations ${student.fullName}!\n\nYour registration for AWS Student Community Day Kolhapur 2026 is confirmed!\nTicket Pass Code: ${student.ticketCode || student.bookingId}\nBooking ID: ${student.bookingId}\nTier: ${student.ticketTier}\nCollege: ${student.collegeName}\n\nVenue: V.T. Patil Convention Hall, Kolhapur\nDate: Sunday, November 01, 2026\n\nPlease present this ticket pass QR code at the check-in desk.\n\nAdd event to Google Calendar: ${GOOGLE_CALENDAR_URL}`;
 
   return dispatchEmailWithFallbacks({
     gmailUser,
@@ -721,16 +727,23 @@ export function generateApplicationReceivedEmailHtml(student: StudentRegistratio
                 </tr>
                 <tr>
                   <td style="padding: 10px 16px; color: #64748B;">Event Date & Venue:</td>
-                  <td style="padding: 10px 16px; color: #E2E8F0; font-weight: 700;">Sunday, 01 Nov 2026 · V.T. Patil Hall, Kolhapur</td>
+                  <td style="padding: 10px 16px; color: #E2E8F0; font-weight: 700;">Sunday, 01 Nov 2026 · V.T. Patil Convention Hall, Kolhapur</td>
                 </tr>
               </table>
 
-              <!-- TRACK STATUS BUTTON -->
+              <!-- ACTION BUTTONS: TRACK STATUS & ADD TO CALENDAR -->
               <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px;">
                 <tr>
-                  <td align="center">
+                  <td align="center" style="padding-bottom: 10px;">
                     <a href="https://aws-scd-kolhapur.vercel.app/ticket" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #FF9900 0%, #E10600 100%); color: #000000; font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; padding: 14px 32px; border-radius: 8px; box-shadow: 0 4px 18px rgba(255, 153, 0, 0.4);">
                       Track Application Status Online →
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center">
+                    <a href="${GOOGLE_CALENDAR_URL}" target="_blank" style="display: inline-block; background-color: #0B172B; border: 1px solid #FF9900; color: #FF9900; font-family: -apple-system, sans-serif; font-size: 12px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; padding: 10px 24px; border-radius: 6px;">
+                      📅 Add event to Google Calendar
                     </a>
                   </td>
                 </tr>
@@ -780,7 +793,8 @@ SUBMITTED REGISTRATION DETAILS:
 - Ticket Tier / Amount: ₹${student.amount} (${student.ticketTier})
 - Submitted UTR: ${student.transactionId}
 - Event Date: Sunday, 01 November 2026 (09:00 AM IST)
-- Venue: V.T. Patil Hall, Kolhapur
+- Venue: V.T. Patil Convention Hall, Kolhapur
+- Add event to Google Calendar: ${GOOGLE_CALENDAR_URL}
 
 Track your application status anytime at:
 https://aws-scd-kolhapur.vercel.app/ticket

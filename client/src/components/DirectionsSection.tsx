@@ -14,14 +14,14 @@ const contentMap: Record<string, ReactNode> = {
   venue: (
     <div className="flex flex-col gap-4">
       <p className="font-sans text-sm sm:text-base text-white/70 leading-relaxed">
-        <strong className="text-white text-base">V.T. Patil Smruti Bhavan (V.T. Patil Hall)</strong><br />
+        <strong className="text-white text-base">V.T. Patil Convention Hall</strong><br />
         Near Kawala Naka & Tarabai Park,<br />
         CSMT Road, Kolhapur,<br />
         Maharashtra 416003, India
       </p>
       <div className="flex flex-wrap gap-2.5 mt-2">
         <a 
-          href="https://maps.google.com/?q=V.T.+Patil+Smruti+Bhavan,+Kolhapur" 
+          href="https://maps.google.com/?q=V.T.+Patil+Convention+Hall,+Kolhapur" 
           target="_blank" 
           rel="noreferrer"
           className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-aws-orange hover:text-black border border-white/10 transition-colors font-mono text-[10px] uppercase tracking-widest"
@@ -47,7 +47,7 @@ const contentMap: Record<string, ReactNode> = {
         </li>
       </ul>
       <p className="font-sans text-xs text-white/50 mt-2">
-        Auto-rickshaws, city cabs, and city buses are readily available from CSMT Kolhapur Station directly to V.T. Patil Hall.
+        Auto-rickshaws, city cabs, and city buses are readily available from CSMT Kolhapur Station directly to V.T. Patil Convention Hall.
       </p>
     </div>
   ),
@@ -70,7 +70,7 @@ const contentMap: Record<string, ReactNode> = {
         ))}
       </div>
       <p className="font-sans text-xs text-white/50 mt-2">
-        Central Bus Stand (CBS Kolhapur) is just 2 km away from V.T. Patil Hall with round-the-clock state & private luxury buses.
+        Central Bus Stand (CBS Kolhapur) is just 2 km away from V.T. Patil Convention Hall with round-the-clock state & private luxury buses.
       </p>
     </div>
   ),
@@ -90,7 +90,7 @@ const contentMap: Record<string, ReactNode> = {
         </li>
       </ul>
       <p className="font-sans text-xs text-white/50 mt-2">
-        Prepaid taxis and auto-rickshaws connect Kolhapur Airport directly to V.T. Patil Hall.
+        Prepaid taxis and auto-rickshaws connect Kolhapur Airport directly to V.T. Patil Convention Hall.
       </p>
     </div>
   ),
@@ -111,7 +111,7 @@ export const DirectionsSection = () => {
         activeTab === 'road' ? 'bg-[#00ff00]' : 'bg-blue-400'
       }`} />
 
-      <SectionHeader title="Track Directions" subtitle="Navigate to the circuit. Find the best routes to V.T. Patil Hall, Kolhapur via air, train, or road." sysId="08.NAV" />
+      <SectionHeader title="Track Directions" subtitle="Navigate to the circuit. Find the best routes to V.T. Patil Convention Hall, Kolhapur via air, train, or road." sysId="08.NAV" />
 
       <div className="w-full flex flex-col lg:flex-row gap-6 sm:gap-10 mt-12 sm:mt-16 relative z-10 bg-[#111] border border-white/5 p-4 sm:p-6 lg:p-8">
         
@@ -182,7 +182,7 @@ export const DirectionsSection = () => {
             allowFullScreen 
             loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
-            title="V.T. Patil Hall Kolhapur Location"
+            title="V.T. Patil Convention Hall Kolhapur Location"
           ></iframe>
         </div>
 

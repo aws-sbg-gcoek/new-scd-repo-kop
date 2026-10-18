@@ -130,7 +130,7 @@ Organizing Team Preparation
 ### Pit Lane
 
 08:30 AM – 10:00 AM
-Registration & Morning Breakfast
+Registration & Networking
 
 ### Lights Out
 

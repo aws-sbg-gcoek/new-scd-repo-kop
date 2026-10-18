@@ -83,8 +83,8 @@ export function TicketPass({ ticket_number, full_name, pass_name, role, organiza
           <div className="border-t border-dashed border-white/10 mt-5 pt-4">
             <div className="flex justify-between items-center">
               <div>
-                <p className="font-mono text-[8px] text-white/30">14 August 2026</p>
-                <p className="font-mono text-[8px] text-white/30">V.T. Patil Hall, Kolhapur</p>
+                <p className="font-mono text-[8px] text-white/30">01 November 2026</p>
+                <p className="font-mono text-[8px] text-white/30">V.T. Patil Convention Hall, Kolhapur</p>
               </div>
               <p className="font-mono text-[8px] text-white/20">Show QR at gate</p>
             </div>

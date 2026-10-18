@@ -158,8 +158,8 @@ function createBadgeTexture(props: BadgeProps): THREE.CanvasTexture {
   ctx.fillStyle = 'rgba(255,255,255,0.4)';
   ctx.font = '48px monospace';
   ctx.textAlign = 'left';
-  ctx.fillText('14 August 2026', 120, h - 100);
-  ctx.fillText("V.T. Patil Hall, Kolhapur", 120, h - 40);
+  ctx.fillText('01 November 2026', 120, h - 100);
+  ctx.fillText("V.T. Patil Convention Hall, Kolhapur", 120, h - 40);
   ctx.textAlign = 'right';
   ctx.fillStyle = 'rgba(255,255,255,0.3)';
   ctx.fillText('Show QR at gate', w - 120, h - 70);

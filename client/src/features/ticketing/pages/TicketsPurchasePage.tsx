@@ -1,7 +1,7 @@
 /* eslint-disable react-doctor/no-chain-state-updates, react-doctor/no-cascading-set-state */
 import { Link, useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { ChevronRight, ArrowLeft, AlertCircle, Loader2, Search, CheckCircle2, Copy, Check, Ticket, Download } from 'lucide-react';
+import { ChevronRight, ArrowLeft, AlertCircle, Loader2, Search, CheckCircle2, Copy, Check, Ticket, Download, Calendar } from 'lucide-react';
 import { usePassTypes, PassType } from '../hooks/usePassTypes';
 import { useSettings } from '../hooks/useSettings';
 import { PassTypeSelector } from '../components/PassTypeSelector';
@@ -9,6 +9,7 @@ import { RegistrationForm, RegistrationFormData } from '../components/Registrati
 import { PaymentEmbed } from '../components/PaymentEmbed';
 import { submitNewRegistration, findRegistrationAsync, StudentRegistration } from '../../../utils/registrationStore';
 import { sendApplicationReceivedEmail } from '../../../services/emailService';
+import { GOOGLE_CALENDAR_URL } from '../../../utils/eventConstants';
 import OfficialTicketPass from '../../../components/OfficialTicketPass';
 
 const stepLabels = ['Select Pass', 'Register Details', 'UPI Payment', 'Confirmation'];
@@ -340,7 +341,19 @@ export function TicketsPurchasePage() {
                       Once verified by our committee, your official ticket pass will be emailed to <strong className="text-white">{submittedRecord.email}</strong> and will be downloadable via the Track Status tab.
                     </p>
 
-                    <div className="flex gap-3 pt-4">
+                    <div className="pt-2">
+                      <a
+                        href={GOOGLE_CALENDAR_URL}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/15 hover:border-aws-orange text-white text-xs font-mono uppercase tracking-wider transition-all"
+                      >
+                        <Calendar size={13} className="text-aws-orange" />
+                        <span>Add event to Google Calendar</span>
+                      </a>
+                    </div>
+
+                    <div className="flex gap-3 pt-2">
                       <button
                         type="button"
                         onClick={() => {

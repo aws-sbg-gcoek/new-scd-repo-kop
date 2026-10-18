@@ -49,8 +49,8 @@ export const CodeOfConductPage = () => {
           </h1>
           <div className="text-white/50 font-mono text-[9px] sm:text-xs uppercase tracking-wider max-w-xl mx-auto leading-relaxed space-y-1">
             <p className="font-black text-white">AWS Student Community Day (SCD) Kolhapur 2026</p>
-            <p className="text-[10px] text-white/40">Organized by AWS Student Builder Group, V.T. Patil Hall, Kolhapur</p>
-            <p className="text-[9px] text-aws-orange">📅 August 14, 2026 · 📍 V.T. Patil Hall, Kolhapur</p>
+            <p className="text-[10px] text-white/40">Organized by AWS Student Builder Group, V.T. Patil Convention Hall, Kolhapur</p>
+            <p className="text-[9px] text-aws-orange">📅 Sunday, November 01, 2026 · 📍 V.T. Patil Convention Hall, Kolhapur</p>
           </div>
         </div>
 
