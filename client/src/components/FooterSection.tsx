@@ -1,4 +1,4 @@
-import { Mail, Linkedin, Twitter, Instagram, Github, MapPin } from 'lucide-react';
+import { Mail, Linkedin, Instagram, Github, MapPin, PhoneCall } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const quickLinks = [
@@ -41,7 +41,7 @@ export const FooterSection = () => {
         ))}
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8 sm:gap-12 justify-between">
+      <div className="flex flex-col xl:flex-row gap-8 sm:gap-12 justify-between">
          
          <div className="flex flex-col max-w-sm">
            <div className="text-white font-sans font-black italic text-2xl sm:text-4xl mb-2 uppercase tracking-tighter">AWS SCD<br/>KOLHAPUR 2026.</div>
@@ -55,7 +55,32 @@ export const FooterSection = () => {
            </a>
          </div>
 
-         <div className="grid grid-cols-2 gap-8 sm:gap-12 md:gap-24">
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12">
+            {/* Support Helpline */}
+            <div className="flex flex-col">
+               <span className="font-sans font-black italic text-base sm:text-lg uppercase text-white mb-3 sm:mb-4 flex items-center gap-2">
+                 <PhoneCall size={16} className="text-aws-orange shrink-0" /> Support Helpline
+               </span>
+               <div className="flex flex-col gap-3 font-mono text-[10px] sm:text-xs">
+                  <div>
+                    <span className="text-aws-orange font-bold uppercase tracking-wider block mb-1">Tech Team Support</span>
+                    <a href="tel:+918160578261" className="text-white/80 hover:text-white transition-colors block">
+                      Yash Nawal: <span className="text-white font-semibold">+91 81605 78261</span>
+                    </a>
+                    <a href="tel:+917028388155" className="text-white/80 hover:text-white transition-colors block mt-1">
+                      Anas Pathan: <span className="text-white font-semibold">+91 70283 88155</span>
+                    </a>
+                  </div>
+                  <div className="pt-1">
+                    <span className="text-f1-red font-bold uppercase tracking-wider block mb-1">Payment Issues</span>
+                    <a href="tel:+917020926643" className="text-white/80 hover:text-white transition-colors block">
+                      Bhushan Jadhav: <span className="text-white font-semibold">+91 70209 26643</span>
+                    </a>
+                  </div>
+               </div>
+            </div>
+
+            {/* Leadership Contact */}
             <div className="flex flex-col">
                <span className="font-sans font-black italic text-base sm:text-lg uppercase text-white mb-3 sm:mb-4">Leadership Contact</span>
                <ul className="flex flex-col gap-3 font-mono text-[10px] sm:text-xs opacity-70 uppercase tracking-wider sm:tracking-widest">
@@ -65,11 +90,11 @@ export const FooterSection = () => {
                </ul>
             </div>
             
+            {/* Community Socials */}
             <div className="flex flex-col">
                <span className="font-sans font-black italic text-base sm:text-lg uppercase text-white mb-3 sm:mb-4">Community Socials</span>
                <ul className="flex flex-col gap-3 font-mono text-[10px] sm:text-xs opacity-70 uppercase tracking-wider sm:tracking-widest">
                   <li><a href="https://www.linkedin.com/company/aws-cloud-club-gcoe-kolhapur/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#0a66c2] transition-colors"><Linkedin size={14} /> LinkedIn</a></li>
-                  <li><a href="https://x.com/aws_gcoek" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors"><Twitter size={14} /> X / Twitter</a></li>
                   <li><a href="https://www.instagram.com/aws.sbg.gcoe.kolhapur/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#e1306c] transition-colors"><Instagram size={14} /> Instagram</a></li>
                   <li><a href="https://www.meetup.com/aws-sbg-at-government-college-of-engineering-kolhapur" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#e0393e] transition-colors"><span className="w-3.5 h-3.5 flex items-center justify-center font-bold text-xs">M</span> Meetup</a></li>
                   <li><a href="https://github.com/AWSCloudClubGCOE" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors"><Github size={14} /> GitHub</a></li>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SectionHeader } from './LayoutElements';
-import { Plus, Minus, Mail, HelpCircle } from 'lucide-react';
+import { Plus, Minus, Mail, HelpCircle, PhoneCall } from 'lucide-react';
 
 interface FAQItem {
   question: string;
@@ -102,7 +102,11 @@ const faqCategories = [
       },
       {
         question: "What if I have a question about registration or payment?",
-        answer: "Email the organizing team at awssbggcoek@gmail.com for help with registration, payment instructions, or other event-related questions."
+        answer: "For payment issues and UPI/UTR verification, contact Bhushan Jadhav directly at +91 70209 26643. For technical and website support, reach out to Yash Nawal at +91 81605 78261 or Anas Pathan at +91 70283 88155. You can also email the organizing team at awssbggcoek@gmail.com."
+      },
+      {
+        question: "How can I reach the technical support team?",
+        answer: "Our technical team is available to assist you. Contact Yash Nawal (+91 81605 78261) or Anas Pathan (+91 70283 88155) for any portal, form submission, or ticket pass queries."
       }
     ]
   }
@@ -229,20 +233,54 @@ export const FAQSection = () => {
         {/* Contact Us Box at bottom */}
         <div className="mt-14 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-white/[0.02] via-[#111] to-white/[0.02] border border-white/10 text-center relative overflow-hidden">
           <div className="w-10 h-10 rounded-full bg-aws-orange/10 border border-aws-orange/30 flex items-center justify-center mx-auto mb-3 text-aws-orange">
-            <Mail size={18} />
+            <HelpCircle size={18} />
           </div>
           <h4 className="font-sans font-black italic uppercase text-lg sm:text-xl text-white mb-1">
-            Still Have Questions?
+            Still Have Questions or Need Support?
           </h4>
-          <p className="font-sans text-xs sm:text-sm text-white/60 max-w-md mx-auto mb-4">
-            We're happy to help! Reach out to the organizing team for questions about tickets, payment, workshops, or the event.
+          <p className="font-sans text-xs sm:text-sm text-white/60 max-w-md mx-auto mb-6">
+            We're here to help! Reach out directly to our dedicated technical team or payment coordinator.
           </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-6 text-left">
+            {/* Tech Team Support */}
+            <div className="p-4 rounded-xl bg-black/60 border border-white/10 flex flex-col gap-2.5">
+              <span className="font-mono text-[10px] text-aws-orange uppercase tracking-widest font-bold flex items-center gap-2">
+                <PhoneCall size={12} /> Technical Team Support
+              </span>
+              <div className="flex flex-col gap-2 font-sans text-xs">
+                <a href="tel:+918160578261" className="text-white/80 hover:text-white transition-colors flex items-center justify-between border-b border-white/5 pb-1.5">
+                  <span className="font-medium">Yash Nawal</span>
+                  <span className="font-mono text-aws-orange font-bold">+91 81605 78261</span>
+                </a>
+                <a href="tel:+917028388155" className="text-white/80 hover:text-white transition-colors flex items-center justify-between">
+                  <span className="font-medium">Anas Pathan</span>
+                  <span className="font-mono text-aws-orange font-bold">+91 70283 88155</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Payment Issues Support */}
+            <div className="p-4 rounded-xl bg-black/60 border border-white/10 flex flex-col gap-2.5">
+              <span className="font-mono text-[10px] text-f1-red uppercase tracking-widest font-bold flex items-center gap-2">
+                <PhoneCall size={12} /> Payment Issues Support
+              </span>
+              <div className="flex flex-col gap-1.5 font-sans text-xs">
+                <a href="tel:+917020926643" className="text-white/80 hover:text-white transition-colors flex items-center justify-between">
+                  <span className="font-medium">Bhushan Jadhav</span>
+                  <span className="font-mono text-f1-red font-bold">+91 70209 26643</span>
+                </a>
+                <span className="text-[10px] text-white/40 font-mono mt-2">UPI / UTR verification & payment query assistance</span>
+              </div>
+            </div>
+          </div>
+
           <a
             href="mailto:awssbggcoek@gmail.com"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-aws-orange text-black font-sans font-bold text-xs uppercase tracking-wider hover:bg-white transition-all shadow-[0_0_20px_rgba(255,153,0,0.25)]"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-white/5 border border-white/10 text-white font-sans font-bold text-xs uppercase tracking-wider hover:bg-aws-orange hover:text-black transition-all"
           >
             <Mail size={14} />
-            <span>Email awssbggcoek@gmail.com</span>
+            <span>Email: awssbggcoek@gmail.com</span>
           </a>
         </div>
 
