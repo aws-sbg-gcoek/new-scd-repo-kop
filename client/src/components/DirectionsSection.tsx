@@ -176,7 +176,7 @@ export const DirectionsSection = () => {
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-aws-orange/50 shadow-[0_0_10px_#FF9900] z-20 animate-[scan_3s_ease-in-out_infinite] opacity-50 pointer-events-none"></div>
 
           <iframe 
-            src="https://maps.google.com/maps?q=V.T.+Patil+Convention+Hall,+Tararani+High+School+Compound,+Poorvarang,+Mahalaxminagar,+Rajarampuri,+Kolhapur,+Maharashtra+416008&t=&z=16&ie=UTF8&iwloc=&output=embed"
+            src="https://www.google.com/maps?q=V.T.+Patil+Convention+Hall,+Tararani+High+School+Compound,+Poorvarang,+Mahalaxminagar,+Rajarampuri,+Kolhapur,+Maharashtra+416008&t=&z=16&ie=UTF8&iwloc=&output=embed"
             className="w-full h-full contrast-125 saturate-75 opacity-90 group-hover:opacity-100 group-hover:saturate-100 transition-all duration-700 relative z-10"
             style={{ border: 0 }} 
             allowFullScreen 
