@@ -75,14 +75,14 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
   // Technical Dept
   {
     department: "Technical Dept",
-    id: "atharv-patil",
-    name: "Atharv Patil",
-    role: "Technical Lead",
-    bio: "Assisting in the strategic direction and operations of the club, leading technical masterclasses.",
-    skills: "Cloud Computing, Management, AWS",
-    email: "atharvpatil1808@gmail.com",
-    linkedin: "https://www.linkedin.com/in/atharvpatilw",
-    image: "https://i.ibb.co/wZYNhv1R/Whats-App-Image-2026-04-18-at-1-54-07-PM.jpg"
+    id: "anas",
+    name: "Anas Pathan",
+    role: "Project Lead",
+    bio: "Leading project development, coordinating the student builder team, and building scalable applications with modern cloud technologies.",
+    skills: "AWS, Project Leadership, Cloud Development, Node.js, Docker",
+    email: "pathananas2007@gmail.com",
+    linkedin: "https://www.linkedin.com/in/anas-pathan-91a6b3368",
+    image: "https://i.ibb.co/xS2tZTkf/Formal-Black-Suit-Portrait.png"
   },
   {
     department: "Technical Dept",
@@ -97,14 +97,14 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
   },
   {
     department: "Technical Dept",
-    id: "anas",
-    name: "Anas Pathan",
-    role: "Project Lead",
-    bio: "Leading project development, coordinating the student builder team, and building scalable applications with modern cloud technologies.",
-    skills: "AWS, Project Leadership, Cloud Development, Node.js, Docker",
-    email: "pathananas2007@gmail.com",
-    linkedin: "https://www.linkedin.com/in/anas-pathan-91a6b3368",
-    image: "https://i.ibb.co/YBDxDXfV/Chat-GPT-Image-Sep-4-2026-12-44-21-AM.png"
+    id: "atharv-patil",
+    name: "Atharv Patil",
+    role: "Technical Lead",
+    bio: "Assisting in the strategic direction and operations of the club, leading technical masterclasses.",
+    skills: "Cloud Computing, Management, AWS",
+    email: "atharvpatil1808@gmail.com",
+    linkedin: "https://www.linkedin.com/in/atharvpatilw",
+    image: "https://i.ibb.co/wZYNhv1R/Whats-App-Image-2026-04-18-at-1-54-07-PM.jpg"
   },
   {
     department: "Technical Dept",
@@ -163,17 +163,7 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     linkedin: "https://www.linkedin.com/in/chhaitanyaa-zanjurne-84976a24",
     image: "https://i.ibb.co/KjLPBGnt/chaitanya.png"
   },
-  {
-    department: "Events & Operations Dept",
-    id: "suhani",
-    name: "Suhani Varma",
-    role: "Event Coordination",
-    bio: "Helping plan and execute high-energy club events, guest seminars, and speaker sessions.",
-    skills: "Coordination, Teamwork",
-    email: "suhanivarma33@gmail.com",
-    linkedin: "https://www.linkedin.com/in/suhani-varma-09810a214",
-    image: "https://i.ibb.co/7t7JXFhg/IMG-20260316-WA0011-Suhani-Varma.jpg"
-  },
+
   {
     department: "Events & Operations Dept",
     id: "arya",
@@ -207,7 +197,7 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     skills: "Content Creation, Social Media, Writing",
     email: "varekarshekhar@gmail.com",
     linkedin: "https://www.linkedin.com/in/shekhar-varekar-530b97384",
-    image: "https://i.ibb.co/HpV9qJwH/shekhar.jpg"
+    image: "https://i.ibb.co/HD3K9JkM/1786518429271-jpg-1-2.jpg"
   },
   {
     department: "Media & Content Dept",
@@ -413,7 +403,7 @@ export default function TeamSection() {
       <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-cyan-500/[0.02] rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        
+
         {/* Header HUD */}
         <div className="mb-12 text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-white/[0.03] border border-white/10 text-aws-orange font-mono text-[10px] tracking-widest uppercase mb-4">
@@ -429,7 +419,7 @@ export default function TeamSection() {
           </h2>
 
           <p className="mt-4 text-xs sm:text-sm md:text-base text-white/60 max-w-2xl leading-relaxed">
-            The passionate team of student organizers, cloud enthusiasts, guiding the largest 
+            The passionate team of student organizers, cloud enthusiasts, guiding the largest
             AWS student community summit in Kolhapur at V.T. Patil Convention Hall.
           </p>
         </div>
@@ -446,11 +436,10 @@ export default function TeamSection() {
               <button
                 key={dept}
                 onClick={() => setSelectedDepartment(dept)}
-                className={`px-3 sm:px-4 py-2 rounded-lg text-[10px] sm:text-xs font-mono uppercase tracking-wider transition-all duration-300 border cursor-pointer ${
-                  isSelected
-                    ? 'bg-aws-orange text-black border-aws-orange font-bold shadow-[0_0_20px_rgba(255,153,0,0.3)]'
-                    : 'bg-[#0e0e0e] text-white/60 border-white/10 hover:border-white/30 hover:text-white'
-                }`}
+                className={`px-3 sm:px-4 py-2 rounded-lg text-[10px] sm:text-xs font-mono uppercase tracking-wider transition-all duration-300 border cursor-pointer ${isSelected
+                  ? 'bg-aws-orange text-black border-aws-orange font-bold shadow-[0_0_20px_rgba(255,153,0,0.3)]'
+                  : 'bg-[#0e0e0e] text-white/60 border-white/10 hover:border-white/30 hover:text-white'
+                  }`}
               >
                 <span>{dept}</span>
                 <span className={`ml-1.5 px-1.5 py-0.2 rounded text-[9px] ${isSelected ? 'bg-black/20 text-black' : 'bg-white/10 text-white/50'}`}>

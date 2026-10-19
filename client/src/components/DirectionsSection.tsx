@@ -21,7 +21,7 @@ const contentMap: Record<string, ReactNode> = {
       </p>
       <div className="flex flex-wrap gap-2.5 mt-2">
         <a 
-          href="https://maps.google.com/?q=V.T.+Patil+Convention+Hall,+Tararani+High+School+Compound,+Poorvarang,+Mahalaxminagar,+Rajarampuri,+Kolhapur,+Maharashtra+416008" 
+          href="https://www.google.com/maps?q=V.T.+Patil+Convention+Hall,+Tararani+High+School+Compound,+Poorvarang,+Mahalaxminagar,+Rajarampuri,+Kolhapur,+Maharashtra+416008" 
           target="_blank" 
           rel="noreferrer"
           className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-aws-orange hover:text-black border border-white/10 transition-colors font-mono text-[10px] uppercase tracking-widest"
@@ -175,9 +175,19 @@ export const DirectionsSection = () => {
           {/* Scanning line effect */}
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-aws-orange/50 shadow-[0_0_10px_#FF9900] z-20 animate-[scan_3s_ease-in-out_infinite] opacity-50 pointer-events-none"></div>
           
+          {/* Quick link button */}
+          <a
+            href="https://www.google.com/maps?q=V.T.+Patil+Convention+Hall,+Tararani+High+School+Compound,+Poorvarang,+Mahalaxminagar,+Rajarampuri,+Kolhapur,+Maharashtra+416008"
+            target="_blank"
+            rel="noreferrer"
+            className="absolute top-4 left-4 z-30 inline-flex items-center gap-1.5 px-3 py-1.5 bg-black/85 hover:bg-aws-orange hover:text-black border border-white/20 text-white font-mono text-[10px] uppercase tracking-wider backdrop-blur-md transition-all shadow-lg"
+          >
+            <Navigation size={12} /> Open in Maps ↗
+          </a>
+
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3821.5796799042296!2d74.2435773!3d16.6978438!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc1001a1c4b72ef%3A0xe54955bcaee798ef!2sV.T.Patil%20Smruti%20Bhavan!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-            className="w-full h-full contrast-125 saturate-50 opacity-80 group-hover:opacity-100 group-hover:saturate-100 transition-all duration-700 relative z-10"
+            src="https://maps.google.com/maps?q=V.T.+Patil+Convention+Hall,+Tararani+High+School+Compound,+Poorvarang,+Mahalaxminagar,+Rajarampuri,+Kolhapur,+Maharashtra+416008&t=&z=16&ie=UTF8&iwloc=&output=embed"
+            className="w-full h-full relative z-10 transition-all duration-700"
             style={{ border: 0 }} 
             allowFullScreen 
             loading="lazy" 

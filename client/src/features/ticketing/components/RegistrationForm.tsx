@@ -29,7 +29,8 @@ interface Props {
 
 const DISTRICT_COLLEGES: Record<string, string[]> = {
   Kolhapur: [
-    'Government College of Engineering Karad (GCOEK)',
+    'Government College of Engineering Kolhapur (GCOEK)',
+    'Government College of Engineering Karad (GCEK)',
     'Shivaji University (DOT), Kolhapur',
     'D.Y. Patil College of Engineering and Technology, Kolhapur',
     "KIT's College of Engineering (Autonomous), Kolhapur",

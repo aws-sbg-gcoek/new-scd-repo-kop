@@ -60,6 +60,16 @@ const coreCrew: TeamMember[] = [
     skills: "Management, Coordination, Community Building"
   },
   {
+    name: "Anas Pathan",
+    role: "Project Lead",
+    department: "Technical Dept",
+    description: "Leading project development, coordinating the team, and building scalable applications with modern cloud technologies.",
+    image: "https://i.ibb.co/xS2tZTkf/Formal-Black-Suit-Portrait.png",
+    linkedin: "https://www.linkedin.com/in/anas-pathan-91a6b3368",
+    email: "pathananas2007@gmail.com",
+    skills: "AWS, Project Leadership, Cloud Development, Node.js, Docker"
+  },
+  {
     name: "Yash Nawal",
     role: "Technical Associate",
     department: "Technical Dept",
@@ -69,25 +79,17 @@ const coreCrew: TeamMember[] = [
     email: "yashsanjaynawal810@gmail.com",
     skills: "AWS, Python, Cloud Native"
   },
+
+
   {
-    name: "Anas Pathan",
-    role: "Project Lead",
-    department: "Technical Dept",
-    description: "Leading project development, coordinating the team, and building scalable applications with modern cloud technologies.",
-    image: "https://i.ibb.co/YBDxDXfV/Chat-GPT-Image-Sep-4-2026-12-44-21-AM.png",
-    linkedin: "https://www.linkedin.com/in/anas-pathan-91a6b3368",
-    email: "pathananas2007@gmail.com",
-    skills: "AWS, Project Leadership, Cloud Development, Node.js, Docker"
-  },
-  {
-    name: "Atharv Patil",
-    role: "Technical Lead",
-    department: "Technical Dept",
-    description: "Spearheading technical workshops, cloud architecture masterclasses, and assisting in the strategic and operational direction of the club.",
-    image: "https://i.ibb.co/wZYNhv1R/Whats-App-Image-2026-04-18-at-1-54-07-PM.jpg",
-    linkedin: "https://www.linkedin.com/in/atharvpatilw",
-    email: "atharvpatil1808@gmail.com",
-    skills: "Cloud Computing, Management, AWS"
+    name: "Shekhar",
+    role: "Social Media & Content Lead",
+    department: "Media & Content Dept",
+    description: "Directing digital storytelling, video content creation, and active community management across social channels.",
+    image: "https://i.ibb.co/HD3K9JkM/1786518429271-jpg-1-2.jpg",
+    linkedin: "https://www.linkedin.com/in/shekhar-varekar-530b97384",
+    email: "varekarshekhar@gmail.com",
+    skills: "Content Creation, Social Media, Writing"
   },
   {
     name: "Bhushan Jadhav",
@@ -99,6 +101,27 @@ const coreCrew: TeamMember[] = [
     email: "aj6244249@gmail.com",
     skills: "Finance, Budgeting, Accounting, Operations"
   },
+  {
+    name: "Punam Age",
+    role: "Event Coordinator",
+    department: "Events & Operations Dept",
+    description: "Organizing engaging, educational, and high-energy cloud events, guest lectures, and student hackathons for the regional builder community.",
+    image: "https://i.ibb.co/spsQqkZ3/Professional-passport-style-headshot-with-smile-1-Punam-age.png",
+    linkedin: "https://www.linkedin.com/in/punam-age-5219a52b6",
+    email: "punamage123@gmail.com",
+    skills: "Event Planning, Public Speaking, Coordination"
+  },
+  {
+    name: "Suhani Varma",
+    role: "Event Coordination",
+    department: "Events & Operations Dept",
+    description: "Helping plan and execute high-energy club events, guest seminars, and speaker sessions for the AWS student builder community.",
+    image: "https://i.ibb.co/7t7JXFhg/IMG-20260316-WA0011-Suhani-Varma.jpg",
+    linkedin: "https://www.linkedin.com/in/suhani-varma-09810a214",
+    email: "suhanivarma33@gmail.com",
+    skills: "Coordination, Teamwork"
+  },
+
   {
     name: "Tushant Tagade",
     role: "Marketing Lead",
@@ -119,26 +142,8 @@ const coreCrew: TeamMember[] = [
     email: "dhrupatawankhede@gmail.com",
     skills: "Graphic Design, Figma, Branding"
   },
-  {
-    name: "Punam Age",
-    role: "Event Coordinator",
-    department: "Events & Operations Dept",
-    description: "Organizing engaging, educational, and high-energy cloud events, guest lectures, and student hackathons for the regional builder community.",
-    image: "https://i.ibb.co/spsQqkZ3/Professional-passport-style-headshot-with-smile-1-Punam-age.png",
-    linkedin: "https://www.linkedin.com/in/punam-age-5219a52b6",
-    email: "punamage123@gmail.com",
-    skills: "Event Planning, Public Speaking, Coordination"
-  },
-  {
-    name: "Shekhar",
-    role: "Social Media & Content Lead",
-    department: "Media & Content Dept",
-    description: "Directing digital storytelling, video content creation, and active community management across social channels.",
-    image: "https://i.ibb.co/HpV9qJwH/shekhar.jpg",
-    linkedin: "https://www.linkedin.com/in/shekhar-varekar-530b97384",
-    email: "varekarshekhar@gmail.com",
-    skills: "Content Creation, Social Media, Writing"
-  },
+
+
   {
     name: "Siddhi",
     role: "PR Lead",
@@ -393,8 +398,8 @@ const LiteModeSection = ({ crew }: { crew: TeamMember[] }) => {
         </div>
 
         {/* Info Side - High-tech Telemetry HUD Console */}
-        <div 
-          ref={infoRef} 
+        <div
+          ref={infoRef}
           className="flex-1 w-full bg-[#0a0a0a]/80 border border-white/10 p-6 sm:p-8 rounded-2xl relative overflow-hidden text-left shadow-2xl backdrop-blur-sm"
         >
           {/* Corner brackets */}
@@ -509,11 +514,10 @@ const LiteModeSection = ({ crew }: { crew: TeamMember[] }) => {
             key={i}
             onClick={() => handleDotClickWithReset(i)}
             aria-label={`Go to team member ${i + 1}`}
-            className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-              i === currentIndex
-                ? 'bg-aws-orange w-6'
-                : 'bg-white/20 w-2 hover:bg-white/40'
-            }`}
+            className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${i === currentIndex
+              ? 'bg-aws-orange w-6'
+              : 'bg-white/20 w-2 hover:bg-white/40'
+              }`}
           />
         ))}
       </div>
@@ -528,10 +532,10 @@ export const DriversSection = () => {
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[250px] sm:w-[400px] h-[250px] sm:h-[400px] bg-aws-orange/5 rounded-full blur-[100px] sm:blur-[150px] pointer-events-none z-0" />
 
       <div className="w-full mb-0 flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
-        <SectionHeader 
-          title="Meet Our Team" 
-          subtitle="Discover the passionate student leaders, cloud builders, and coordinators behind AWS Student Community Day Kolhapur 2026." 
-          sysId="07.DRV" 
+        <SectionHeader
+          title="Meet Our Team"
+          subtitle="Discover the passionate student leaders, cloud builders, and coordinators behind AWS Student Community Day Kolhapur 2026."
+          sysId="07.DRV"
           action={
             <Link
               to="/team"
