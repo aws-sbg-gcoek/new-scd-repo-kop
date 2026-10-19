@@ -188,13 +188,13 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
   {
     department: "Events & Operations Dept",
     id: "palak",
-    name: "Kaya Vedi",
+    name: "Palak Vedi",
     role: "Event Coordination Associate",
     bio: "Helping to plan and execute club events with enthusiasm and operational precision.",
     skills: "Coordination, Teamwork",
     email: "kayavedi7@gmail.com",
     linkedin: "https://www.linkedin.com/in/palak-vedi-284821388",
-    image: "https://i.ibb.co/DPczYCS5/Professional-headshot-with-warm-smile-Kaya-Vedi.png"
+    image: "/team/palak-vedi.png"
   },
 
   // Media & Content Dept
