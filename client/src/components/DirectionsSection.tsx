@@ -174,19 +174,9 @@ export const DirectionsSection = () => {
         <div className="w-full lg:w-1/2 aspect-[4/3] lg:aspect-auto lg:h-[500px] bg-[#0a0a0a] border border-white/5 p-2 relative group overflow-hidden">
           {/* Scanning line effect */}
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-aws-orange/50 shadow-[0_0_10px_#FF9900] z-20 animate-[scan_3s_ease-in-out_infinite] opacity-50 pointer-events-none"></div>
-          
-          {/* Quick link button */}
-          <a
-            href="https://www.google.com/maps?q=V.T.+Patil+Convention+Hall,+Tararani+High+School+Compound,+Poorvarang,+Mahalaxminagar,+Rajarampuri,+Kolhapur,+Maharashtra+416008"
-            target="_blank"
-            rel="noreferrer"
-            className="absolute top-4 left-4 z-30 inline-flex items-center gap-1.5 px-3 py-1.5 bg-black/85 hover:bg-aws-orange hover:text-black border border-white/20 text-white font-mono text-[10px] uppercase tracking-wider backdrop-blur-md transition-all shadow-lg"
-          >
-            <Navigation size={12} /> Open in Maps ↗
-          </a>
 
           <iframe 
-            src="https://maps.google.com/maps?q=V.T.+Patil+Convention+Hall,+Tararani+High+School+Compound,+Poorvarang,+Mahalaxminagar,+Rajarampuri,+Kolhapur,+Maharashtra+416008&t=&z=16&ie=UTF8&iwloc=&output=embed"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3821.572!2d74.2435773!3d16.6982671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc1001a1c4b72ef%3A0xe54955bcaee798ef!2sV.T.+Patil+Convention+Hall!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
             className="w-full h-full relative z-10 transition-all duration-700"
             style={{ border: 0 }} 
             allowFullScreen 
