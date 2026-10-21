@@ -56,17 +56,29 @@ interface SpeakerSlot {
 const SPEAKER_SLOTS: SpeakerSlot[] = [
   {
     id: 1,
+    revealed: false,
+    track: "Keynote Address",
+    badge: "SPEAKER 01 // KEYNOTE",
+    sector: "SECTOR-A1",
+    headline: "Cloud Innovation & The Next Generation of Builders",
+    focus: "Keynote Address, Future of Cloud & AWS Ecosystem Trends",
+    description: "Opening keynote address exploring cutting-edge cloud innovations, global developer ecosystem trends, and empowering the next generation of cloud builders.",
+    statusBadge: "IN PADDOCK // REVEALING SOON",
+    iconName: "award"
+  },
+  {
+    id: 2,
     revealed: true,
     name: "Ameya Prakash Vaidya",
     image: "/Speakers/1780647595003.png",
     designation: "Founder, DreamWorld Tech",
     role: "AWS Community Builder · AWS User Group Pune Leader · 16+ Years Experience",
-    badge: "SPEAKER 01 // CONFIRMED",
+    badge: "SPEAKER 02 // CONFIRMED",
     specialBadge: "AWS COMMUNITY BUILDER",
     subTrackBadge: "Conducting Session 01 & Workshop 01",
     experience: "16+ YEARS",
     accreditation: "14x CERTIFIED",
-    sector: "SECTOR-A1",
+    sector: "SECTOR-B2",
     track: "Technical Session 01 & Workshop 01",
     headline: "From Zero to Cloud: Discover the World of AWS",
     focus: "Cloud Computing Foundations, AWS Core Services & Modern Cloud Careers",
@@ -83,14 +95,14 @@ const SPEAKER_SLOTS: SpeakerSlot[] = [
     ],
     linkedinLink: "https://www.linkedin.com/in/ameya-vaidya-9a164317?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     statusBadge: "CONFIRMED // STAGE READY",
-    iconName: "award"
+    iconName: "cloud"
   },
   {
-    id: 2,
+    id: 3,
     revealed: false,
     track: "Career Guidance & Cloud Leadership",
-    badge: "SPEAKER 02 // CAREER",
-    sector: "SECTOR-B2",
+    badge: "SPEAKER 03 // CAREER",
+    sector: "SECTOR-C3",
     headline: "Cloud Careers, Certifications & Community Impact",
     focus: "AWS Certifications, High-Impact Networking & Career Growth",
     description: "Actionable frameworks to accelerate your cloud journey through active community contribution, industry certifications, and leadership within the AWS ecosystem.",
@@ -98,18 +110,18 @@ const SPEAKER_SLOTS: SpeakerSlot[] = [
     iconName: "users"
   },
   {
-    id: 3,
+    id: 4,
     revealed: true,
     name: "Jayesh Ashok Shinde",
     image: "https://i.ibb.co/Ng7s0J5V/IMG-20261020-WA0036-jpg-1.jpg",
     designation: "AWS Golden Jacket Holder",
     role: "20+ Years Technology Professional · Backend & Scalable Architectures",
-    badge: "SPEAKER 03 // CONFIRMED",
+    badge: "SPEAKER 04 // CONFIRMED",
     specialBadge: "AWS GOLDEN JACKET",
     subTrackBadge: "Conducting Session 03 & Workshop 03",
     experience: "20+ YEARS",
     accreditation: "GOLDEN JACKET",
-    sector: "SECTOR-C3",
+    sector: "SECTOR-D4",
     track: "Technical Session 03 & Workshop 03",
     headline: "From Specs to Agents: Building Production-Ready Full-Stack Applications with Amazon Kiro",
     focus: "Amazon Kiro, React, Node.js, Amazon DynamoDB, AWS CDK & AI Agents",
@@ -125,20 +137,9 @@ const SPEAKER_SLOTS: SpeakerSlot[] = [
       "Production Readiness and Quality Engineering — Apply automated testing, least-privilege IAM, error handling, and deployment validation to build reliable cloud-native applications."
     ],
     credlyLink: "https://www.credly.com/users/jayesh-a-shinde/badges/credly",
+    linkedinLink: "https://www.linkedin.com/in/jayeshshinde?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     statusBadge: "CONFIRMED // STAGE READY",
     iconName: "cloud"
-  },
-  {
-    id: 4,
-    revealed: false,
-    track: "Generative AI & Enterprise Workflows",
-    badge: "SPEAKER 04 // GEN-AI",
-    sector: "SECTOR-D4",
-    headline: "Enterprise AI Workflows with Amazon Bedrock",
-    focus: "Foundation Models, RAG Pipelines & Intelligent Agents",
-    description: "Hands-on engineering perspectives on deploying scalable AI applications, retrieval-augmented generation (RAG), and security guardrails using Amazon Bedrock.",
-    statusBadge: "STANDBY // REVEALING SOON",
-    iconName: "binary"
   }
 ];
 

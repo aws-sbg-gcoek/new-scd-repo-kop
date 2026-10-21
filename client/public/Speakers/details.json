@@ -36,7 +36,8 @@
     "topic": "Spec-Driven Development, Amazon Kiro, React, Node.js, DynamoDB, AWS CDK & AI Agents",
     "shortDescription": "Explore Spec-Driven Development with Amazon Kiro in this hands-on workshop by building a full-stack application using React, Node.js, Amazon DynamoDB, and AWS CDK.",
     "category": "AWS Golden Jacket",
-    "featured": true
+    "featured": true,
+    "linkedinUrl": "https://www.linkedin.com/in/jayeshshinde"
   },
   {
     "id": 4,
