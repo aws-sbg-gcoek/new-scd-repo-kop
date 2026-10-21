@@ -62,8 +62,8 @@ export function PaymentEmbed({
       {/* Proven UPI Payment Component from Commity Day */}
       <UpiPaymentCard
         amount={selectedPass.price}
-        payeeName="Shardul Kolekar"
-        upiId="kolekarshardul23@okicici"
+        payeeName="Anas Pathan"
+        upiId="pathananas2007@oksbi"
         transactionNote="AWS SCD 2026 Ticket"
         onPaymentDone={(utr, ssBase64, ssName) => {
           onPaymentSubmitted(utr, ssBase64, ssName);
