@@ -2866,7 +2866,7 @@ export default function TicketAdminPage() {
 
                     <div className="flex justify-between items-center">
                       <span className="text-slate-400">Payee Account:</span>
-                      <span className="text-slate-200 font-mono text-[11px]">Anas Pathan (kolekarshardul23@okicici)</span>
+                      <span className="text-slate-200 font-mono text-[11px]">Shardul Kolekar (kolekarshardul23@okicici)</span>
                     </div>
 
                     <div className="flex justify-between items-center">
