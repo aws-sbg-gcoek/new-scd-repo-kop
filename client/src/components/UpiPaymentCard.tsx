@@ -23,8 +23,8 @@ interface UpiPaymentCardProps {
 
 export default function UpiPaymentCard({
   amount = 149,
-  payeeName = 'Bhushan Jadhav',
-  upiId = 'aj6244249-1@okaxis',
+  payeeName = 'Anas Pathan',
+  upiId = 'pathananas2007@oksbi',
   transactionNote = 'AWS SCD 2026 Ticket',
   onPaymentDone,
 }: UpiPaymentCardProps) {
