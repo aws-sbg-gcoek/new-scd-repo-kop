@@ -63,7 +63,7 @@ export function PaymentEmbed({
       <UpiPaymentCard
         amount={selectedPass.price}
         payeeName="Anas Pathan"
-        upiId="pathananas2007@oksbi"
+        upiId="kolekarshardul23@okicici"
         transactionNote="AWS SCD 2026 Ticket"
         onPaymentDone={(utr, ssBase64, ssName) => {
           onPaymentSubmitted(utr, ssBase64, ssName);
