@@ -16,11 +16,14 @@ import {
   StudentRegistration,
   VerificationStatus,
   loadRegistrations,
+  saveRegistrations,
   subscribeToRegistrations,
   updateRegistrationStatus,
   deleteRegistration,
   exportRegistrationsToCSV,
 } from '../utils/registrationStore';
+import { collection, getDocs } from 'firebase/firestore';
+import { db, isFirebaseConfigured } from '../services/firebase';
 import {
   Lock,
   Unlock,
@@ -241,6 +244,71 @@ export default function TicketAdminPage() {
   const [testEmailTo, setTestEmailTo] = useState<string>('');
   const [isSendingTestEmail, setIsSendingTestEmail] = useState(false);
   const [testEmailResult, setTestEmailResult] = useState<string>('');
+  const [isBulkApproving, setIsBulkApproving] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  // Manual trigger to force immediate sync from Firebase Firestore
+  const handleForceSync = async () => {
+    setIsSyncing(true);
+    try {
+      if (isFirebaseConfigured() && db) {
+        const snap = await getDocs(collection(db, 'registrations'));
+        const remoteRecords: StudentRegistration[] = [];
+        snap.forEach(d => {
+          const data = d.data() as StudentRegistration;
+          remoteRecords.push({ ...data, id: data.id || d.id });
+        });
+        remoteRecords.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+        if (remoteRecords.length > 0) {
+          setRegistrations(remoteRecords);
+          saveRegistrations(remoteRecords);
+          setEmailNotice(`✅ Real-time sync complete: ${remoteRecords.length} student registrations loaded from Firebase!`);
+          setTimeout(() => setEmailNotice(''), 5000);
+        } else {
+          setEmailNotice('ℹ️ Firebase connected. 0 registrations found.');
+          setTimeout(() => setEmailNotice(''), 4000);
+        }
+      }
+    } catch (err) {
+      console.error('Error during manual sync:', err);
+      setEmailNotice(`⚠️ Sync notice: ${err instanceof Error ? err.message : 'Error syncing'}`);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  // Bulk approve all pending student registrations with 1 click
+  const handleApproveAllPending = async () => {
+    const pendingList = registrations.filter(r => r.status === 'UNDER_SURVEILLANCE');
+    if (pendingList.length === 0) {
+      alert('There are no pending student registrations under surveillance to approve.');
+      return;
+    }
+
+    if (
+      !window.confirm(
+        `Are you sure you want to approve ALL ${pendingList.length} pending student registrations?\nThis will issue official ticket pass codes and save them to Firestore.`
+      )
+    ) {
+      return;
+    }
+
+    setIsBulkApproving(true);
+    setEmailNotice(`Approving ${pendingList.length} student registrations in Firestore...`);
+
+    let count = 0;
+    for (const student of pendingList) {
+      const updated = updateRegistrationStatus(student.id, 'APPROVED');
+      if (updated) {
+        setRegistrations(prev => prev.map(r => (r.id === student.id ? updated : r)));
+        count++;
+      }
+    }
+
+    setEmailNotice(`✅ Successfully approved all ${count} student registrations in Firebase!`);
+    setTimeout(() => setEmailNotice(''), 7000);
+    setIsBulkApproving(false);
+  };
 
   // Live clock, live real-time registration sync & live ticket tiers config (Firestore / Local)
   useEffect(() => {
@@ -313,7 +381,7 @@ export default function TicketAdminPage() {
     setApprovingId(id);
     const updated = updateRegistrationStatus(id, 'APPROVED');
     if (updated) {
-      setRegistrations(loadRegistrations());
+      setRegistrations(prev => prev.map(r => (r.id === id ? updated : r)));
       if (selectedAttendee?.id === id) {
         setSelectedAttendee(updated);
       }
@@ -382,7 +450,7 @@ export default function TicketAdminPage() {
     try {
       const updated = updateRegistrationStatus(rejectingStudent.id, 'REJECTED', finalReason);
       if (updated) {
-        setRegistrations(loadRegistrations());
+        setRegistrations(prev => prev.map(r => (r.id === rejectingStudent.id ? updated : r)));
         if (selectedAttendee?.id === rejectingStudent.id) {
           setSelectedAttendee(updated);
         }
@@ -482,7 +550,7 @@ export default function TicketAdminPage() {
   const handleSetSurveillance = (id: string) => {
     const updated = updateRegistrationStatus(id, 'UNDER_SURVEILLANCE');
     if (updated) {
-      setRegistrations(loadRegistrations());
+      setRegistrations(prev => prev.map(r => (r.id === id ? updated : r)));
       if (selectedAttendee?.id === id) {
         setSelectedAttendee(updated);
       }
@@ -496,7 +564,7 @@ export default function TicketAdminPage() {
       )
     ) {
       deleteRegistration(id);
-      setRegistrations(loadRegistrations());
+      setRegistrations(prev => prev.filter(r => r.id !== id));
       if (selectedAttendee?.id === id) {
         setSelectedAttendee(null);
       }
@@ -647,6 +715,23 @@ export default function TicketAdminPage() {
                 <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] text-amber-400 bg-amber-950/80 border border-amber-700/60 px-1.5 py-0.5 rounded font-bold animate-pulse">
                   Setup
                 </span>
+              )}
+            </button>
+
+            {/* Realtime Firebase Sync Badge & Manual Trigger */}
+            <button
+              type="button"
+              onClick={handleForceSync}
+              disabled={isSyncing}
+              className="bg-[#1E293B] hover:bg-[#334155] border border-[#334155] text-slate-200 text-xs font-mono px-2.5 sm:px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
+              title="Click to force immediate sync with Firebase Firestore"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="hidden sm:inline font-bold text-emerald-400">Firebase Live</span>
+              {isSyncing ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400" />
+              ) : (
+                <RotateCw className="w-3.5 h-3.5 text-slate-400 hover:text-white" />
               )}
             </button>
 
@@ -817,8 +902,22 @@ export default function TicketAdminPage() {
                   </strong>
                   <span className="text-[10px] text-slate-500">Awaiting UTR matching</span>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                  <ShieldAlert className="w-5 h-5" />
+                <div className="flex flex-col items-end gap-2">
+                  <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                    <ShieldAlert className="w-5 h-5" />
+                  </div>
+                  {pendingCount > 0 && (
+                    <button
+                      type="button"
+                      disabled={isBulkApproving}
+                      onClick={handleApproveAllPending}
+                      className="text-[10px] font-mono px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold flex items-center gap-1 transition-colors cursor-pointer disabled:opacity-50 shadow-md shadow-emerald-950"
+                      title="Bulk approve all pending student registrations and save to Firestore"
+                    >
+                      {isBulkApproving ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCircle2 className="w-3 h-3" />}
+                      <span>Approve All ({pendingCount})</span>
+                    </button>
+                  )}
                 </div>
               </div>
 

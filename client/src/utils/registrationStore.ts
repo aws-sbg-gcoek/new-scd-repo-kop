@@ -97,6 +97,23 @@ export function compressImageToBase64(
   });
 }
 
+/**
+ * Strips all `undefined` values recursively so Firebase Firestore setDoc/updateDoc never throws.
+ */
+export function cleanForFirestore<T extends Record<string, any>>(obj: T): Record<string, any> {
+  const result: Record<string, any> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    if (value !== undefined) {
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        result[key] = cleanForFirestore(value);
+      } else {
+        result[key] = value;
+      }
+    }
+  }
+  return result;
+}
+
 export const REGISTRATIONS_STORAGE_KEY = 'aws_scd_registrations_v2';
 
 // Seed registrations for initial administrative review
@@ -150,11 +167,10 @@ export function loadRegistrations(): StudentRegistration[] {
   try {
     const raw = localStorage.getItem(REGISTRATIONS_STORAGE_KEY);
     if (!raw) {
-      localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(SEED_REGISTRATIONS));
       return SEED_REGISTRATIONS;
     }
     const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) return parsed;
+    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
   } catch (err) {
     console.error('Failed to load registrations from localStorage:', err);
   }
@@ -163,36 +179,94 @@ export function loadRegistrations(): StudentRegistration[] {
 
 export function saveRegistrations(records: StudentRegistration[]): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(records));
-  window.dispatchEvent(new CustomEvent('registrationsUpdated', { detail: records }));
+
+  // Attempt to save full records in localStorage
+  try {
+    localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(records));
+  } catch {
+    // When records exceed browser quota (5MB limit, and base64 images can be 7MB+),
+    // save a lightweight version stripping large base64 images so localStorage never throws!
+    try {
+      const lightweight = records.map(r => ({
+        ...r,
+        idProofBase64: undefined,
+        paymentScreenshotBase64: undefined,
+      }));
+      localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(lightweight));
+    } catch (innerErr) {
+      console.warn('Could not cache registrations in localStorage:', innerErr);
+    }
+  }
+
+  // Always notify local listeners with the complete in-memory records
+  try {
+    window.dispatchEvent(new CustomEvent('registrationsUpdated', { detail: records }));
+  } catch (eventErr) {
+    console.warn('Failed to dispatch registrationsUpdated event:', eventErr);
+  }
 }
 
 /**
  * Real-time subscription to Firebase Firestore registrations collection.
- * When Firestore changes, updates localStorage and triggers listeners.
+ * When Firestore changes, delivers live records to the callback and safely caches in localStorage.
  */
 export function subscribeToRegistrations(callback: (records: StudentRegistration[]) => void): () => void {
   // If Firebase is configured, listen to Firestore in real-time
   if (isFirebaseConfigured() && db) {
     try {
+      // First, provide local/cached data immediately so UI is not empty while waiting for network
+      callback(loadRegistrations());
+
       const q = query(collection(db, 'registrations'), orderBy('createdAt', 'desc'));
       const unsubscribe: Unsubscribe = onSnapshot(
         q,
         snapshot => {
           const remoteRecords: StudentRegistration[] = [];
           snapshot.forEach(docSnap => {
-            remoteRecords.push(docSnap.data() as StudentRegistration);
+            const data = docSnap.data() as StudentRegistration;
+            remoteRecords.push({
+              ...data,
+              id: data.id || docSnap.id,
+            });
           });
+
           if (remoteRecords.length > 0) {
-            saveRegistrations(remoteRecords);
+            // CRITICAL: Call callback FIRST to update React UI state with all live records!
             callback(remoteRecords);
+            // Safely background-cache in localStorage without throwing
+            saveRegistrations(remoteRecords);
           } else {
             callback(loadRegistrations());
           }
         },
         error => {
-          console.warn('Firestore onSnapshot listener error, falling back to local storage:', error);
-          callback(loadRegistrations());
+          console.warn('Firestore onSnapshot listener error, attempting query fallback:', error);
+          // Query fallback in case orderBy requires an index or encounters an error
+          try {
+            getDocs(collection(db, 'registrations'))
+              .then(snap => {
+                const fallbackRecords: StudentRegistration[] = [];
+                snap.forEach(d => {
+                  const data = d.data() as StudentRegistration;
+                  fallbackRecords.push({
+                    ...data,
+                    id: data.id || d.id,
+                  });
+                });
+                fallbackRecords.sort(
+                  (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+                );
+                if (fallbackRecords.length > 0) {
+                  callback(fallbackRecords);
+                  saveRegistrations(fallbackRecords);
+                } else {
+                  callback(loadRegistrations());
+                }
+              })
+              .catch(() => callback(loadRegistrations()));
+          } catch {
+            callback(loadRegistrations());
+          }
         }
       );
       return () => unsubscribe();
@@ -236,9 +310,10 @@ export function submitNewRegistration(
   const updated = [newRecord, ...current];
   saveRegistrations(updated);
 
-  // Sync to Firebase Firestore asynchronously if configured
+  // Sync to Firebase Firestore asynchronously if configured with cleaned payload
   if (isFirebaseConfigured() && db) {
-    setDoc(doc(db, 'registrations', newRecord.id), newRecord).catch(err => {
+    const payload = cleanForFirestore(newRecord);
+    setDoc(doc(db, 'registrations', newRecord.id), payload).catch(err => {
       console.error('Error saving registration to Firestore:', err);
     });
   }
@@ -274,13 +349,14 @@ export function updateRegistrationStatus(
 
   // Sync update to Firebase Firestore
   if (isFirebaseConfigured() && db) {
-    updateDoc(doc(db, 'registrations', id), {
+    const updatePayload = cleanForFirestore({
       status: updatedRecord.status,
       rejectionReason: updatedRecord.rejectionReason || null,
       ticketCode: updatedRecord.ticketCode || null,
       verifiedAt: updatedRecord.verifiedAt || null,
       updatedAt: updatedRecord.updatedAt,
-    }).catch(err => {
+    });
+    updateDoc(doc(db, 'registrations', id), updatePayload).catch(err => {
       console.error('Error updating status in Firestore:', err);
     });
   }
@@ -331,21 +407,27 @@ export async function findRegistrationAsync(queryStr: string): Promise<StudentRe
       const qTx = query(collection(db, 'registrations'), where('transactionId', '==', q));
       const txSnap = await getDocs(qTx);
       if (!txSnap.empty) {
-        return txSnap.docs[0].data() as StudentRegistration;
+        const d = txSnap.docs[0];
+        const data = d.data() as StudentRegistration;
+        return { ...data, id: data.id || d.id };
       }
 
       // 2. Try finding by email
       const qEmail = query(collection(db, 'registrations'), where('email', '==', q.toLowerCase()));
       const emailSnap = await getDocs(qEmail);
       if (!emailSnap.empty) {
-        return emailSnap.docs[0].data() as StudentRegistration;
+        const d = emailSnap.docs[0];
+        const data = d.data() as StudentRegistration;
+        return { ...data, id: data.id || d.id };
       }
 
       // 3. Try finding by bookingId
       const qBooking = query(collection(db, 'registrations'), where('bookingId', '==', q.toUpperCase()));
       const bookingSnap = await getDocs(qBooking);
       if (!bookingSnap.empty) {
-        return bookingSnap.docs[0].data() as StudentRegistration;
+        const d = bookingSnap.docs[0];
+        const data = d.data() as StudentRegistration;
+        return { ...data, id: data.id || d.id };
       }
     } catch (err) {
       console.warn('Error querying Firestore for ticket status:', err);
@@ -480,11 +562,12 @@ export function checkInTicket(rawCode: string): CheckInResult {
 
   // Sync check-in to Firestore
   if (isFirebaseConfigured() && db) {
-    updateDoc(doc(db, 'registrations', updatedRecord.id), {
+    const payload = cleanForFirestore({
       checkedIn: true,
       checkedInAt: updatedRecord.checkedInAt,
       updatedAt: updatedRecord.updatedAt,
-    }).catch(err => {
+    });
+    updateDoc(doc(db, 'registrations', updatedRecord.id), payload).catch(err => {
       console.error('Error syncing check-in to Firestore:', err);
     });
   }
@@ -517,11 +600,12 @@ export function resetTicketCheckIn(id: string): StudentRegistration | null {
   saveRegistrations(current);
 
   if (isFirebaseConfigured() && db) {
-    updateDoc(doc(db, 'registrations', id), {
+    const payload = cleanForFirestore({
       checkedIn: false,
       checkedInAt: null,
       updatedAt: updated.updatedAt,
-    }).catch(err => console.error(err));
+    });
+    updateDoc(doc(db, 'registrations', id), payload).catch(err => console.error(err));
   }
 
   return updated;
