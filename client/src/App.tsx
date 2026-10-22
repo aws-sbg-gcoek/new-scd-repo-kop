@@ -18,6 +18,7 @@ import { LogoMarquee } from './components/LogoMarquee';
 import { WhatYouGetSection } from './components/WhatYouGetSection';
 import { DriversSection } from './components/DriversSection';
 import { TimelineSection } from './components/TimelineSection';
+import { ActivitiesSection } from './components/ActivitiesSection';
 
 import { BecomeSponsorSection } from './components/BecomeSponsorSection';
 import { TicketsSection } from './components/TicketsSection';
@@ -77,6 +78,7 @@ function HomePage() {
             <SpeakersSection />
             <TicketsSection />
             <TimelineSection />
+            <ActivitiesSection />
 
             {/* Act 3: The Team & Tickets */}
             <BecomeSponsorSection />

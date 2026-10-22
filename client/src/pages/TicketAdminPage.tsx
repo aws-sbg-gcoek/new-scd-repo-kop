@@ -229,6 +229,8 @@ export default function TicketAdminPage() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [emailNotice, setEmailNotice] = useState<string>('');
   const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [emailSentId, setEmailSentId] = useState<string | null>(null);
+  const [sendingEmailId, setSendingEmailId] = useState<string | null>(null);
   const [approvingId, setApprovingId] = useState<string | null>(null);
 
   // Rejection Dialog State with 5+ preset reasons
@@ -459,9 +461,13 @@ export default function TicketAdminPage() {
 
   const handleSendTicketEmail = async (student: StudentRegistration) => {
     setIsSendingEmail(true);
+    setSendingEmailId(student.id);
     const res = await sendTicketEmailViaResend(student);
     setIsSendingEmail(false);
+    setSendingEmailId(null);
     if (res.success) {
+      setEmailSentId(student.id);
+      setTimeout(() => setEmailSentId(null), 3000);
       setEmailNotice(`✓ Official ticket email sent to ${student.email}`);
       setTimeout(() => setEmailNotice(''), 5000);
     } else {
@@ -1424,12 +1430,20 @@ export default function TicketAdminPage() {
                               <div className="flex items-center gap-2">
                                 <button
                                   type="button"
-                                  disabled={isSendingEmail}
+                                  disabled={sendingEmailId === reg.id || emailSentId === reg.id}
                                   onClick={() => handleSendTicketEmail(reg)}
-                                  className="flex-1 bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-700/60 text-indigo-300 py-2 rounded-lg text-xs font-mono flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                                  className={`flex-1 border py-2 rounded-lg text-xs font-mono flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                                    emailSentId === reg.id
+                                      ? 'bg-emerald-950/80 border-emerald-700/60 text-emerald-300'
+                                      : sendingEmailId === reg.id
+                                      ? 'bg-indigo-950/50 border-indigo-700/40 text-indigo-400 opacity-70'
+                                      : 'bg-indigo-950/80 hover:bg-indigo-900 border-indigo-700/60 text-indigo-300'
+                                  }`}
                                 >
-                                  <Mail className="w-3.5 h-3.5 text-indigo-400" />
-                                  <span>Email Pass</span>
+                                  <Mail className={`w-3.5 h-3.5 ${emailSentId === reg.id ? 'text-emerald-400' : 'text-indigo-400'}`} />
+                                  <span>
+                                    {emailSentId === reg.id ? 'Sent ✓' : sendingEmailId === reg.id ? 'Sending…' : 'Email Pass'}
+                                  </span>
                                 </button>
                                 <button
                                   type="button"
@@ -1445,12 +1459,20 @@ export default function TicketAdminPage() {
                               <div className="flex items-center gap-2">
                                 <button
                                   type="button"
-                                  disabled={isSendingEmail}
+                                  disabled={sendingEmailId === reg.id || emailSentId === reg.id}
                                   onClick={() => handleSendRejectionEmail(reg)}
-                                  className="flex-1 bg-red-950/80 hover:bg-red-900 border border-red-700/60 text-red-300 py-2 rounded-lg text-xs font-mono flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                                  className={`flex-1 border py-2 rounded-lg text-xs font-mono flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                                    emailSentId === reg.id
+                                      ? 'bg-emerald-950/80 border-emerald-700/60 text-emerald-300'
+                                      : sendingEmailId === reg.id
+                                      ? 'bg-red-950/50 border-red-700/40 text-red-400 opacity-70'
+                                      : 'bg-red-950/80 hover:bg-red-900 border-red-700/60 text-red-300'
+                                  }`}
                                 >
-                                  <Mail className="w-3.5 h-3.5 text-red-400" />
-                                  <span>Email Rejection</span>
+                                  <Mail className={`w-3.5 h-3.5 ${emailSentId === reg.id ? 'text-emerald-400' : 'text-red-400'}`} />
+                                  <span>
+                                    {emailSentId === reg.id ? 'Sent ✓' : sendingEmailId === reg.id ? 'Sending…' : 'Email Rejection'}
+                                  </span>
                                 </button>
                                 <button
                                   type="button"
@@ -1683,13 +1705,19 @@ export default function TicketAdminPage() {
                                   <div className="flex items-center gap-1.5">
                                     <button
                                       type="button"
-                                      disabled={isSendingEmail}
+                                      disabled={sendingEmailId === reg.id || emailSentId === reg.id}
                                       onClick={() => handleSendTicketEmail(reg)}
-                                      className="bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-700/60 text-indigo-300 px-2 py-1.5 rounded text-[10px] font-mono flex items-center gap-1 transition-colors cursor-pointer"
+                                      className={`border px-2 py-1.5 rounded text-[10px] font-mono flex items-center gap-1 transition-all cursor-pointer ${
+                                        emailSentId === reg.id
+                                          ? 'bg-emerald-950/80 border-emerald-700/60 text-emerald-300'
+                                          : sendingEmailId === reg.id
+                                          ? 'bg-indigo-950/50 border-indigo-700/40 text-indigo-400 opacity-70'
+                                          : 'bg-indigo-950/80 hover:bg-indigo-900 border-indigo-700/60 text-indigo-300'
+                                      }`}
                                       title={`Email ticket pass directly to ${reg.email}`}
                                     >
-                                      <Mail className="w-3 h-3 text-indigo-400" />
-                                      <span>Email Pass</span>
+                                      <Mail className={`w-3 h-3 ${emailSentId === reg.id ? 'text-emerald-400' : 'text-indigo-400'}`} />
+                                      <span>{emailSentId === reg.id ? 'Sent ✓' : sendingEmailId === reg.id ? 'Sending…' : 'Email Pass'}</span>
                                     </button>
                                     <button
                                       type="button"
@@ -1706,13 +1734,19 @@ export default function TicketAdminPage() {
                                   <div className="flex items-center gap-1.5">
                                     <button
                                       type="button"
-                                      disabled={isSendingEmail}
+                                      disabled={sendingEmailId === reg.id || emailSentId === reg.id}
                                       onClick={() => handleSendRejectionEmail(reg)}
-                                      className="bg-red-950/80 hover:bg-red-900 border border-red-700/60 text-red-300 px-2 py-1.5 rounded text-[10px] font-mono flex items-center gap-1 transition-colors cursor-pointer"
+                                      className={`border px-2 py-1.5 rounded text-[10px] font-mono flex items-center gap-1 transition-all cursor-pointer ${
+                                        emailSentId === reg.id
+                                          ? 'bg-emerald-950/80 border-emerald-700/60 text-emerald-300'
+                                          : sendingEmailId === reg.id
+                                          ? 'bg-red-950/50 border-red-700/40 text-red-400 opacity-70'
+                                          : 'bg-red-950/80 hover:bg-red-900 border-red-700/60 text-red-300'
+                                      }`}
                                       title={`Email rejection notice to ${reg.email}`}
                                     >
-                                      <Mail className="w-3 h-3 text-red-400" />
-                                      <span>Email Rejection</span>
+                                      <Mail className={`w-3 h-3 ${emailSentId === reg.id ? 'text-emerald-400' : 'text-red-400'}`} />
+                                      <span>{emailSentId === reg.id ? 'Sent ✓' : sendingEmailId === reg.id ? 'Sending…' : 'Email Rejection'}</span>
                                     </button>
                                     <button
                                       type="button"
@@ -2713,8 +2747,8 @@ export default function TicketAdminPage() {
 
         {/* High-Efficiency Large Side-by-Side Verification & Comparison Modal */}
         {selectedAttendee && (
-          <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4 lg:p-6 overflow-y-auto">
-            <div className="bg-[#0B111E] border border-[#233147] rounded-2xl w-full max-w-[98vw] 2xl:max-w-7xl max-h-[96vh] p-3.5 sm:p-5 lg:p-6 shadow-2xl flex flex-col space-y-3.5 my-auto overflow-y-auto animate-scale-up">
+          <div data-lenis-prevent="true" className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4 lg:p-6 overflow-y-auto" style={{overscrollBehavior:'contain'}}>
+            <div data-lenis-prevent="true" className="bg-[#0B111E] border border-[#233147] rounded-2xl w-full max-w-[98vw] 2xl:max-w-7xl max-h-[96vh] p-3.5 sm:p-5 lg:p-6 shadow-2xl flex flex-col space-y-3.5 my-auto overflow-y-auto animate-scale-up" style={{overscrollBehavior:'contain'}}>
               {/* Modal Top Header */}
               <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#233147]">
                 <div className="min-w-0 flex-1">
@@ -3328,6 +3362,7 @@ export default function TicketAdminPage() {
               </div>
             </div>
             <div
+              data-lenis-prevent="true"
               className="max-h-[85vh] max-w-[95vw] flex items-center justify-center mt-12 p-2 overflow-auto"
               onClick={e => e.stopPropagation()}
             >
@@ -3344,8 +3379,8 @@ export default function TicketAdminPage() {
             EMAIL DISPATCH SETTINGS MODAL: Configure Direct Gmail & Resend
         ───────────────────────────────────────────────────────────── */}
         {showEmailSettingsModal && (
-          <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-            <div className="bg-[#101826] border border-[#23334D] rounded-2xl max-w-xl w-full p-6 text-white shadow-2xl space-y-5 my-8">
+          <div data-lenis-prevent="true" className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fade-in" style={{overscrollBehavior:'contain'}}>
+            <div data-lenis-prevent="true" className="bg-[#101826] border border-[#23334D] rounded-2xl max-w-xl w-full p-6 text-white shadow-2xl space-y-5 my-8">
               {/* Header */}
               <div className="flex items-center justify-between border-b border-[#1E293B] pb-4">
                 <div className="flex items-center gap-2.5">
@@ -3512,8 +3547,8 @@ export default function TicketAdminPage() {
             UPI ACCOUNT GATEWAY MODAL: 1-Click Switcher & Limits
         ───────────────────────────────────────────────────────────── */}
         {showUpiModal && (
-          <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-            <div className="bg-[#101826] border border-[#23334D] rounded-2xl max-w-xl w-full p-6 text-white shadow-2xl space-y-5 my-8">
+          <div data-lenis-prevent="true" className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fade-in" style={{overscrollBehavior:'contain'}}>
+            <div data-lenis-prevent="true" className="bg-[#101826] border border-[#23334D] rounded-2xl max-w-xl w-full p-6 text-white shadow-2xl space-y-5 my-8">
               {/* Header */}
               <div className="flex items-center justify-between border-b border-[#1E293B] pb-4">
                 <div className="flex items-center gap-2.5">
@@ -3633,8 +3668,8 @@ export default function TicketAdminPage() {
             REJECTION REASON & EMAIL NOTIFICATION MODAL
         ───────────────────────────────────────────────────────────── */}
         {rejectingStudent && (
-          <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-            <div className="bg-[#0A101D] border border-red-500/40 rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl shadow-red-950/60 space-y-4 my-6 text-white animate-in fade-in zoom-in-95 duration-150">
+          <div data-lenis-prevent="true" className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto" style={{overscrollBehavior:'contain'}}>
+            <div data-lenis-prevent="true" className="bg-[#0A101D] border border-red-500/40 rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl shadow-red-950/60 space-y-4 my-6 text-white animate-in fade-in zoom-in-95 duration-150">
               {/* Header */}
               <div className="flex items-start justify-between border-b border-[#1E293B] pb-4">
                 <div className="flex items-center gap-3">

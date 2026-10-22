@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 const quickLinks = [
   { label: 'About', href: '#about' },
   { label: 'Agenda', href: '#schedule' },
+  { label: 'Activities', href: '#activities' },
   { label: 'Speakers', href: '#speakers' },
   { label: 'Tickets', href: '#tickets' },
   { label: 'Team', href: '/team' },

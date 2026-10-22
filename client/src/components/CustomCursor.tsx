@@ -114,7 +114,7 @@ export const CustomCursor = () => {
         width: '28px',
         height: '28px',
         pointerEvents: 'none',
-        zIndex: 99999,
+        zIndex: 999999,
         transform: 'translate(-50%, -50%) rotate(0deg)',
         /* Smooth springy tilt snap, but NO transition on left/top (would lag) */
         transition: 'transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease',
