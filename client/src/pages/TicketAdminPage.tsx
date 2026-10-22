@@ -64,7 +64,15 @@ import {
   Send,
   HelpCircle,
   Receipt,
+  CreditCard,
 } from 'lucide-react';
+import {
+  loadUpiConfig,
+  subscribeToUpiConfig,
+  switchActiveUpiAccount,
+  getActiveUpiAccount,
+  UpiSystemConfig,
+} from '../utils/upiConfig';
 import { sendTicketEmailViaResend, sendRejectionEmail } from '../services/emailService';
 import TicketScanner from '../components/TicketScanner';
 import {
@@ -246,6 +254,33 @@ export default function TicketAdminPage() {
   const [testEmailResult, setTestEmailResult] = useState<string>('');
   const [isBulkApproving, setIsBulkApproving] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+
+  // UPI Account Switcher State (Bhushan / Shardul / Anas)
+  const [upiConfig, setUpiConfig] = useState<UpiSystemConfig>(() => loadUpiConfig());
+  const [isSwitchingUpi, setIsSwitchingUpi] = useState(false);
+  const [upiSuccessMessage, setUpiSuccessMessage] = useState('');
+  const [showUpiModal, setShowUpiModal] = useState(false);
+
+  useEffect(() => {
+    return subscribeToUpiConfig(cfg => {
+      setUpiConfig(cfg);
+    });
+  }, []);
+
+  const activeUpiAccount = getActiveUpiAccount(upiConfig);
+
+  const handleSwitchUpi = async (accountId: string) => {
+    setIsSwitchingUpi(true);
+    try {
+      const switched = await switchActiveUpiAccount(accountId, 'Admin Panel');
+      setUpiSuccessMessage(`⚡ Active receiving UPI switched to ${switched.payeeName} (${switched.upiId})!`);
+      setTimeout(() => setUpiSuccessMessage(''), 6000);
+    } catch (err: any) {
+      alert(`Failed to switch UPI: ${err.message}`);
+    } finally {
+      setIsSwitchingUpi(false);
+    }
+  };
 
   // Manual trigger to force immediate sync from Firebase Firestore
   const handleForceSync = async () => {
@@ -712,6 +747,19 @@ export default function TicketAdminPage() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Live UPI Gateway Switcher Trigger */}
+            <button
+              type="button"
+              onClick={() => setShowUpiModal(true)}
+              className="bg-[#1E293B] hover:bg-[#2A3B52] border border-amber-500/40 hover:border-amber-400 text-slate-200 text-xs font-mono px-2.5 sm:px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Click to switch active UPI ID (Daily Limit Controller)"
+            >
+              <CreditCard className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline text-slate-400">UPI:</span>
+              <span className="text-amber-300 font-bold">{activeUpiAccount.payeeName.split(' ')[0]}</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            </button>
+
             {/* Email Dispatch Settings Trigger */}
             <button
               type="button"
@@ -911,6 +959,114 @@ export default function TicketAdminPage() {
                 </button>
               </div>
             )}
+
+            {/* Active Receiving UPI Gateway Controller (Switch when daily limit reached) */}
+            <div className="bg-[#101928] border border-amber-500/30 rounded-2xl p-4 sm:p-5 shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-4 border-b border-[#233147]">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                      <CreditCard className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm sm:text-base font-bold text-white uppercase font-mono tracking-wider flex items-center gap-2">
+                        <span>Active UPI Receiving Gateway</span>
+                        <span className="text-[10px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-600 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1 normal-case">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          Live on Student Pass Checkout
+                        </span>
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        When bank daily UPI transfer limit or txn count is reached, switch receiving account with 1-click. All future ticket checkouts & QR codes immediately update in real time.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {upiSuccessMessage && (
+                  <div className="bg-emerald-950/90 border border-emerald-500 text-emerald-200 px-3.5 py-2 rounded-xl text-xs font-mono flex items-center gap-2 shrink-0 animate-fade-in shadow-lg">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span>{upiSuccessMessage}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* 3 UPI Account Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-4">
+                {upiConfig.accounts.map(acc => {
+                  const isActive = acc.id === upiConfig.activeAccountId;
+                  return (
+                    <div
+                      key={acc.id}
+                      className={`relative rounded-xl p-4 border transition-all ${
+                        isActive
+                          ? 'bg-gradient-to-b from-[#19273f] to-[#121c2d] border-amber-400/90 shadow-xl shadow-amber-500/15 ring-1 ring-amber-400/50'
+                          : 'bg-[#0B101B] border-[#223046] hover:border-slate-500'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-white text-sm sm:text-base">{acc.payeeName}</span>
+                            <span className="text-[9px] font-mono uppercase bg-[#182337] text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded">
+                              {acc.role}
+                            </span>
+                          </div>
+                          {acc.bankHint && (
+                            <span className="text-[10px] text-slate-400 font-mono block mt-0.5">
+                              {acc.bankHint}
+                            </span>
+                          )}
+                        </div>
+
+                        {isActive ? (
+                          <span className="text-[10px] font-mono font-bold uppercase bg-emerald-950 text-emerald-300 border border-emerald-600 px-2.5 py-1 rounded-full flex items-center gap-1.5 shrink-0 shadow">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                            ACTIVE
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            disabled={isSwitchingUpi}
+                            onClick={() => handleSwitchUpi(acc.id)}
+                            className="bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-mono font-bold text-xs px-3 py-1.5 rounded-lg transition-all cursor-pointer shadow-md shadow-amber-500/20 disabled:opacity-50 shrink-0"
+                          >
+                            {isSwitchingUpi ? 'Switching…' : 'Switch Active'}
+                          </button>
+                        )}
+                      </div>
+
+                      {/* UPI ID block */}
+                      <div className="mt-3 p-2.5 rounded-lg bg-[#070b13] border border-[#1e2a3b] flex items-center justify-between gap-2">
+                        <div className="font-mono text-xs text-amber-300 font-bold truncate select-all">
+                          {acc.upiId}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigator.clipboard.writeText(acc.upiId);
+                            setEmailNotice(`Copied ${acc.upiId} to clipboard!`);
+                            setTimeout(() => setEmailNotice(''), 3000);
+                          }}
+                          className="text-slate-400 hover:text-white p-1 rounded hover:bg-white/5 transition-colors shrink-0"
+                          title="Copy UPI ID"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      {/* Details & limit info */}
+                      <div className="mt-2.5 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                        <span>{acc.dailyLimit || 'Standard UPI limit'}</span>
+                        {acc.phone && <span className="text-slate-500">{acc.phone}</span>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
             {/* Quick Metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono">
@@ -2985,7 +3141,14 @@ export default function TicketAdminPage() {
 
                     <div className="flex justify-between items-center">
                       <span className="text-slate-400">Payee Account:</span>
-                      <span className="text-slate-200 font-mono text-[11px]">Bhushan Jadhav (aj6244249-1@okaxis)</span>
+                      <div className="text-right">
+                        <span className="text-slate-200 font-mono text-[11px] block">
+                          {selectedAttendee.payeeName || activeUpiAccount.payeeName} ({selectedAttendee.payeeUpiId || activeUpiAccount.upiId})
+                        </span>
+                        <span className="text-[9px] text-amber-400/80 font-mono block">
+                          Verify credit in this bank statement
+                        </span>
+                      </div>
                     </div>
 
                     <div className="flex justify-between items-center">
@@ -3339,6 +3502,127 @@ export default function TicketAdminPage() {
                   className="bg-emerald-600 hover:bg-emerald-500 text-white font-mono font-bold text-xs px-5 py-2.5 rounded-xl transition-colors cursor-pointer shadow-lg shadow-emerald-950/30"
                 >
                   Save Email Configuration
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ─────────────────────────────────────────────────────────────
+            UPI ACCOUNT GATEWAY MODAL: 1-Click Switcher & Limits
+        ───────────────────────────────────────────────────────────── */}
+        {showUpiModal && (
+          <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
+            <div className="bg-[#101826] border border-[#23334D] rounded-2xl max-w-xl w-full p-6 text-white shadow-2xl space-y-5 my-8">
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-[#1E293B] pb-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                    <CreditCard className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-base text-white">UPI Gateway Controller</h3>
+                    <p className="text-xs text-slate-400">
+                      Switch active receiver account when daily bank limit is reached
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowUpiModal(false)}
+                  className="text-slate-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Status Banner */}
+              <div className="bg-[#0B101B] border border-amber-500/30 rounded-xl p-3.5 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] uppercase font-mono text-slate-400 block tracking-wider">
+                    Currently Receiving Payments:
+                  </span>
+                  <div className="font-bold text-white text-sm flex items-center gap-2 mt-0.5">
+                    <span>{activeUpiAccount.payeeName}</span>
+                    <span className="text-amber-400 font-mono text-xs">({activeUpiAccount.upiId})</span>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono font-bold uppercase bg-emerald-950 text-emerald-300 border border-emerald-600 px-2.5 py-1 rounded-full flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Live
+                </span>
+              </div>
+
+              {/* Accounts List */}
+              <div className="space-y-3">
+                <span className="text-xs font-mono uppercase text-slate-400 tracking-wider block">
+                  Select Gateway Account:
+                </span>
+                {upiConfig.accounts.map(acc => {
+                  const isActive = acc.id === upiConfig.activeAccountId;
+                  return (
+                    <div
+                      key={acc.id}
+                      className={`p-4 rounded-xl border flex items-center justify-between gap-3 transition-all ${
+                        isActive
+                          ? 'bg-[#182338] border-amber-500 ring-1 ring-amber-500/50'
+                          : 'bg-[#0B0F19] border-[#223046] hover:border-slate-500'
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <strong className="text-white text-sm">{acc.payeeName}</strong>
+                          <span className="text-[9px] font-mono uppercase bg-[#182337] text-slate-300 border border-slate-700 px-1.5 py-0.5 rounded">
+                            {acc.role}
+                          </span>
+                        </div>
+                        <div className="font-mono text-xs text-amber-300 font-semibold mt-1">
+                          {acc.upiId}
+                        </div>
+                        <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                          {acc.bankHint} · {acc.dailyLimit}
+                        </div>
+                      </div>
+
+                      {isActive ? (
+                        <span className="text-[11px] font-mono font-bold uppercase text-emerald-400 bg-emerald-950/80 border border-emerald-700 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          Active
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled={isSwitchingUpi}
+                          onClick={async () => {
+                            await handleSwitchUpi(acc.id);
+                            setShowUpiModal(false);
+                          }}
+                          className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs px-3.5 py-2 rounded-lg transition-colors cursor-pointer shadow-md shadow-amber-500/20 disabled:opacity-50"
+                        >
+                          Activate
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Notice */}
+              <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-200/90 flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <p>
+                  Switching updates the live QR code and deep links in real time via Firebase sync without requiring a redeployment or page reload.
+                </p>
+              </div>
+
+              {/* Close */}
+              <div className="flex justify-end pt-2 border-t border-[#1E293B]">
+                <button
+                  type="button"
+                  onClick={() => setShowUpiModal(false)}
+                  className="bg-[#1E293B] hover:bg-[#2A374D] text-slate-200 px-5 py-2 rounded-xl text-xs font-mono transition-colors cursor-pointer"
+                >
+                  Close
                 </button>
               </div>
             </div>

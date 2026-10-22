@@ -8,7 +8,13 @@ interface Props {
   attendeeName?: string;
   loading: boolean;
   error: string | null;
-  onPaymentSubmitted: (utrNumber: string, screenshotBase64?: string, screenshotName?: string) => void;
+  onPaymentSubmitted: (
+    utrNumber: string,
+    screenshotBase64?: string,
+    screenshotName?: string,
+    payeeUpiId?: string,
+    payeeName?: string
+  ) => void;
   onBack: () => void;
 }
 
@@ -59,14 +65,12 @@ export function PaymentEmbed({
         </div>
       )}
 
-      {/* Proven UPI Payment Component from Commity Day */}
+      {/* Dynamic UPI Payment Component with Live Switcher support */}
       <UpiPaymentCard
         amount={selectedPass.price}
-        payeeName="Bhushan Jadhav"
-        upiId="aj6244249-1@okaxis"
         transactionNote="AWS SCD 2026 Ticket"
-        onPaymentDone={(utr, ssBase64, ssName) => {
-          onPaymentSubmitted(utr, ssBase64, ssName);
+        onPaymentDone={(utr, ssBase64, ssName, payeeUpiId, payeeName) => {
+          onPaymentSubmitted(utr, ssBase64, ssName, payeeUpiId, payeeName);
         }}
       />
 

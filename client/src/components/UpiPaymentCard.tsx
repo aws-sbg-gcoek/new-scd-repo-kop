@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Copy,
   Check,
@@ -12,22 +12,40 @@ import {
   FileCheck,
 } from 'lucide-react';
 import { compressImageToBase64 } from '../utils/registrationStore';
+import { getActiveUpiAccount, subscribeToUpiConfig, UpiAccount } from '../utils/upiConfig';
 
 interface UpiPaymentCardProps {
   amount?: number;
   payeeName?: string;
   upiId?: string;
   transactionNote?: string;
-  onPaymentDone?: (utrNumber: string, screenshotBase64?: string, screenshotName?: string) => void;
+  onPaymentDone?: (
+    utrNumber: string,
+    screenshotBase64?: string,
+    screenshotName?: string,
+    payeeUpiId?: string,
+    payeeName?: string
+  ) => void;
 }
 
 export default function UpiPaymentCard({
   amount = 149,
-  payeeName = 'Bhushan Jadhav',
-  upiId = 'aj6244249-1@okaxis',
+  payeeName,
+  upiId,
   transactionNote = 'AWS SCD 2026 Ticket',
   onPaymentDone,
 }: UpiPaymentCardProps) {
+  const [activeAccount, setActiveAccount] = useState<UpiAccount>(() => getActiveUpiAccount());
+
+  useEffect(() => {
+    return subscribeToUpiConfig(config => {
+      setActiveAccount(getActiveUpiAccount(config));
+    });
+  }, []);
+
+  const effectivePayeeName = payeeName || activeAccount.payeeName;
+  const effectiveUpiId = upiId || activeAccount.upiId;
+
   const [copied, setCopied] = useState(false);
   const [utrNumber, setUtrNumber] = useState('');
   const [submittingUtr, setSubmittingUtr] = useState(false);
@@ -41,22 +59,22 @@ export default function UpiPaymentCard({
   const [utrError, setUtrError] = useState('');
 
   // Universal UPI Deep Link URL (Pre-fills recipient, amount, note in all UPI apps)
-  const upiLink = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(
-    payeeName
+  const upiLink = `upi://pay?pa=${encodeURIComponent(effectiveUpiId)}&pn=${encodeURIComponent(
+    effectivePayeeName
   )}&am=${amount}&cu=INR&tn=${encodeURIComponent(transactionNote)}`;
 
   // Specific App Links
-  const gpayLink = `gpay://upi/pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(
-    payeeName
+  const gpayLink = `gpay://upi/pay?pa=${encodeURIComponent(effectiveUpiId)}&pn=${encodeURIComponent(
+    effectivePayeeName
   )}&am=${amount}&cu=INR&tn=${encodeURIComponent(transactionNote)}`;
 
-  const phonepeLink = `phonepe://upi/pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(
-    payeeName
+  const phonepeLink = `phonepe://upi/pay?pa=${encodeURIComponent(effectiveUpiId)}&pn=${encodeURIComponent(
+    effectivePayeeName
   )}&am=${amount}&cu=INR&tn=${encodeURIComponent(transactionNote)}`;
 
   // Paytm deep link scheme: paytmmp://pay?pa=... (NOT /upi/pay which causes Paytm to open on home screen without payment window)
-  const paytmLink = `paytmmp://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(
-    payeeName
+  const paytmLink = `paytmmp://pay?pa=${encodeURIComponent(effectiveUpiId)}&pn=${encodeURIComponent(
+    effectivePayeeName
   )}&am=${amount}&cu=INR&tn=${encodeURIComponent(transactionNote)}`;
 
   // Scannable QR Code URL
@@ -65,7 +83,7 @@ export default function UpiPaymentCard({
   )}&margin=10`;
 
   const copyUpiId = () => {
-    navigator.clipboard.writeText(upiId);
+    navigator.clipboard.writeText(effectiveUpiId);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
@@ -127,7 +145,9 @@ export default function UpiPaymentCard({
         onPaymentDone(
           cleanUtr,
           screenshotBase64 || undefined,
-          screenshotFile?.name || undefined
+          screenshotFile?.name || undefined,
+          effectiveUpiId,
+          effectivePayeeName
         );
       }
     }, 800);
@@ -193,7 +213,7 @@ export default function UpiPaymentCard({
         <div className="flex items-center justify-between pb-3 border-b border-[#233147]">
           <div className="text-left">
             <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Official Event UPI</span>
-            <h4 className="text-base font-bold text-white">{payeeName}</h4>
+            <h4 className="text-base font-bold text-white">{effectivePayeeName}</h4>
           </div>
           <div className="text-right">
             <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Amount</span>
@@ -236,7 +256,7 @@ export default function UpiPaymentCard({
           {/* UPI ID + Copy */}
           <div className="text-center space-y-1.5 pt-2">
             <div className="flex items-center justify-center gap-1.5 font-mono text-xs text-[#334155] font-semibold">
-              <span>UPI ID: {upiId}</span>
+              <span>UPI ID: {effectiveUpiId}</span>
               <button
                 type="button"
                 onClick={copyUpiId}

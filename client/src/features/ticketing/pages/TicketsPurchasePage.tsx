@@ -90,7 +90,9 @@ export function TicketsPurchasePage() {
   const handlePaymentSubmitted = async (
     utrNumber: string,
     screenshotBase64?: string,
-    screenshotName?: string
+    screenshotName?: string,
+    payeeUpiId?: string,
+    payeeName?: string
   ) => {
     if (!selectedPass || !attendeeData) return;
     setIsSubmitting(true);
@@ -114,6 +116,8 @@ export function TicketsPurchasePage() {
         paymentScreenshotName: screenshotName,
         ticketTier: selectedPass.name,
         amount: selectedPass.price,
+        payeeUpiId: payeeUpiId || 'aj6244249-1@okaxis',
+        payeeName: payeeName || 'Bhushan Jadhav',
       });
 
       // Dispatch application acknowledgment email with Application ID to student immediately

@@ -40,6 +40,8 @@ export interface StudentRegistration {
   verifiedAt?: string;
   checkedIn?: boolean; // Has this QR code been scanned at the gate?
   checkedInAt?: string; // Timestamp of check-in scan
+  payeeName?: string; // Name of UPI payee paid to (e.g. Bhushan Jadhav, Shardul Kolekar)
+  payeeUpiId?: string; // Specific UPI ID paid to (e.g. aj6244249-1@okaxis, kolekarshardul23@okicici)
   createdAt: string;
   updatedAt: string;
 }
