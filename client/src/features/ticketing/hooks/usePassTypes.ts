@@ -34,23 +34,6 @@ function mapConfigToPasses(config: TicketSystemConfig): PassType[] {
     perks: string[];
   }> = [
     {
-      code: 'super_early_bird',
-      defaultName: 'Super Early Bird Tickets',
-      slug: 'SCD-SUPER-EARLY',
-      defaultTagline: 'Be Super, Be Early!',
-      defaultPrice: 149,
-      capacity: 100,
-      badgeColor: '#3b82f6',
-      defaultBadge: 'SUPER SAVER',
-      perks: [
-        'Full Day All-Track Conference Access',
-        'Official Event Swag Kit & Badge',
-        'Networking High Tea & Catered Lunch',
-        'Verified Certificate of Participation',
-        'Access to Keynotes & Hands-on Tech Demos'
-      ]
-    },
-    {
       code: 'early_bird',
       defaultName: 'Early Bird Ticket',
       slug: 'SCD-EARLY-BIRD',

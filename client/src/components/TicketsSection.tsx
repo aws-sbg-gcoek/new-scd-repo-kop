@@ -13,9 +13,8 @@ export const TicketsSection = () => {
 
   const displayPasses = loading
     ? [
-        { id: '1', name: 'Pass Name Skeleton', slug: 'SCD-PASS-1', price: 999, badge_color: '#3b82f6', label: 'SELECT', perks: ['Perk 1 details placeholder', 'Perk 2 details placeholder', 'Perk 3 details placeholder'], capacity: 10, sold: 0, is_locked: false, is_active: true },
-        { id: '2', name: 'Pass Name Skeleton', slug: 'SCD-PASS-2', price: 1999, badge_color: '#ef4444', label: 'SELECT', perks: ['Perk 1 details placeholder', 'Perk 2 details placeholder', 'Perk 3 details placeholder'], capacity: 10, sold: 0, is_locked: false, is_active: true },
-        { id: '3', name: 'Pass Name Skeleton', slug: 'SCD-PASS-3', price: 2999, badge_color: '#10b981', label: 'SELECT', perks: ['Perk 1 details placeholder', 'Perk 2 details placeholder', 'Perk 3 details placeholder'], capacity: 10, sold: 0, is_locked: false, is_active: true },
+        { id: '1', name: 'Pass Name Skeleton', slug: 'SCD-PASS-1', price: 999, badge_color: '#FF9900', label: 'SELECT', perks: ['Perk 1 details placeholder', 'Perk 2 details placeholder', 'Perk 3 details placeholder'], capacity: 10, sold: 0, is_locked: false, is_active: true },
+        { id: '2', name: 'Pass Name Skeleton', slug: 'SCD-PASS-2', price: 1999, badge_color: '#10b981', label: 'SELECT', perks: ['Perk 1 details placeholder', 'Perk 2 details placeholder', 'Perk 3 details placeholder'], capacity: 10, sold: 0, is_locked: false, is_active: true },
       ]
     : passes.filter(p => p.is_active);
 

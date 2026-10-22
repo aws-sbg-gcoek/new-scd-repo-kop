@@ -30,6 +30,10 @@ const faqCategories = [
         answer: "No, this is a paid event. Check the official registration page for the ticket price and payment instructions."
       },
       {
+        question: "Are tickets refundable?",
+        answer: "No. All ticket purchases are non-refundable."
+      },
+      {
         question: "Are seats limited?",
         answer: "Yes, seats are limited. Complete your registration early to avoid missing out. Your seat is subject to the event's registration and payment confirmation process."
       },

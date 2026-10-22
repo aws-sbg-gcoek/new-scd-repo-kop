@@ -12,5 +12,9 @@
     "start": "npm --prefix client run dev",
     "build": "npm --prefix client run build",
     "lint": "npm --prefix client run lint"
+  },
+  "dependencies": {
+    "motion": "^14.5.0",
+    "motion-dom": "^14.5.0"
   }
 }
