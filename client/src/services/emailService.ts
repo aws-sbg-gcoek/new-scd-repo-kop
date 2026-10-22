@@ -242,6 +242,23 @@ export function generateTicketEmailHtml(student: StudentRegistration): string {
           </tr>
         </table>
 
+        <!-- WhatsApp Group Join -->
+        <table width="680" border="0" cellspacing="0" cellpadding="0" style="margin-top: 16px; border-radius: 14px; overflow: hidden; background: linear-gradient(135deg, #075e54 0%, #128c7e 100%); border: 1px solid #25D366;">
+          <tr>
+            <td style="padding: 24px 32px; text-align: center;">
+              <p style="margin: 0 0 4px; font-size: 24px;">💬</p>
+              <p style="margin: 0 0 6px; font-size: 17px; font-weight: 800; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; letter-spacing: -0.3px;">Join Our Official WhatsApp Group</p>
+              <p style="margin: 0 0 18px; font-size: 13px; color: #d1fae5; font-family: -apple-system, sans-serif; line-height: 1.6;">Get real-time event updates, schedule announcements, and connect with fellow attendees before the big day!</p>
+              <a href="https://chat.whatsapp.com/C3n5K5mqVgv4GC0wFu9gvj"
+                 target="_blank"
+                 style="background-color: #25D366; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 800; font-size: 14px; text-decoration: none; padding: 13px 32px; border-radius: 8px; display: inline-block; box-shadow: 0 4px 16px rgba(37,211,102,0.4); letter-spacing: 0.3px;">
+                👉 &nbsp;Join WhatsApp Group
+              </a>
+              <p style="margin: 12px 0 0; font-size: 11px; color: #a7f3d0; font-family: monospace; word-break: break-all;">https://chat.whatsapp.com/C3n5K5mqVgv4GC0wFu9gvj</p>
+            </td>
+          </tr>
+        </table>
+
         <!-- Email Footer Notice -->
         <table width="680" border="0" cellspacing="0" cellpadding="0" style="margin-top: 18px; text-align: center;">
           <tr>
