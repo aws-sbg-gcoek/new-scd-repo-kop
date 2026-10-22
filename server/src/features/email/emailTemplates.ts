@@ -319,6 +319,28 @@ export function buildRegistrationConfirmationEmail(data: ConfirmationEmailData):
                 </tr>
               </table>
 
+              <!-- ═══ WHATSAPP GROUP ═══ -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;">
+                <tr>
+                  <td style="background:linear-gradient(135deg,#075e54 0%,#128c7e 100%);border-radius:10px;padding:24px 28px;text-align:center;">
+                    <p style="margin:0 0 6px;font-size:22px;">💬</p>
+                    <p style="margin:0 0 8px;font-size:16px;font-weight:700;color:#ffffff;">Join Our Official WhatsApp Group</p>
+                    <p style="margin:0 0 18px;font-size:13px;color:#d1fae5;line-height:1.6;">Get real-time updates, event reminders, and connect with fellow attendees before the event!</p>
+                    <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+                      <tr>
+                        <td style="background:#25D366;border-radius:8px;padding:12px 28px;">
+                          <a href="https://chat.whatsapp.com/C3n5K5mqVgv4GC0wFu9gvj"
+                             target="_blank"
+                             style="color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:0.3px;"
+                          >👉 &nbsp;Join WhatsApp Group</a>
+                        </td>
+                      </tr>
+                    </table>
+                    <p style="margin:12px 0 0;font-size:11px;color:#a7f3d0;">Tap the button above or copy the link: https://chat.whatsapp.com/C3n5K5mqVgv4GC0wFu9gvj</p>
+                  </td>
+                </tr>
+              </table>
+
               <!-- ═══ TAGLINE BAR ═══ -->
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;">
                 <tr>
@@ -404,6 +426,9 @@ ${download_url}
 - Please arrive at least 30 minutes before the event starts.
 - Your ticket contains a unique QR code required for check-in.
 - Keep this email accessible on the event day.
+
+💬 Join our Official WhatsApp Group for event updates:
+https://chat.whatsapp.com/C3n5K5mqVgv4GC0wFu9gvj
 
 📍 Venue:
 V.T. Patil Convention Hall, Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008
@@ -725,6 +750,28 @@ export function buildGroupRegistrationConfirmationEmail(data: GroupConfirmationE
                 </tr>
               </table>
 
+              <!-- ═══ WHATSAPP GROUP ═══ -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;">
+                <tr>
+                  <td style="background:linear-gradient(135deg,#075e54 0%,#128c7e 100%);border-radius:10px;padding:24px 28px;text-align:center;">
+                    <p style="margin:0 0 6px;font-size:22px;">💬</p>
+                    <p style="margin:0 0 8px;font-size:16px;font-weight:700;color:#ffffff;">Join Our Official WhatsApp Group</p>
+                    <p style="margin:0 0 18px;font-size:13px;color:#d1fae5;line-height:1.6;">Get real-time updates, event reminders, and connect with fellow attendees before the event!</p>
+                    <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+                      <tr>
+                        <td style="background:#25D366;border-radius:8px;padding:12px 28px;">
+                          <a href="https://chat.whatsapp.com/C3n5K5mqVgv4GC0wFu9gvj"
+                             target="_blank"
+                             style="color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:0.3px;"
+                          >👉 &nbsp;Join WhatsApp Group</a>
+                        </td>
+                      </tr>
+                    </table>
+                    <p style="margin:12px 0 0;font-size:11px;color:#a7f3d0;">Tap the button above or copy the link: https://chat.whatsapp.com/C3n5K5mqVgv4GC0wFu9gvj</p>
+                  </td>
+                </tr>
+              </table>
+
               <!-- ═══ TAGLINE BAR ═══ -->
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;">
                 <tr>
@@ -809,6 +856,9 @@ Category: ${pass_name}
 - Please arrive at least 30 minutes before the event starts.
 - Your ticket contains a unique QR code required for check-in.
 - Keep this email accessible on the event day.
+
+💬 Join our Official WhatsApp Group for event updates:
+https://chat.whatsapp.com/C3n5K5mqVgv4GC0wFu9gvj
 
 📍 Venue:
 V.T. Patil Convention Hall, Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008
