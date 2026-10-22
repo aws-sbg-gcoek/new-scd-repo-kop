@@ -48,6 +48,14 @@ export const PRESET_UPI_ACCOUNTS: UpiAccount[] = [
     dailyLimit: 'Standard Daily Limit (₹1,00,000 / 20 txns)',
     phone: '+91 70283 88155',
   },
+  {
+    id: 'apeksha',
+    payeeName: 'Apeksha Khodave',
+    upiId: 'apekshakhodave1106@oksbi',
+    role: 'Organizer',
+    bankHint: 'State Bank of India',
+    dailyLimit: 'Standard Daily Limit (₹1,00,000 / 20 txns)',
+  },
 ];
 
 export const DEFAULT_UPI_CONFIG: UpiSystemConfig = {
@@ -66,7 +74,7 @@ export function loadUpiConfig(): UpiSystemConfig {
     if (!raw) return DEFAULT_UPI_CONFIG;
     const parsed = JSON.parse(raw) as UpiSystemConfig;
     if (parsed && parsed.accounts && parsed.accounts.length > 0) {
-      // Ensure all 3 presets are present even if previous storage had an older structure
+      // Ensure all 4 presets are present even if previous storage had an older structure
       const accountMap = new Map<string, UpiAccount>();
       PRESET_UPI_ACCOUNTS.forEach(acc => accountMap.set(acc.id, acc));
       parsed.accounts.forEach(acc => accountMap.set(acc.id, { ...accountMap.get(acc.id), ...acc }));
@@ -157,6 +165,7 @@ export function subscribeToUpiConfig(callback: (config: UpiSystemConfig) => void
           if (snapshot.exists()) {
             const data = snapshot.data() as UpiSystemConfig;
             if (data && data.accounts) {
+              // Ensure all 4 presets are present even if Firestore has an older structure
               const accountMap = new Map<string, UpiAccount>();
               PRESET_UPI_ACCOUNTS.forEach(acc => accountMap.set(acc.id, acc));
               data.accounts.forEach(acc => accountMap.set(acc.id, { ...accountMap.get(acc.id), ...acc }));
