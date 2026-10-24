@@ -267,7 +267,7 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
       }
     });
 
-    const interval = setInterval(() => loadData(true), 30_000);
+    const interval = setInterval(() => loadData(true), 5_000);
     return () => {
       unsub();
       clearInterval(interval);
