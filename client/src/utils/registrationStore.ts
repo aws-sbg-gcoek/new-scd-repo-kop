@@ -219,7 +219,8 @@ export function subscribeToRegistrations(callback: (records: StudentRegistration
       // First, provide local/cached data immediately so UI is not empty while waiting for network
       callback(loadRegistrations());
 
-      const q = query(collection(db, 'registrations'), orderBy('createdAt', 'desc'));
+      // Query collection directly without restrictive orderBy to prevent index errors on mobile
+      const q = collection(db, 'registrations');
       const unsubscribe: Unsubscribe = onSnapshot(
         q,
         snapshot => {
@@ -232,10 +233,14 @@ export function subscribeToRegistrations(callback: (records: StudentRegistration
             });
           });
 
+          // Sort in memory newest first
+          remoteRecords.sort(
+            (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+          );
+
           if (remoteRecords.length > 0) {
-            // CRITICAL: Call callback FIRST to update React UI state with all live records!
             callback(remoteRecords);
-            // Safely background-cache in localStorage without throwing
+            // Safely background-cache in localStorage
             saveRegistrations(remoteRecords);
           } else {
             callback(loadRegistrations());
@@ -243,7 +248,6 @@ export function subscribeToRegistrations(callback: (records: StudentRegistration
         },
         error => {
           console.warn('Firestore onSnapshot listener error, attempting query fallback:', error);
-          // Query fallback in case orderBy requires an index or encounters an error
           try {
             getDocs(collection(db, 'registrations'))
               .then(snap => {
@@ -495,8 +499,25 @@ export function exportRegistrationsToCSV(records: StudentRegistration[]): void {
  * Gate Check-In: Scans a ticket QR code.
  * Ensures each QR code can only be scanned ONCE.
  */
-export function checkInTicket(rawCode: string): CheckInResult {
-  const current = loadRegistrations();
+export function checkInTicket(rawCode: string, memoryFallback?: StudentRegistration[]): CheckInResult {
+  let current = loadRegistrations();
+
+  // If memory fallback records are provided (e.g. from live Firestore subscription in React state),
+  // merge any records that might not yet be in local storage:
+  if (memoryFallback && memoryFallback.length > 0) {
+    const existingIds = new Set(current.map(c => c.id || c.ticketCode));
+    let added = false;
+    for (const fb of memoryFallback) {
+      const key = fb.id || fb.ticketCode;
+      if (key && !existingIds.has(key)) {
+        current.push(fb);
+        added = true;
+      }
+    }
+    if (added) {
+      saveRegistrations(current);
+    }
+  }
 
   // Strip prefixes if scanned from URL or JSON payload
   let cleanCode = rawCode.trim();
@@ -506,13 +527,15 @@ export function checkInTicket(rawCode: string): CheckInResult {
   } else if (cleanCode.includes('ticket=')) {
     cleanCode = cleanCode.split('ticket=')[1].split('&')[0];
   }
-  const q = cleanCode.toLowerCase();
+  const q = cleanCode.toLowerCase().trim();
 
+  // Safe matching against ticketCode, bookingId, transactionId, or internal id
   const matchIndex = current.findIndex(
     r =>
-      (r.ticketCode && r.ticketCode.toLowerCase() === q) ||
-      r.bookingId.toLowerCase() === q ||
-      r.transactionId.toLowerCase() === q
+      (r.ticketCode && r.ticketCode.toLowerCase().trim() === q) ||
+      (r.bookingId && r.bookingId.toLowerCase().trim() === q) ||
+      (r.transactionId && r.transactionId.toLowerCase().trim() === q) ||
+      (r.id && r.id.toLowerCase().trim() === q)
   );
 
   if (matchIndex === -1) {

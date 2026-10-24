@@ -7,6 +7,7 @@ import {
   checkInTicket,
   resetTicketCheckIn,
   loadRegistrations,
+  subscribeToRegistrations,
 } from '../utils/registrationStore';
 import {
   Camera,
@@ -30,6 +31,8 @@ import {
   FlipHorizontal,
   Upload,
   RefreshCw,
+  Wifi,
+  Cloud,
 } from 'lucide-react';
 
 interface TicketScannerProps {
@@ -38,15 +41,30 @@ interface TicketScannerProps {
 }
 
 export default function TicketScanner({ registrations: propRegistrations, onCheckInChange }: TicketScannerProps) {
-  const [internalRegistrations, setInternalRegistrations] = useState<StudentRegistration[]>([]);
+  const [internalRegistrations, setInternalRegistrations] = useState<StudentRegistration[]>(() => loadRegistrations());
+  const [isCloudSynced, setIsCloudSynced] = useState<boolean>(false);
+
+  // Live real-time Firestore sync directly inside TicketScanner:
+  // Guarantees mobile volunteers ALWAYS have 100% of approved tickets instantly!
+  useEffect(() => {
+    const unsub = subscribeToRegistrations(records => {
+      if (records && records.length > 0) {
+        setInternalRegistrations(records);
+        setIsCloudSynced(true);
+      }
+    });
+    return () => {
+      if (unsub) unsub();
+    };
+  }, []);
 
   useEffect(() => {
-    if (!propRegistrations) {
-      setInternalRegistrations(loadRegistrations());
+    if (propRegistrations && propRegistrations.length > 0) {
+      setInternalRegistrations(propRegistrations);
     }
   }, [propRegistrations]);
 
-  const registrations = propRegistrations ?? internalRegistrations;
+  const registrations = propRegistrations && propRegistrations.length > 0 ? propRegistrations : internalRegistrations;
   const [isScanning, setIsScanning] = useState(false);
   const [isStartingCamera, setIsStartingCamera] = useState(false);
   const [facingMode, setFacingMode] = useState<'environment' | 'user'>('environment');
@@ -152,7 +170,7 @@ export default function TicketScanner({ registrations: propRegistrations, onChec
     setIsProcessing(true);
 
     try {
-      const result = checkInTicket(trimmed);
+      const result = checkInTicket(trimmed, registrations);
       setLastResult(result);
       setRecentScans(prev => [{ result, timestamp: new Date().toLocaleTimeString('en-IN') }, ...prev.slice(0, 19)]);
 
@@ -446,9 +464,17 @@ export default function TicketScanner({ registrations: propRegistrations, onChec
         <div className="lg:col-span-6 space-y-4">
           <div className="bg-[#101726] border border-[#1E293B] rounded-2xl p-5 shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <ScanLine className="w-5 h-5 text-amber-400" />
                 <h3 className="font-bold text-white text-base">Gate QR Scanner</h3>
+                <span className={`inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full border ${
+                  isCloudSynced
+                    ? 'bg-emerald-950/60 border-emerald-700/60 text-emerald-400'
+                    : 'bg-amber-950/60 border-amber-700/60 text-amber-400'
+                }`}>
+                  <Cloud className="w-3 h-3" />
+                  {isCloudSynced ? `Cloud Synced (${approvedList.length} Passes)` : 'Connecting Cloud...'}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <button

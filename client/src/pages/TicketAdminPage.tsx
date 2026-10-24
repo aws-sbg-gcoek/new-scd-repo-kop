@@ -65,7 +65,9 @@ import {
   HelpCircle,
   Receipt,
   CreditCard,
+  Gamepad2,
 } from 'lucide-react';
+import ActivityAdminPanel from '../components/ActivityAdminPanel';
 import {
   loadUpiConfig,
   subscribeToUpiConfig,
@@ -170,7 +172,7 @@ export default function TicketAdminPage() {
   const [authError, setAuthError] = useState('');
 
   // Admin Navigation Tab
-  const [activeAdminTab, setActiveAdminTab] = useState<'transactions' | 'scanner' | 'sponsors' | 'speakers' | 'tiers'>('transactions');
+  const [activeAdminTab, setActiveAdminTab] = useState<'transactions' | 'scanner' | 'activities' | 'sponsors' | 'speakers' | 'tiers'>('transactions');
 
   // Tier Configuration State
   const [config, setConfig] = useState<TicketSystemConfig>(() => loadTicketConfig());
@@ -195,11 +197,17 @@ export default function TicketAdminPage() {
   const [speakerStatusFilter, setSpeakerStatusFilter] = useState<'ALL' | SpeakerStatus>('ALL');
   const [selectedSpeaker, setSelectedSpeaker] = useState<SpeakerApplication | null>(null);
 
-  // Live real-time listener for Sponsors and Speakers
+  // Live real-time listener for Registrations, Sponsors, and Speakers
   useEffect(() => {
+    const unsubRegistrations = subscribeToRegistrations(data => {
+      if (data && data.length > 0) {
+        setRegistrations(data);
+      }
+    });
     const unsubSponsors = subscribeToSponsors(data => setSponsors(data));
     const unsubSpeakers = subscribeToSpeakers(data => setSpeakers(data));
     return () => {
+      unsubRegistrations();
       unsubSponsors();
       unsubSpeakers();
     };
@@ -903,6 +911,19 @@ export default function TicketAdminPage() {
                 {checkedInCount} Checked In
               </span>
             )}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveAdminTab('activities')}
+            className={`flex items-center gap-2 px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-lg font-mono text-xs uppercase font-bold tracking-wider shrink-0 transition-all cursor-pointer ${
+              activeAdminTab === 'activities'
+                ? 'bg-purple-500 text-slate-950 shadow-lg shadow-purple-500/20'
+                : 'text-slate-300 hover:bg-[#162133]'
+            }`}
+          >
+            <Gamepad2 className="w-4 h-4" />
+            <span>5 Activities Tracker</span>
           </button>
 
           <button
@@ -2709,6 +2730,13 @@ export default function TicketAdminPage() {
             registrations={registrations}
             onCheckInChange={() => setRegistrations(loadRegistrations())}
           />
+        )}
+
+        {/* ─────────────────────────────────────────────────────────────
+            TAB: 5 ACTIVITIES TRACKER & STUDENT PARTICIPATION
+        ───────────────────────────────────────────────────────────── */}
+        {activeAdminTab === 'activities' && (
+          <ActivityAdminPanel />
         )}
 
         {/* High-Efficiency Large Side-by-Side Verification & Comparison Modal */}

@@ -8,6 +8,7 @@ const TicketPage = lazy(() => import('./features/ticketing/pages/TicketPage').th
 const MyReferralsPage = lazy(() => import('./features/ticketing/pages/MyReferralsPage'));
 const TicketAdminPage = lazy(() => import('./pages/TicketAdminPage'));
 const TicketScanner = lazy(() => import('./components/TicketScanner'));
+const ActivityScannerPage = lazy(() => import('./pages/activity/ActivityScannerPage'));
 const SpeakerPage = lazy(() => import('./features/speaker/pages/SpeakerPage').then(module => ({ default: module.SpeakerPage })));
 const VolunteerPage = lazy(() => import('./features/volunteer/pages/VolunteerPage').then(module => ({ default: module.VolunteerPage })));
 const MpdPage = lazy(() => import('./features/mpd/pages/MpdPage').then(module => ({ default: module.MpdPage })));
@@ -128,6 +129,7 @@ export default function App() {
         <Route path="/volunteer" element={<VolunteerPage />} />
         <Route path="/womenintech" element={<MpdPage />} />
         <Route path="/scanner" element={<TicketScanner />} />
+        <Route path="/activity/:activitySlug" element={<ActivityScannerPage />} />
         <Route path="/admin" element={<TicketAdminPage />} />
         <Route path="/status" element={<StatusPage />} />
         <Route path="/badge" element={<BadgePage />} />
