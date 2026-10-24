@@ -167,6 +167,10 @@ export default function TicketAdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return sessionStorage.getItem(ADMIN_AUTH_KEY) === 'true';
   });
+  // Store the entered admin key so it can be passed to ActivityAdminPanel for its API calls
+  const [adminKey, setAdminKey] = useState<string>(() => {
+    return sessionStorage.getItem('admin_entered_key') || 'AWS-Ticket-Admin-2026!';
+  });
   const [passwordInput, setPasswordInput] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState('');
@@ -396,7 +400,9 @@ export default function TicketAdminPage() {
 
     if (validPasswords.includes(entered)) {
       sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
+      sessionStorage.setItem('admin_entered_key', entered);
       setIsAuthenticated(true);
+      setAdminKey(entered);
       setAuthError('');
       // Instantly load fresh Firestore records
       setTimeout(() => handleForceSync(), 50);
@@ -407,6 +413,7 @@ export default function TicketAdminPage() {
 
   const handleLogout = () => {
     sessionStorage.removeItem(ADMIN_AUTH_KEY);
+    sessionStorage.removeItem('admin_entered_key');
     setIsAuthenticated(false);
     setPasswordInput('');
   };
@@ -2736,7 +2743,7 @@ export default function TicketAdminPage() {
             TAB: 5 ACTIVITIES TRACKER & STUDENT PARTICIPATION
         ───────────────────────────────────────────────────────────── */}
         {activeAdminTab === 'activities' && (
-          <ActivityAdminPanel />
+          <ActivityAdminPanel scannerKey={adminKey} />
         )}
 
         {/* High-Efficiency Large Side-by-Side Verification & Comparison Modal */}
