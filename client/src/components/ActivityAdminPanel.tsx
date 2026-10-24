@@ -7,6 +7,8 @@ import {
   getSavedScannerKey,
   ActivityScan,
   subscribeToActivityScans,
+  resetActivityScan,
+  resetAllStudentActivityScans,
 } from '../utils/activityStore';
 import {
   Activity,
@@ -35,6 +37,7 @@ import {
   Calendar,
   ShieldCheck,
   MapPin,
+  Trash2,
 } from 'lucide-react';
 import {
   StudentRegistration,
@@ -333,6 +336,64 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
       (reg?.collegeName || '').toLowerCase().includes(q)
     );
   });
+
+  // ── Delete scan handlers (Admin override) ─────────────────
+  const [deletingKey, setDeletingKey] = useState<string | null>(null);
+
+  const handleDeleteScan = async (ticketNumber: string, activitySlug: ActivitySlug, activityName: string) => {
+    if (!window.confirm(`Are you sure you want to remove the "${activityName}" scan for ticket ${ticketNumber}?`)) {
+      return;
+    }
+    const key = `${ticketNumber}_${activitySlug}`;
+    setDeletingKey(key);
+    try {
+      await resetActivityScan(ticketNumber, activitySlug);
+      // Immediately update local state
+      setAllScans(prev => prev.filter(s => !(s.ticket_number === ticketNumber && s.activity === activitySlug)));
+      setStudentSummary(prev => {
+        return prev
+          .map(s => {
+            if (s.ticket_number === ticketNumber) {
+              const updatedActivities = s.activities.filter(a => a !== activitySlug);
+              return {
+                ...s,
+                activities: updatedActivities,
+                scan_count: updatedActivities.length,
+              };
+            }
+            return s;
+          })
+          .filter(s => s.scan_count > 0);
+      });
+      setStats(prev => ({
+        ...prev,
+        [activitySlug]: Math.max(0, (prev[activitySlug] || 1) - 1),
+      }));
+    } catch (err) {
+      console.error('Failed to delete scan:', err);
+      alert('Failed to delete scan. Please try again.');
+    } finally {
+      setDeletingKey(null);
+    }
+  };
+
+  const handleDeleteAllStudentScans = async (ticketNumber: string, studentName?: string) => {
+    if (!window.confirm(`Are you sure you want to delete ALL activity scans for ${studentName || ticketNumber}?`)) {
+      return;
+    }
+    setDeletingKey(ticketNumber);
+    try {
+      await resetAllStudentActivityScans(ticketNumber);
+      setAllScans(prev => prev.filter(s => s.ticket_number !== ticketNumber));
+      setStudentSummary(prev => prev.filter(s => s.ticket_number !== ticketNumber));
+      loadData(false);
+    } catch (err) {
+      console.error('Failed to reset all student scans:', err);
+      alert('Failed to reset student scans. Please try again.');
+    } finally {
+      setDeletingKey(null);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -689,9 +750,27 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
                                   {act.name}
                                 </span>
                                 {done ? (
-                                  <span className={`inline-flex items-center gap-1 text-[10px] font-mono font-bold ${col.light}`}>
-                                    <CheckCircle2 className="w-3 h-3" /> Done
-                                  </span>
+                                  <div className="flex items-center gap-1.5 mt-0.5">
+                                    <span className={`inline-flex items-center gap-1 text-[10px] font-mono font-bold ${col.light}`}>
+                                      <CheckCircle2 className="w-3 h-3" /> Done
+                                    </span>
+                                    <button
+                                      type="button"
+                                      disabled={deletingKey === `${student.ticket_number}_${act.slug}`}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDeleteScan(student.ticket_number, act.slug, act.name);
+                                      }}
+                                      className="p-1 text-slate-400 hover:text-red-400 hover:bg-red-950/70 border border-[#233147] hover:border-red-900 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+                                      title={`Delete / Reset ${act.name} scan for this student`}
+                                    >
+                                      {deletingKey === `${student.ticket_number}_${act.slug}` ? (
+                                        <Loader2 className="w-3 h-3 animate-spin" />
+                                      ) : (
+                                        <Trash2 className="w-3 h-3" />
+                                      )}
+                                    </button>
+                                  </div>
                                 ) : (
                                   <span className="inline-flex items-center gap-1 text-[10px] font-mono text-slate-600">
                                     <XCircle className="w-3 h-3 text-slate-700" /> Pending
@@ -722,7 +801,7 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
 
                         {/* Student Information & Profile Section */}
                         <div className="pt-3 border-t border-[#1E293B]">
-                          <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
                             <div className="flex items-center gap-2">
                               <div className="w-6 h-6 rounded-md bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
                                 <User className="w-3.5 h-3.5" />
@@ -731,15 +810,34 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
                                 Student Registration & Profile Details
                               </h4>
                             </div>
-                            {reg?.status && (
-                              <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border ${
-                                reg.status === 'APPROVED'
-                                  ? 'bg-emerald-950/60 border-emerald-700/60 text-emerald-400'
-                                  : 'bg-amber-950/60 border-amber-700/60 text-amber-400'
-                              }`}>
-                                {reg.status}
-                              </span>
-                            )}
+                            <div className="flex items-center gap-2">
+                              {reg?.status && (
+                                <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border ${
+                                  reg.status === 'APPROVED'
+                                    ? 'bg-emerald-950/60 border-emerald-700/60 text-emerald-400'
+                                    : 'bg-amber-950/60 border-amber-700/60 text-amber-400'
+                                }`}>
+                                  {reg.status}
+                                </span>
+                              )}
+                              <button
+                                type="button"
+                                disabled={deletingKey === student.ticket_number}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteAllStudentScans(student.ticket_number, student.attendee_name || reg?.fullName);
+                                }}
+                                className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono text-slate-400 hover:text-red-400 hover:bg-red-950/70 border border-[#233147] hover:border-red-900 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+                                title="Reset / Delete all activity scans for this student"
+                              >
+                                {deletingKey === student.ticket_number ? (
+                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                ) : (
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                )}
+                                <span>Reset All</span>
+                              </button>
+                            </div>
                           </div>
 
                           {reg ? (
@@ -879,6 +977,7 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
                       <th className="text-left px-4 py-2.5 text-slate-400 uppercase tracking-wider font-semibold">Ticket</th>
                       <th className="text-left px-4 py-2.5 text-slate-400 uppercase tracking-wider font-semibold">Activity</th>
                       <th className="text-left px-4 py-2.5 text-slate-400 uppercase tracking-wider font-semibold">Time</th>
+                      <th className="text-right px-4 py-2.5 text-slate-400 uppercase tracking-wider font-semibold">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#1E293B]">
@@ -886,6 +985,7 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
                       const act = ACTIVITIES.find(a => a.slug === scan.activity);
                       const col = ACTIVITY_COLORS[scan.activity as ActivitySlug];
                       const reg = getStudentRegistration(scan.ticket_number, scan.attendee_name);
+                      const isDeletingThis = deletingKey === `${scan.ticket_number}_${scan.activity}`;
                       return (
                         <tr key={i} className="hover:bg-[#162133] transition-colors">
                           <td className="px-4 py-2.5 text-slate-200 font-sans">
@@ -914,6 +1014,21 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
                                   second: '2-digit',
                                 })
                               : '—'}
+                          </td>
+                          <td className="px-4 py-2.5 text-right">
+                            <button
+                              type="button"
+                              disabled={isDeletingThis}
+                              onClick={() => handleDeleteScan(scan.ticket_number, scan.activity as ActivitySlug, act?.name || scan.activity)}
+                              className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-950/70 border border-[#233147] hover:border-red-900 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+                              title={`Delete scan for ${act?.name || scan.activity}`}
+                            >
+                              {isDeletingThis ? (
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                              ) : (
+                                <Trash2 className="w-3.5 h-3.5" />
+                              )}
+                            </button>
                           </td>
                         </tr>
                       );

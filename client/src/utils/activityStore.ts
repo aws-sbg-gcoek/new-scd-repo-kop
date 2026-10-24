@@ -423,6 +423,13 @@ export async function resetActivityScan(ticketNumber: string, activity: Activity
   }
 }
 
+export async function resetAllStudentActivityScans(ticketNumber: string): Promise<void> {
+  const activities: ActivitySlug[] = ['human-tetris', 'blindfold', 'move-the-byte', 'live-trivia', 'food'];
+  for (const act of activities) {
+    await resetActivityScan(ticketNumber, act);
+  }
+}
+
 // ── Background Sync (call once on app start) ───────────────────
 // Drains the pending_sync queue when the device comes back online.
 export function startBackgroundSync(scannerKey: string): () => void {
