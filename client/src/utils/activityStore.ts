@@ -17,6 +17,7 @@ import {
   deleteDoc,
   onSnapshot,
   getDocs,
+  getDoc,
 } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '../services/firebase';
 
@@ -256,8 +257,29 @@ export async function performActivityScan(
   const ticketNumber = matchAttendee?.ticketCode || matchAttendee?.bookingId || cleanCode;
   const attendeeName = matchAttendee?.fullName || parsedName || 'Attendee';
 
-  // ─ Step 3: Check local duplicate (instant, works 100% offline)
-  const localDup = await isAlreadyScannedLocally(ticketNumber, activity);
+  // ─ Step 3: Check duplicate (instant offline local DB + Firestore if online)
+  let localDup = await isAlreadyScannedLocally(ticketNumber, activity);
+  if (!localDup && navigator.onLine && isFirebaseConfigured() && db) {
+    try {
+      const docId = `${activity}_${ticketNumber.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
+      const snap = await getDoc(doc(db, 'activity_scans', docId));
+      if (snap.exists()) {
+        const d = snap.data() as ActivityScan;
+        localDup = {
+          ticket_number: d.ticket_number,
+          attendee_name: d.attendee_name,
+          activity: d.activity,
+          scanned_at: d.scanned_at,
+          scanned_by: d.scanned_by,
+          synced: true,
+        };
+        await saveLocalScan(localDup);
+      }
+    } catch {
+      // ignore
+    }
+  }
+
   if (localDup) {
     const timeStr = localDup.scanned_at
       ? new Date(localDup.scanned_at).toLocaleTimeString('en-IN')
@@ -299,15 +321,18 @@ export async function performActivityScan(
   // Ensures any device (admin or volunteer) sees this scan instantly across the venue!
   if (isFirebaseConfigured() && db) {
     const docId = `${activity}_${ticketNumber.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
-    setDoc(doc(db, 'activity_scans', docId), {
-      ticket_number: ticketNumber,
-      attendee_name: attendeeName,
-      activity,
-      scanned_at: scannedAt,
-      scanned_by,
-    }).catch(err => {
+    try {
+      await setDoc(doc(db, 'activity_scans', docId), {
+        ticket_number: ticketNumber,
+        attendee_name: attendeeName,
+        activity,
+        scanned_at: scannedAt,
+        scanned_by,
+      });
+      scanRecord.synced = true;
+    } catch (err) {
       console.warn('Firestore activity scan sync notice:', err);
-    });
+    }
   }
 
   // ─ Step 5: Queue for background sync
@@ -457,102 +482,101 @@ export function startBackgroundSync(scannerKey: string): () => void {
   };
 }
 
-// ── Server stats fetch with local fallback ─────────────────────
-export async function fetchActivityStats(
-  scannerKey: string
-): Promise<Record<string, number>> {
+// ── Server / Firestore stats fetch with local fallback ────────
+export async function fetchAllActivityScans(scannerKey?: string): Promise<ActivityScan[]> {
+  // 1. Live Cloud Sync: Try Firebase Firestore first (synchronized venue-wide)
+  if (isFirebaseConfigured() && db) {
+    try {
+      const snap = await getDocs(collection(db, 'activity_scans'));
+      const remoteScans: ActivityScan[] = [];
+      snap.forEach(docSnap => {
+        const data = docSnap.data() as ActivityScan;
+        if (data && data.ticket_number) {
+          remoteScans.push({
+            ticket_number: data.ticket_number,
+            attendee_name: data.attendee_name || 'Attendee',
+            activity: data.activity,
+            scanned_at: data.scanned_at || new Date().toISOString(),
+            scanned_by: data.scanned_by,
+            synced: true,
+          });
+        }
+      });
+      if (remoteScans.length > 0) {
+        remoteScans.sort(
+          (a, b) => new Date(b.scanned_at || 0).getTime() - new Date(a.scanned_at || 0).getTime()
+        );
+        // Background cache in local IndexedDB
+        for (const s of remoteScans) {
+          saveLocalScan(s).catch(() => {});
+        }
+        return remoteScans;
+      }
+    } catch (err) {
+      console.warn('Firestore getDocs activity_scans notice:', err);
+    }
+  }
+
+  // 2. Try REST API if backend is running and returns JSON
   const API_BASE = (import.meta as any).env?.VITE_API_URL || '/api';
   try {
-    const response = await fetch(`${API_BASE}/activity/all-stats`, {
-      headers: { 'x-scanner-key': scannerKey },
+    const response = await fetch(`${API_BASE}/activity/all`, {
+      headers: scannerKey ? { 'x-scanner-key': scannerKey } : {},
     });
-    if (response.ok) {
-      const text = await response.text();
-      if (text) {
-        const data = JSON.parse(text);
-        if (data.stats) return data.stats;
+    const contentType = response.headers.get('content-type') || '';
+    if (response.ok && contentType.includes('application/json')) {
+      const data = await response.json();
+      if (Array.isArray(data) && data.length > 0) {
+        for (const s of data) {
+          saveLocalScan(s).catch(() => {});
+        }
+        return data;
       }
     }
   } catch {
     // swallow and fallback to local
   }
 
-  // Fallback: compute stats directly from local IndexedDB scans
-  try {
-    const local = await getLocalScans();
-    const stats: Record<string, number> = {};
-    for (const s of local) {
-      stats[s.activity] = (stats[s.activity] || 0) + 1;
-    }
-    return stats;
-  } catch {
-    return {};
-  }
-}
-
-export async function fetchAllActivityScans(scannerKey: string): Promise<ActivityScan[]> {
-  const API_BASE = (import.meta as any).env?.VITE_API_URL || '/api';
-  try {
-    const response = await fetch(`${API_BASE}/activity/all`, {
-      headers: { 'x-scanner-key': scannerKey },
-    });
-    if (response.ok) {
-      const text = await response.text();
-      if (text) {
-        return JSON.parse(text);
-      }
-    }
-  } catch {
-    // swallow
-  }
+  // 3. Fallback: local IndexedDB
   return getLocalScans();
 }
 
+export async function fetchActivityStats(
+  scannerKey?: string
+): Promise<Record<string, number>> {
+  const scans = await fetchAllActivityScans(scannerKey);
+  const stats: Record<string, number> = {};
+  for (const s of scans) {
+    stats[s.activity] = (stats[s.activity] || 0) + 1;
+  }
+  return stats;
+}
+
 export async function fetchStudentSummary(
-  scannerKey: string
+  scannerKey?: string
 ): Promise<Array<{
   ticket_number: string;
   attendee_name: string;
   activities: string[];
   scan_count: number;
 }>> {
-  const API_BASE = (import.meta as any).env?.VITE_API_URL || '/api';
-  try {
-    const response = await fetch(`${API_BASE}/activity/student-summary`, {
-      headers: { 'x-scanner-key': scannerKey },
-    });
-    if (response.ok) {
-      const text = await response.text();
-      if (text) {
-        return JSON.parse(text);
-      }
+  const scans = await fetchAllActivityScans(scannerKey);
+  const summaryMap: Record<string, { attendee_name: string; activities: Set<string> }> = {};
+  for (const s of scans) {
+    if (!summaryMap[s.ticket_number]) {
+      summaryMap[s.ticket_number] = {
+        attendee_name: s.attendee_name || 'Attendee',
+        activities: new Set(),
+      };
     }
-  } catch {
-    // swallow
+    summaryMap[s.ticket_number].activities.add(s.activity);
   }
-
-  // Fallback: build summary from local IndexedDB scans
-  try {
-    const scans = await getLocalScans();
-    const summaryMap: Record<string, { attendee_name: string; activities: Set<string> }> = {};
-    for (const s of scans) {
-      if (!summaryMap[s.ticket_number]) {
-        summaryMap[s.ticket_number] = {
-          attendee_name: s.attendee_name || 'Attendee',
-          activities: new Set(),
-        };
-      }
-      summaryMap[s.ticket_number].activities.add(s.activity);
-    }
-    return Object.entries(summaryMap).map(([ticket_number, data]) => ({
-      ticket_number,
-      attendee_name: data.attendee_name,
-      activities: Array.from(data.activities),
-      scan_count: data.activities.size,
-    }));
-  } catch {
-    return [];
-  }
+  return Object.entries(summaryMap).map(([ticket_number, data]) => ({
+    ticket_number,
+    attendee_name: data.attendee_name,
+    activities: Array.from(data.activities),
+    scan_count: data.activities.size,
+  })).sort((a, b) => b.scan_count - a.scan_count);
 }
 
 // ── Auth check ─────────────────────────────────────────────────
@@ -609,18 +633,24 @@ export function subscribeToActivityScans(callback: (scans: ActivityScan[]) => vo
           const remoteScans: ActivityScan[] = [];
           snapshot.forEach(docSnap => {
             const data = docSnap.data() as ActivityScan;
-            remoteScans.push({
-              ticket_number: data.ticket_number,
-              attendee_name: data.attendee_name,
-              activity: data.activity,
-              scanned_at: data.scanned_at,
-              scanned_by: data.scanned_by,
-              synced: true,
-            });
+            if (data && data.ticket_number) {
+              remoteScans.push({
+                ticket_number: data.ticket_number,
+                attendee_name: data.attendee_name || 'Attendee',
+                activity: data.activity,
+                scanned_at: data.scanned_at || new Date().toISOString(),
+                scanned_by: data.scanned_by,
+                synced: true,
+              });
+            }
           });
           remoteScans.sort(
             (a, b) => new Date(b.scanned_at || 0).getTime() - new Date(a.scanned_at || 0).getTime()
           );
+          // Sync into local IndexedDB on all devices
+          for (const s of remoteScans) {
+            saveLocalScan(s).catch(() => {});
+          }
           callback(remoteScans);
         },
         error => {

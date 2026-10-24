@@ -213,41 +213,21 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
     const key = scannerKey || getSavedScannerKey() || localStorage.getItem('activity_scanner_key') || '';
 
     try {
-      const [statsData, scansData, summaryData] = await Promise.all([
-        fetchActivityStats(key),
-        fetchAllActivityScans(key),
-        fetchStudentSummary(key),
-      ]);
-      setStats(statsData);
-      setAllScans(scansData);
-      setStudentSummary(summaryData);
-      setLastRefreshed(new Date());
-    } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
-    }
-  }, [scannerKey]);
+      const scansData = await fetchAllActivityScans(key);
+      if (scansData && scansData.length > 0) {
+        setAllScans(scansData);
 
-  useEffect(() => {
-    loadData(false);
-    // Real-time listener: updates Activity stats, per-student progress, and live feed INSTANTLY when any volunteer scans!
-    const unsub = subscribeToActivityScans(remoteScans => {
-      if (remoteScans && remoteScans.length > 0) {
-        setAllScans(remoteScans);
-
-        // Update live per-activity counts
         const newStats: Record<string, number> = {};
         for (const act of ACTIVITIES) {
           newStats[act.slug] = 0;
         }
-        for (const s of remoteScans) {
+        for (const s of scansData) {
           newStats[s.activity] = (newStats[s.activity] || 0) + 1;
         }
         setStats(newStats);
 
-        // Update live per-student participation summary
         const summaryMap: Record<string, { attendee_name: string; activities: Set<string> }> = {};
-        for (const s of remoteScans) {
+        for (const s of scansData) {
           if (!summaryMap[s.ticket_number]) {
             summaryMap[s.ticket_number] = {
               attendee_name: s.attendee_name || 'Attendee',
@@ -261,13 +241,55 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
           attendee_name: data.attendee_name,
           activities: Array.from(data.activities),
           scan_count: data.activities.size,
-        }));
+        })).sort((a, b) => b.scan_count - a.scan_count);
         setStudentSummary(newSummary);
-        setLastRefreshed(new Date());
       }
+      setLastRefreshed(new Date());
+    } finally {
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  }, [scannerKey]);
+
+  useEffect(() => {
+    loadData(false);
+    // Real-time listener: updates Activity stats, per-student progress, and live feed INSTANTLY when any volunteer scans!
+    const unsub = subscribeToActivityScans(remoteScans => {
+      setAllScans(remoteScans);
+
+      // Update live per-activity counts
+      const newStats: Record<string, number> = {};
+      for (const act of ACTIVITIES) {
+        newStats[act.slug] = 0;
+      }
+      for (const s of remoteScans) {
+        newStats[s.activity] = (newStats[s.activity] || 0) + 1;
+      }
+      setStats(newStats);
+
+      // Update live per-student participation summary
+      const summaryMap: Record<string, { attendee_name: string; activities: Set<string> }> = {};
+      for (const s of remoteScans) {
+        if (!summaryMap[s.ticket_number]) {
+          summaryMap[s.ticket_number] = {
+            attendee_name: s.attendee_name || 'Attendee',
+            activities: new Set(),
+          };
+        }
+        summaryMap[s.ticket_number].activities.add(s.activity);
+      }
+      const newSummary = Object.entries(summaryMap).map(([ticket_number, data]) => ({
+        ticket_number,
+        attendee_name: data.attendee_name,
+        activities: Array.from(data.activities),
+        scan_count: data.activities.size,
+      })).sort((a, b) => b.scan_count - a.scan_count);
+      setStudentSummary(newSummary);
+      setLastRefreshed(new Date());
+      setIsLoading(false);
     });
 
-    const interval = setInterval(() => loadData(true), 5_000);
+    const interval = setInterval(() => loadData(true), 10_000);
     return () => {
       unsub();
       clearInterval(interval);
