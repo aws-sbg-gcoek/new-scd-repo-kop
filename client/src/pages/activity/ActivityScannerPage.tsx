@@ -12,6 +12,7 @@ import {
   verifyActivityScannerKey,
   resetActivityScan,
   ActivityScanResult,
+  subscribeToActivityScans,
 } from '../../utils/activityStore';
 import {
   StudentRegistration,
@@ -274,6 +275,27 @@ export default function ActivityScannerPage() {
     setRegistrations(loadRegistrations());
     const count = await getLocalActivityCount(activity.slug);
     setLocalCount(count);
+  }, [activity]);
+
+  // Real-time activity scans subscription from Firestore
+  useEffect(() => {
+    if (!activity) return;
+    const unsub = subscribeToActivityScans(scans => {
+      const thisActivityScans = scans.filter(s => s.activity === activity.slug);
+      setLocalCount(thisActivityScans.length);
+      const feed = thisActivityScans.slice(0, 20).map(s => ({
+        result: {
+          status: 'SUCCESS' as const,
+          message: `Approved for ${activity.name}`,
+          attendee_name: s.attendee_name,
+          ticket_number: s.ticket_number,
+          scanned_at: s.scanned_at,
+        },
+        timestamp: new Date(s.scanned_at).toLocaleTimeString('en-IN'),
+      }));
+      setRecentScans(feed);
+    });
+    return () => unsub();
   }, [activity]);
 
   useEffect(() => {

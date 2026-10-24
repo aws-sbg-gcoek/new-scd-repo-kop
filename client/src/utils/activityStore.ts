@@ -10,6 +10,15 @@
 
 import { ActivitySlug } from './activityConfig';
 import { loadRegistrations, StudentRegistration } from './registrationStore';
+import {
+  collection,
+  doc,
+  setDoc,
+  deleteDoc,
+  onSnapshot,
+  getDocs,
+} from 'firebase/firestore';
+import { db, isFirebaseConfigured } from '../services/firebase';
 
 // ── Types ──────────────────────────────────────────────────────
 export interface ActivityScan {
@@ -286,6 +295,21 @@ export async function performActivityScan(
   };
   await saveLocalScan(scanRecord);
 
+  // ─ Step 4.5: Real-time Cloud Sync to Firebase Firestore
+  // Ensures any device (admin or volunteer) sees this scan instantly across the venue!
+  if (isFirebaseConfigured() && db) {
+    const docId = `${activity}_${ticketNumber.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
+    setDoc(doc(db, 'activity_scans', docId), {
+      ticket_number: ticketNumber,
+      attendee_name: attendeeName,
+      activity,
+      scanned_at: scannedAt,
+      scanned_by,
+    }).catch(err => {
+      console.warn('Firestore activity scan sync notice:', err);
+    });
+  }
+
   // ─ Step 5: Queue for background sync
   await queueForSync({
     id: `${ticketNumber}-${activity}-${Date.now()}`,
@@ -363,6 +387,14 @@ export async function resetActivityScan(ticketNumber: string, activity: Activity
     };
   } catch (err) {
     console.error('Error resetting activity scan:', err);
+  }
+
+  // Delete from Firebase Firestore to revert across all devices
+  if (isFirebaseConfigured() && db) {
+    const docId = `${activity}_${ticketNumber.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
+    deleteDoc(doc(db, 'activity_scans', docId)).catch(err => {
+      console.warn('Firestore activity scan delete notice:', err);
+    });
   }
 }
 
@@ -563,4 +595,42 @@ export function saveScannerKey(key: string): void {
 
 export function clearScannerKey(): void {
   sessionStorage.removeItem(SCANNER_KEY_SESSION);
+}
+
+// ── Live Firestore Activity Scans Subscription ────────────────
+// Enables real-time sync across ALL devices (desktop admin & volunteer phones)
+export function subscribeToActivityScans(callback: (scans: ActivityScan[]) => void): () => void {
+  if (isFirebaseConfigured() && db) {
+    try {
+      const q = collection(db, 'activity_scans');
+      const unsubscribe = onSnapshot(
+        q,
+        snapshot => {
+          const remoteScans: ActivityScan[] = [];
+          snapshot.forEach(docSnap => {
+            const data = docSnap.data() as ActivityScan;
+            remoteScans.push({
+              ticket_number: data.ticket_number,
+              attendee_name: data.attendee_name,
+              activity: data.activity,
+              scanned_at: data.scanned_at,
+              scanned_by: data.scanned_by,
+              synced: true,
+            });
+          });
+          remoteScans.sort(
+            (a, b) => new Date(b.scanned_at || 0).getTime() - new Date(a.scanned_at || 0).getTime()
+          );
+          callback(remoteScans);
+        },
+        error => {
+          console.warn('Firestore activity_scans onSnapshot notice:', error);
+        }
+      );
+      return () => unsubscribe();
+    } catch (err) {
+      console.warn('Error subscribing to activity_scans in Firestore:', err);
+    }
+  }
+  return () => {};
 }

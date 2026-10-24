@@ -6,6 +6,7 @@ import {
   fetchStudentSummary,
   getSavedScannerKey,
   ActivityScan,
+  subscribeToActivityScans,
 } from '../utils/activityStore';
 import {
   Activity,
@@ -229,9 +230,48 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
 
   useEffect(() => {
     loadData(false);
-    // Auto-refresh every 30 seconds
+    // Real-time listener: updates Activity stats, per-student progress, and live feed INSTANTLY when any volunteer scans!
+    const unsub = subscribeToActivityScans(remoteScans => {
+      if (remoteScans && remoteScans.length > 0) {
+        setAllScans(remoteScans);
+
+        // Update live per-activity counts
+        const newStats: Record<string, number> = {};
+        for (const act of ACTIVITIES) {
+          newStats[act.slug] = 0;
+        }
+        for (const s of remoteScans) {
+          newStats[s.activity] = (newStats[s.activity] || 0) + 1;
+        }
+        setStats(newStats);
+
+        // Update live per-student participation summary
+        const summaryMap: Record<string, { attendee_name: string; activities: Set<string> }> = {};
+        for (const s of remoteScans) {
+          if (!summaryMap[s.ticket_number]) {
+            summaryMap[s.ticket_number] = {
+              attendee_name: s.attendee_name || 'Attendee',
+              activities: new Set(),
+            };
+          }
+          summaryMap[s.ticket_number].activities.add(s.activity);
+        }
+        const newSummary = Object.entries(summaryMap).map(([ticket_number, data]) => ({
+          ticket_number,
+          attendee_name: data.attendee_name,
+          activities: Array.from(data.activities),
+          scan_count: data.activities.size,
+        }));
+        setStudentSummary(newSummary);
+        setLastRefreshed(new Date());
+      }
+    });
+
     const interval = setInterval(() => loadData(true), 30_000);
-    return () => clearInterval(interval);
+    return () => {
+      unsub();
+      clearInterval(interval);
+    };
   }, [loadData]);
 
   const totalScans = Object.values(stats).reduce((a, b) => a + b, 0);
