@@ -156,5 +156,19 @@
     "shortDescription": "Join an inspiring panel discussion featuring women leaders in technology as they share their career journeys, leadership experiences, and insights on building a successful career in cloud and tech.",
     "category": "Panelist",
     "featured": false
+  },
+  {
+    "id": 13,
+    "name": "Atul Kumbhar",
+    "image": "atul-kumbhar.jpg",
+    "designation": "Senior Consultant – Platform Ops at CirrusLabs",
+    "role": "Former AWS Community Builder | Cloud Architecture & AI Governance",
+    "sessionType": "Technical Talk",
+    "sessionTitle": "The Cloud Engineering Blueprint: Build, Scale, Modernize & Extend with AI",
+    "topic": "Cloud Engineering Blueprint, Scalability, Modernization, Generative AI & Career Roadmap",
+    "shortDescription": "Explore a practical engineering journey from application fundamentals and monolithic architectures to AWS cloud infrastructure, scalability, modernization, and Generative AI integration.",
+    "category": "Former AWS Community Builder",
+    "featured": true,
+    "linkedinUrl": "https://www.linkedin.com/in/kumbharatul/"
   }
 ]

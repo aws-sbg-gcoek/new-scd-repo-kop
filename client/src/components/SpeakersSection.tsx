@@ -47,6 +47,7 @@ interface SpeakerSlot {
   sessionType?: string;
   sessionDescription?: string;
   keyTopics?: string[];
+  certifications?: string[];
   credlyLink?: string;
   linkedinLink?: string;
   statusBadge: string;
@@ -99,15 +100,46 @@ const SPEAKER_SLOTS: SpeakerSlot[] = [
   },
   {
     id: 3,
-    revealed: false,
-    track: "Career Guidance & Cloud Leadership",
-    badge: "SPEAKER 03 // CAREER",
+    revealed: true,
+    name: "Atul Kumbhar",
+    image: "/Speakers/atul-kumbhar.jpg",
+    designation: "Senior Consultant – Platform Ops, CirrusLabs",
+    role: "Former AWS Community Builder · Cloud Architecture & AI Governance Specialist",
+    badge: "SPEAKER 03 // CONFIRMED",
+    specialBadge: "FORMER AWS COMMUNITY BUILDER",
+    subTrackBadge: "Technical Talk",
+    experience: "SENIOR CONSULTANT",
+    accreditation: "3x AWS CERTIFIED",
     sector: "SECTOR-C3",
-    headline: "Cloud Careers, Certifications & Community Impact",
-    focus: "AWS Certifications, High-Impact Networking & Career Growth",
-    description: "Actionable frameworks to accelerate your cloud journey through active community contribution, industry certifications, and leadership within the AWS ecosystem.",
-    statusBadge: "IN PADDOCK // REVEALING SOON",
-    iconName: "users"
+    track: "Technical Talk // Cloud Engineering Blueprint",
+    headline: "The Cloud Engineering Blueprint: Build, Scale, Modernize & Extend with AI",
+    focus: "Cloud Architecture, Platform Engineering, FinOps, Cloud Security & AI Governance",
+    description: "Atul Kumbhar is a Senior Consultant – Platform Ops at CirrusLabs, specializing in Cloud Architecture, Platform Engineering, Cloud Security, FinOps, and AI Governance. A former AWS Community Builder and AWS User Group organizer, he actively contributes to the cloud community through technical sessions, workshops, and knowledge sharing. His professional credentials span AWS architecture, security, FinOps, cybersecurity auditing, and AI governance. Passionate about mentoring aspiring engineers, he focuses on bridging engineering fundamentals with real-world cloud architectures, emerging AI technologies, and career development.",
+    sessionType: "Technical Talk",
+    sessionTitle: "The Cloud Engineering Blueprint: Build, Scale, Modernize & Extend with AI",
+    sessionDescription: "How does a simple application evolve into a scalable, secure, cloud-native, and AI-powered system? This session takes participants through a practical engineering journey from application fundamentals and monolithic architectures to AWS cloud infrastructure, scalability, modernization, and Generative AI integration. Along the way, attendees will explore architectural decisions, essential engineering skills, evolving career roles, AWS certification pathways, and the value of community-driven learning.",
+    keyTopics: [
+      "Engineering Fundamentals & Architectural Thinking — Operating systems, networking, application architecture, functional and non-functional requirements.",
+      "Cloud Engineering & Scalability — AWS infrastructure, cloud migration strategies, networking, high availability, reliability, and scaling.",
+      "Cloud-Native Modernization — Containers, DevOps, microservices, event-driven architectures, and the Strangler Fig pattern.",
+      "AI-Powered Cloud Engineering — Generative AI, LLMs, RAG, AI integration, AI security, and emerging AI engineering opportunities.",
+      "Cloud Career Roadmap — Engineering roles, essential competencies, AWS certifications, hands-on learning, and community contributions."
+    ],
+    certifications: [
+      "AWS Certified Solutions Architect – Professional",
+      "AWS Certified Security – Specialty",
+      "AWS Certified Solutions Architect – Associate",
+      "ISACA Advanced in AI Audit (AAIA)",
+      "ISACA CISA",
+      "ISACA Certified Cybersecurity Operations Analyst (CCOA)",
+      "ISO/IEC 42001 AI Management Systems Lead Auditor",
+      "ISO/IEC 27001:2022 Lead Auditor",
+      "FinOps Certified Practitioner"
+    ],
+    credlyLink: "https://bio.link/atulkumbhar",
+    linkedinLink: "https://www.linkedin.com/in/kumbharatul/",
+    statusBadge: "CONFIRMED // STAGE READY",
+    iconName: "cloud"
   },
   {
     id: 4,
@@ -518,7 +550,7 @@ export const SpeakersSection = () => {
                         )}
                       </div>
 
-                      {/* Credly badge link button for revealed speaker */}
+                      {/* Credly / Portfolio badge link button for revealed speaker */}
                       {selectedSlot.credlyLink && (
                         <a
                           href={selectedSlot.credlyLink}
@@ -527,7 +559,7 @@ export const SpeakersSection = () => {
                           className="mt-4 w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-yellow-500/10 to-aws-orange/10 hover:from-yellow-500/20 hover:to-aws-orange/20 border border-yellow-500/30 text-yellow-300 font-mono text-[10px] uppercase tracking-wider rounded transition-all text-center"
                         >
                           <Award size={13} className="text-yellow-400" />
-                          <span>View Credly Badges</span>
+                          <span>{selectedSlot.credlyLink.includes('bio.link') ? 'Bio & Portfolio' : 'View Credly Badges'}</span>
                           <ExternalLink size={11} />
                         </a>
                       )}
@@ -608,6 +640,27 @@ export const SpeakersSection = () => {
                           {selectedSlot.description}
                         </p>
                       </div>
+
+                      {/* Certifications & Professional Credentials */}
+                      {selectedSlot.certifications && selectedSlot.certifications.length > 0 && (
+                        <div className="p-4 bg-white/[0.02] border border-white/5 rounded-xl mb-6">
+                          <p className="font-mono text-[9px] uppercase tracking-widest text-aws-orange mb-2.5 flex items-center gap-1.5 font-bold">
+                            <Award size={12} className="text-aws-orange" />
+                            <span>AWS Certifications & Professional Credentials</span>
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {selectedSlot.certifications.map((cert, idx) => (
+                              <span
+                                key={idx}
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#141414] border border-white/10 text-white/90 font-mono text-[10px]"
+                              >
+                                <CheckCircle2 size={11} className="text-aws-orange shrink-0" />
+                                <span>{cert}</span>
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
                       {/* Session Parameters Box */}
                       <div className="bg-[#121212] border border-white/5 rounded-xl p-4 sm:p-5 relative overflow-hidden">
