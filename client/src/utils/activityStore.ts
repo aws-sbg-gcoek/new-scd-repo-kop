@@ -17,7 +17,6 @@ import {
   deleteDoc,
   onSnapshot,
   getDocs,
-  getDoc,
 } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '../services/firebase';
 
@@ -135,6 +134,40 @@ async function saveLocalScan(scan: ActivityScan): Promise<void> {
     // swallow — offline storage is best-effort
   }
 }
+
+// ── Remove Local Scan (Purges from IndexedDB when deleted) ──────
+export async function removeLocalScan(
+  ticketNumber: string,
+  activity?: ActivitySlug
+): Promise<void> {
+  try {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_SCANS, 'readwrite');
+      const store = tx.objectStore(STORE_SCANS);
+      const req = store.openCursor();
+      req.onsuccess = (e) => {
+        const cursor = (e.target as IDBRequest).result;
+        if (cursor) {
+          const val = cursor.value;
+          const ticketMatch =
+            val.ticket_number === ticketNumber ||
+            val.ticket_number?.toLowerCase() === ticketNumber.toLowerCase();
+          const activityMatch = !activity || val.activity === activity;
+          if (ticketMatch && activityMatch) {
+            cursor.delete();
+          }
+          cursor.continue();
+        }
+      };
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  } catch (err) {
+    console.error('Error removing local scan:', err);
+  }
+}
+
 
 // ── Queue for Offline Sync ─────────────────────────────────────
 async function queueForSync(pending: PendingSync): Promise<void> {
@@ -257,28 +290,10 @@ export async function performActivityScan(
   const ticketNumber = matchAttendee?.ticketCode || matchAttendee?.bookingId || cleanCode;
   const attendeeName = matchAttendee?.fullName || parsedName || 'Attendee';
 
-  // ─ Step 3: Check duplicate (instant offline local DB + Firestore if online)
-  let localDup = await isAlreadyScannedLocally(ticketNumber, activity);
-  if (!localDup && navigator.onLine && isFirebaseConfigured() && db) {
-    try {
-      const docId = `${activity}_${ticketNumber.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
-      const snap = await getDoc(doc(db, 'activity_scans', docId));
-      if (snap.exists()) {
-        const d = snap.data() as ActivityScan;
-        localDup = {
-          ticket_number: d.ticket_number,
-          attendee_name: d.attendee_name,
-          activity: d.activity,
-          scanned_at: d.scanned_at,
-          scanned_by: d.scanned_by,
-          synced: true,
-        };
-        await saveLocalScan(localDup);
-      }
-    } catch {
-      // ignore
-    }
-  }
+  // ─ Step 3: Check duplicate via fast local IndexedDB only
+  // (Firestore onSnapshot keeps local DB in sync across all devices in real-time,
+  //  so a separate getDoc round-trip is unnecessary and adds 200-400ms latency)
+  const localDup = await isAlreadyScannedLocally(ticketNumber, activity);
 
   if (localDup) {
     const timeStr = localDup.scanned_at
@@ -391,42 +406,60 @@ export async function performActivityScan(
 
 // ── Revert / Reset Activity Scan (Admin Override) ─────────────
 export async function resetActivityScan(ticketNumber: string, activity: ActivitySlug): Promise<void> {
-  try {
-    const db = await openDB();
-    const tx = db.transaction(STORE_SCANS, 'readwrite');
-    const store = tx.objectStore(STORE_SCANS);
-    const req = store.openCursor();
-    req.onsuccess = (e) => {
-      const cursor = (e.target as IDBRequest).result;
-      if (cursor) {
-        const val = cursor.value;
-        const match =
-          val.activity === activity &&
-          (val.ticket_number === ticketNumber ||
-            val.ticket_number?.toLowerCase() === ticketNumber.toLowerCase());
-        if (match) {
-          cursor.delete();
-        }
-        cursor.continue();
-      }
-    };
-  } catch (err) {
-    console.error('Error resetting activity scan:', err);
-  }
+  // 1. Delete locally from IndexedDB
+  await removeLocalScan(ticketNumber, activity);
 
-  // Delete from Firebase Firestore to revert across all devices
+  // 2. Delete from Firebase Firestore to propagate the deletion across all devices instantly
   if (isFirebaseConfigured() && db) {
     const docId = `${activity}_${ticketNumber.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
-    deleteDoc(doc(db, 'activity_scans', docId)).catch(err => {
+    const docIdLower = `${activity}_${ticketNumber.toLowerCase().replace(/[^a-zA-Z0-9_-]/g, '_')}`;
+    try {
+      await deleteDoc(doc(db, 'activity_scans', docId));
+      if (docIdLower !== docId) {
+        await deleteDoc(doc(db, 'activity_scans', docIdLower)).catch(() => {});
+      }
+    } catch (err) {
       console.warn('Firestore activity scan delete notice:', err);
-    });
+    }
+  }
+
+  // 3. Delete from backend REST API (Supabase) if online
+  const API_BASE = (import.meta as any).env?.VITE_API_URL || '/api';
+  if (navigator.onLine) {
+    try {
+      await fetch(`${API_BASE}/activity/scan`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ticket_number: ticketNumber, activity }),
+      });
+    } catch {
+      // server offline / best-effort
+    }
   }
 }
 
 export async function resetAllStudentActivityScans(ticketNumber: string): Promise<void> {
+  // 1. Purge all local scans for this student
+  await removeLocalScan(ticketNumber);
+
+  // 2. Reset across all activities in Firestore
   const activities: ActivitySlug[] = ['human-tetris', 'blindfold', 'move-the-byte', 'live-trivia', 'food'];
   for (const act of activities) {
     await resetActivityScan(ticketNumber, act);
+  }
+
+  // 3. Reset in backend REST API (Supabase) if online
+  const API_BASE = (import.meta as any).env?.VITE_API_URL || '/api';
+  if (navigator.onLine) {
+    try {
+      await fetch(`${API_BASE}/activity/all-for-student`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ticket_number: ticketNumber }),
+      });
+    } catch {
+      // best-effort
+    }
   }
 }
 
@@ -509,16 +542,30 @@ export async function fetchAllActivityScans(scannerKey?: string): Promise<Activi
           });
         }
       });
-      if (remoteScans.length > 0) {
-        remoteScans.sort(
-          (a, b) => new Date(b.scanned_at || 0).getTime() - new Date(a.scanned_at || 0).getTime()
+      remoteScans.sort(
+        (a, b) => new Date(b.scanned_at || 0).getTime() - new Date(a.scanned_at || 0).getTime()
+      );
+
+      // Reconcile local IndexedDB: purge any deleted scans so they never resurrect
+      try {
+        const localScans = await getLocalScans();
+        const remoteKeys = new Set(
+          remoteScans.map(s => `${s.activity}_${s.ticket_number?.toLowerCase()}`)
         );
-        // Background cache in local IndexedDB
-        for (const s of remoteScans) {
-          saveLocalScan(s).catch(() => {});
+        for (const local of localScans) {
+          const key = `${local.activity}_${local.ticket_number?.toLowerCase()}`;
+          if (!remoteKeys.has(key)) {
+            await removeLocalScan(local.ticket_number, local.activity);
+          }
         }
-        return remoteScans;
+      } catch {
+        // best-effort cleanup
       }
+
+      for (const s of remoteScans) {
+        saveLocalScan(s).catch(() => {});
+      }
+      return remoteScans;
     } catch (err) {
       console.warn('Firestore getDocs activity_scans notice:', err);
     }
@@ -533,7 +580,7 @@ export async function fetchAllActivityScans(scannerKey?: string): Promise<Activi
     const contentType = response.headers.get('content-type') || '';
     if (response.ok && contentType.includes('application/json')) {
       const data = await response.json();
-      if (Array.isArray(data) && data.length > 0) {
+      if (Array.isArray(data)) {
         for (const s of data) {
           saveLocalScan(s).catch(() => {});
         }
@@ -636,7 +683,17 @@ export function subscribeToActivityScans(callback: (scans: ActivityScan[]) => vo
       const q = collection(db, 'activity_scans');
       const unsubscribe = onSnapshot(
         q,
-        snapshot => {
+        async snapshot => {
+          // 1. Instantly process removed scans so deleted tickets are purged from local DB
+          snapshot.docChanges().forEach(change => {
+            if (change.type === 'removed') {
+              const data = change.doc.data() as ActivityScan;
+              if (data && data.ticket_number) {
+                removeLocalScan(data.ticket_number, data.activity as ActivitySlug).catch(() => {});
+              }
+            }
+          });
+
           const remoteScans: ActivityScan[] = [];
           snapshot.forEach(docSnap => {
             const data = docSnap.data() as ActivityScan;
@@ -654,7 +711,24 @@ export function subscribeToActivityScans(callback: (scans: ActivityScan[]) => vo
           remoteScans.sort(
             (a, b) => new Date(b.scanned_at || 0).getTime() - new Date(a.scanned_at || 0).getTime()
           );
-          // Sync into local IndexedDB on all devices
+
+          // 2. Parity cleanup: remove any local records deleted on other systems
+          try {
+            const localScans = await getLocalScans();
+            const remoteKeys = new Set(
+              remoteScans.map(s => `${s.activity}_${s.ticket_number?.toLowerCase()}`)
+            );
+            for (const local of localScans) {
+              const key = `${local.activity}_${local.ticket_number?.toLowerCase()}`;
+              if (!remoteKeys.has(key)) {
+                await removeLocalScan(local.ticket_number, local.activity);
+              }
+            }
+          } catch {
+            // best effort cleanup
+          }
+
+          // 3. Cache confirmed active scans locally
           for (const s of remoteScans) {
             saveLocalScan(s).catch(() => {});
           }

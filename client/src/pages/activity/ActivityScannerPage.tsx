@@ -365,14 +365,17 @@ export default function ActivityScannerPage() {
       const scanner = new Html5Qrcode(scannerContainerId, {
         formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
         verbose: false,
+        experimentalFeatures: {
+          useBarCodeDetectorIfSupported: true,
+        },
       });
       html5QrCodeRef.current = scanner;
 
       const qrConfig = {
-        fps: 15,
+        fps: 30,
         qrbox: (w: number, h: number) => {
           const edge = Math.min(w, h);
-          const boxSize = Math.max(180, Math.min(Math.floor(edge * 0.72), 280));
+          const boxSize = Math.max(220, Math.min(Math.floor(edge * 0.85), 360));
           return { width: boxSize, height: boxSize };
         },
         aspectRatio: 1.0,
@@ -468,7 +471,7 @@ export default function ActivityScannerPage() {
     if (!trimmed || isProcessing || !activity) return;
 
     const now = Date.now();
-    if (trimmed === lastScannedCodeRef.current && now - lastScanTimeRef.current < 2500) return;
+    if (trimmed === lastScannedCodeRef.current && now - lastScanTimeRef.current < 1000) return;
 
     lastScannedCodeRef.current = trimmed;
     lastScanTimeRef.current = now;

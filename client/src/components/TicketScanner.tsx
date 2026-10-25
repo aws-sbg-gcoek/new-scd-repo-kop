@@ -159,9 +159,9 @@ export default function TicketScanner({ registrations: propRegistrations, onChec
     const trimmed = rawCode.trim();
     if (!trimmed || isProcessing) return;
 
-    // Throttle duplicate reads of the exact same string within 2.5 seconds
+    // Throttle duplicate reads of the exact same string within 1 second
     const now = Date.now();
-    if (trimmed === lastScannedCodeRef.current && now - lastScanTimeRef.current < 2500) {
+    if (trimmed === lastScannedCodeRef.current && now - lastScanTimeRef.current < 1000) {
       return;
     }
 
@@ -237,18 +237,21 @@ export default function TicketScanner({ registrations: propRegistrations, onChec
       // 3. Allow DOM to lay out the container element with non-zero dimensions
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // 4. Instantiate fresh Html5Qrcode instance
+      // 4. Instantiate fresh Html5Qrcode instance with hardware acceleration
       const scanner = new Html5Qrcode(scannerContainerId, {
         formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
         verbose: false,
+        experimentalFeatures: {
+          useBarCodeDetectorIfSupported: true,
+        },
       });
       html5QrCodeRef.current = scanner;
 
       const qrConfig = {
-        fps: 15,
+        fps: 30,
         qrbox: (viewfinderWidth: number, viewfinderHeight: number) => {
           const edge = Math.min(viewfinderWidth, viewfinderHeight);
-          const boxSize = Math.max(180, Math.min(Math.floor(edge * 0.72), 280));
+          const boxSize = Math.max(220, Math.min(Math.floor(edge * 0.85), 360));
           return { width: boxSize, height: boxSize };
         },
         aspectRatio: 1.0,

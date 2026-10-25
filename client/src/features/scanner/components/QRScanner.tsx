@@ -14,8 +14,8 @@ export function QRScanner({ onScan, enabled }: Props) {
 
   const handleScan = useCallback((decodedText: string) => {
     const now = Date.now();
-    // 1500ms debounce to prevent double-scan
-    if (now - lastScanRef.current < 1500) return;
+    // 800ms debounce to prevent double-scan while still feeling instant
+    if (now - lastScanRef.current < 800) return;
     lastScanRef.current = now;
     onScan(decodedText);
   }, [onScan]);
@@ -23,14 +23,18 @@ export function QRScanner({ onScan, enabled }: Props) {
   useEffect(() => {
     if (!enabled || !containerRef.current) return;
 
-    const scanner = new Html5Qrcode('qr-scanner-container');
+    const scanner = new Html5Qrcode('qr-scanner-container', {
+      experimentalFeatures: {
+        useBarCodeDetectorIfSupported: true,
+      },
+    });
     scannerRef.current = scanner;
 
     scanner.start(
       { facingMode: 'environment' },
       {
-        fps: 10,
-        qrbox: { width: 250, height: 250 },
+        fps: 30,
+        qrbox: { width: 300, height: 300 },
         aspectRatio: 1,
       },
       handleScan,

@@ -345,4 +345,55 @@ router.post('/scan', async (req, res, next) => {
   }
 });
 
+// DELETE /api/activity/scan
+// Deletes an activity scan (admin override) from Supabase
+router.delete('/scan', async (req, res, next) => {
+  try {
+    const { ticket_number, activity } = req.body;
+    if (!ticket_number || !activity) {
+      res.status(400).json({ error: 'ticket_number and activity are required' });
+      return;
+    }
+
+    const { error } = await supabase
+      .from('activity_scans')
+      .delete()
+      .match({ ticket_number, activity });
+
+    if (error) {
+      throw error;
+    }
+
+    res.json({ status: 'SUCCESS', message: `Deleted activity scan for ${ticket_number}` });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// DELETE /api/activity/all-for-student
+// Deletes all activity scans for a student from Supabase
+router.delete('/all-for-student', async (req, res, next) => {
+  try {
+    const { ticket_number } = req.body;
+    if (!ticket_number) {
+      res.status(400).json({ error: 'ticket_number is required' });
+      return;
+    }
+
+    const { error } = await supabase
+      .from('activity_scans')
+      .delete()
+      .eq('ticket_number', ticket_number);
+
+    if (error) {
+      throw error;
+    }
+
+    res.json({ status: 'SUCCESS', message: `Deleted all activity scans for ${ticket_number}` });
+  } catch (err) {
+    next(err);
+  }
+});
+
 export default router;
+

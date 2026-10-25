@@ -217,36 +217,35 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
 
     try {
       const scansData = await fetchAllActivityScans(key);
-      if (scansData && scansData.length > 0) {
-        setAllScans(scansData);
+      const validScans = scansData || [];
+      setAllScans(validScans);
 
-        const newStats: Record<string, number> = {};
-        for (const act of ACTIVITIES) {
-          newStats[act.slug] = 0;
-        }
-        for (const s of scansData) {
-          newStats[s.activity] = (newStats[s.activity] || 0) + 1;
-        }
-        setStats(newStats);
-
-        const summaryMap: Record<string, { attendee_name: string; activities: Set<string> }> = {};
-        for (const s of scansData) {
-          if (!summaryMap[s.ticket_number]) {
-            summaryMap[s.ticket_number] = {
-              attendee_name: s.attendee_name || 'Attendee',
-              activities: new Set(),
-            };
-          }
-          summaryMap[s.ticket_number].activities.add(s.activity);
-        }
-        const newSummary = Object.entries(summaryMap).map(([ticket_number, data]) => ({
-          ticket_number,
-          attendee_name: data.attendee_name,
-          activities: Array.from(data.activities),
-          scan_count: data.activities.size,
-        })).sort((a, b) => b.scan_count - a.scan_count);
-        setStudentSummary(newSummary);
+      const newStats: Record<string, number> = {};
+      for (const act of ACTIVITIES) {
+        newStats[act.slug] = 0;
       }
+      for (const s of validScans) {
+        newStats[s.activity] = (newStats[s.activity] || 0) + 1;
+      }
+      setStats(newStats);
+
+      const summaryMap: Record<string, { attendee_name: string; activities: Set<string> }> = {};
+      for (const s of validScans) {
+        if (!summaryMap[s.ticket_number]) {
+          summaryMap[s.ticket_number] = {
+            attendee_name: s.attendee_name || 'Attendee',
+            activities: new Set(),
+          };
+        }
+        summaryMap[s.ticket_number].activities.add(s.activity);
+      }
+      const newSummary = Object.entries(summaryMap).map(([ticket_number, data]) => ({
+        ticket_number,
+        attendee_name: data.attendee_name,
+        activities: Array.from(data.activities),
+        scan_count: data.activities.size,
+      })).sort((a, b) => b.scan_count - a.scan_count);
+      setStudentSummary(newSummary);
       setLastRefreshed(new Date());
     } finally {
       setIsLoading(false);
