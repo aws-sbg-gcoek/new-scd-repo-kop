@@ -33,23 +33,7 @@ function mapConfigToPasses(config: TicketSystemConfig): PassType[] {
     defaultBadge: string;
     perks: string[];
   }> = [
-    {
-      code: 'early_bird',
-      defaultName: 'Standard Ticket',
-      slug: 'SCD-STANDARD',
-      defaultTagline: 'Standard Admission',
-      defaultPrice: 349,
-      capacity: 250,
-      badgeColor: '#FF9900',
-      defaultBadge: 'POPULAR CHOICE',
-      perks: [
-        'Full Day All-Track Conference Access',
-        'Official Event Swag Kit & Badge',
-        'Networking High Tea & Catered Lunch',
-        'Verified Certificate of Participation',
-        'Access to Keynotes & Hands-on Tech Demos'
-      ]
-    },
+    // early_bird hidden from frontend display (ticket data preserved in backend)
     {
       code: 'regular',
       defaultName: 'Regular Ticket',
