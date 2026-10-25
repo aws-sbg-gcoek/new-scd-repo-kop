@@ -61,9 +61,9 @@ export const ACTIVITIES: ActivityConfig[] = [
   },
   {
     slug: 'move-the-byte',
-    name: 'Move the Byte',
-    emoji: '🔢',
-    description: 'Race to sort the bits!',
+    name: 'AWS: Balance the Bytes',
+    emoji: '⚖️',
+    description: 'Balance the load & deliver the data!',
     color: {
       primary: 'amber',
       bg: 'bg-amber-500/10',

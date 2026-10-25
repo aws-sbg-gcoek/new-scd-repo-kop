@@ -72,13 +72,35 @@ const activitiesData: ActivityItem[] = [
       'Players can rotate pieces to fit.',
       'The player who completes the most vertical columns within the time limit wins.'
     ]
+  },
+  {
+    id: 'balance-the-bytes',
+    title: 'AWS: Balance the Bytes',
+    subtitle: 'Teamwork & Obstacle Navigation',
+    zone: 'BUILDER ZONE',
+    gridCode: 'GRID-03',
+    shortDesc: 'Pair up with a teammate, balance a ball on two sticks, and navigate a winding obstacle course without dropping your data.',
+    tagline: 'Balance the load. Navigate the obstacles. Deliver the data.',
+    image: '/activities/balance-the-bytes.jpg',
+    badgeColor: '#f59e0b',
+    participants: '2 players per team',
+    duration: '2–4 minutes per run',
+    objective: 'Reach the finish line as quickly as possible without dropping the ball!',
+    howToPlay: 'Team up with one partner. Hold two sticks each to create a platform for the ball. Carry the ball from the starting point to the finish line, navigating turns, diversions, and obstacles along your designated path while keeping the ball balanced throughout the challenge!',
+    rules: [
+      'Team up with one partner — each player holds two sticks to create a shared platform for the ball.',
+      'Carry the ball from the starting point to the finish line without dropping it.',
+      'Navigate all turns, diversions, and obstacles along your designated path.',
+      'Dropping the ball requires restarting from the nearest checkpoint.',
+      'AWS Connection: The ball = data, the path = network, obstacles = challenges in data transfer. Deliver your data safely!'
+    ]
   }
 ];
 
 export const ActivitiesSection = () => {
   const [selectedId, setSelectedId] = useState<string>(activitiesData[0].id);
   const [modalItem, setModalItem] = useState<ActivityItem | null>(null);
-  const [activeFilter, setActiveFilter] = useState<'all' | 'algorithmic-maze' | 'human-tetris'>('all');
+  const [activeFilter, setActiveFilter] = useState<string>('all');
 
   // Lock body scroll when modal is open
   useEffect(() => {
