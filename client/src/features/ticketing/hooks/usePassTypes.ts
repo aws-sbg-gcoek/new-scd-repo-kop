@@ -35,10 +35,10 @@ function mapConfigToPasses(config: TicketSystemConfig): PassType[] {
   }> = [
     {
       code: 'early_bird',
-      defaultName: 'Early Bird Ticket',
-      slug: 'SCD-EARLY-BIRD',
-      defaultTagline: 'Early Bird, Be Quick!',
-      defaultPrice: 249,
+      defaultName: 'Standard Ticket',
+      slug: 'SCD-STANDARD',
+      defaultTagline: 'Standard Admission',
+      defaultPrice: 349,
       capacity: 250,
       badgeColor: '#FF9900',
       defaultBadge: 'POPULAR CHOICE',

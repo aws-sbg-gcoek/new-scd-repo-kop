@@ -48,9 +48,9 @@ export const DEFAULT_TICKETS_CONFIG: TicketSystemConfig = {
     },
     early_bird: {
       code: 'early_bird',
-      label: 'Early Bird Ticket',
-      tagline: 'Early Bird, Be Quick!',
-      price: 249,
+      label: 'Standard Ticket',
+      tagline: 'Standard Admission',
+      price: 349,
       mode: 'manual',
       manualStatus: 'open',
       openFrom: '2026-09-18T00:00',
