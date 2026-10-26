@@ -8,6 +8,7 @@ import {
   Image as ImageIcon,
   ChevronDown,
   Linkedin,
+  Instagram,
   Copy,
   Check,
   ExternalLink,
@@ -67,6 +68,11 @@ export const BadgePage = () => {
   const [showShareModal, setShowShareModal] = useState(false);
   const [currentCaption, setCurrentCaption] = useState("");
   const [hasCopiedCaption, setHasCopiedCaption] = useState(false);
+
+  // Instagram Story sharing states
+  const [isSharingInsta, setIsSharingInsta] = useState(false);
+  const [showInstaModal, setShowInstaModal] = useState(false);
+  const [hasCopiedInstaTag, setHasCopiedInstaTag] = useState(false);
 
   const getRoleRibbon = (selectedRole: RoleType) => {
     const found = ROLE_OPTIONS.find((r) => r.value === selectedRole);
@@ -437,6 +443,92 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
       setTimeout(() => setHasCopiedCaption(false), 2500);
     } catch {
       alert("Failed to copy to clipboard. Please copy the caption manually.");
+    }
+  };
+
+  const INSTA_HANDLE = "@aws.sbg.gcoe.kolhapur";
+  const INSTA_TAG_TEXT = "@aws.sbg.gcoe.kolhapur #SCDKolhapur2026";
+  const INSTA_PROFILE_URL = "https://www.instagram.com/aws.sbg.gcoe.kolhapur/";
+
+  // Instagram Story Sharing workflow
+  const handleInstagramShare = async () => {
+    if (!name.trim()) {
+      alert("Please enter your name before sharing your badge.");
+      return;
+    }
+    if (!image) {
+      alert("Please upload your photo before sharing your badge.");
+      return;
+    }
+
+    setIsSharingInsta(true);
+    try {
+      const result = await generateBadgeImage();
+      if (!result) throw new Error("Could not render badge");
+
+      // Auto-copy the official tag & hashtag so user can immediately paste sticker
+      try {
+        await navigator.clipboard.writeText(INSTA_TAG_TEXT);
+        setHasCopiedInstaTag(true);
+      } catch {
+        // clipboard permission fallback
+      }
+
+      // Check if native Web Share API supports file sharing (works directly on mobile Chrome/Safari into Instagram Stories)
+      let sharedViaNative = false;
+      try {
+        const res = await fetch(result.dataUrl);
+        const blob = await res.blob();
+        const file = new File([blob], result.filename, { type: "image/png" });
+
+        if (
+          typeof navigator !== "undefined" &&
+          navigator.canShare &&
+          navigator.canShare({ files: [file] })
+        ) {
+          await navigator.share({
+            title: `AWS Student Community Day Kolhapur 2026 - ${role} Badge`,
+            text: `Attending AWS Student Community Day Kolhapur 2026! 🚀 Proud to represent as ${role}. Tagging ${INSTA_TAG_TEXT}`,
+            files: [file],
+          });
+          sharedViaNative = true;
+        }
+      } catch (shareErr: any) {
+        if (shareErr.name === "AbortError") {
+          // User closed share sheet intentionally
+          return;
+        }
+        console.warn("Native file share unsupported or failed, falling back to download modal:", shareErr);
+      }
+
+      // Desktop & Web fallback: automatically download badge + open Instagram Story guidance modal
+      if (!sharedViaNative) {
+        // Download badge PNG automatically
+        const link = document.createElement("a");
+        link.download = result.filename;
+        link.href = result.dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Display Instagram Story modal with step-by-step instructions
+        setShowInstaModal(true);
+      }
+    } catch (error: any) {
+      console.error("Error preparing Instagram share:", error);
+      alert("Failed to prepare badge for Instagram sharing. Please try downloading the badge directly.");
+    } finally {
+      setIsSharingInsta(false);
+    }
+  };
+
+  const copyInstaTagToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(INSTA_TAG_TEXT);
+      setHasCopiedInstaTag(true);
+      setTimeout(() => setHasCopiedInstaTag(false), 2500);
+    } catch {
+      alert("Failed to copy tag to clipboard. Please copy manually: " + INSTA_TAG_TEXT);
     }
   };
 
@@ -919,7 +1011,7 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
               </div>
             </div>
 
-            {/* Step 4: Download & LinkedIn Share */}
+            {/* Step 4: Download & Social Share */}
             <div className="flex gap-4">
               <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white font-bold font-mono text-sm">
                 4
@@ -929,20 +1021,20 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
                   Download & share
                 </h3>
                 <p className="text-sm text-white/50 mb-3">
-                  Share your badge on LinkedIn and tag{" "}
+                  Share your badge on LinkedIn or Instagram Story and tag{" "}
                   <strong className="text-white">#SCDKolhapur2026</strong>.
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-md">
+                <div className="space-y-2.5 w-full max-w-md">
                   {/* Download Badge Button */}
                   <button
                     type="button"
                     onClick={handleDownload}
-                    disabled={!image || !name.trim() || isGenerating || isSharing}
-                    className={`flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg font-bold uppercase tracking-wider text-xs sm:text-sm transition-all cursor-pointer ${
+                    disabled={!image || !name.trim() || isGenerating || isSharing || isSharingInsta}
+                    className={`w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg font-bold uppercase tracking-wider text-xs sm:text-sm transition-all cursor-pointer ${
                       !image || !name.trim()
                         ? "bg-white/5 text-white/30 cursor-not-allowed border border-white/5"
-                        : "bg-aws-orange text-black hover:bg-aws-orange-dark hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(255,153,0,0.4)]"
+                        : "bg-aws-orange text-black hover:bg-aws-orange-dark hover:scale-[1.01] active:scale-95 shadow-[0_0_20px_rgba(255,153,0,0.4)]"
                     }`}
                   >
                     {isGenerating ? (
@@ -950,27 +1042,49 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
                     ) : (
                       <Download className="w-4 h-4" />
                     )}
-                    <span>{isGenerating ? "Generating..." : "Download"}</span>
+                    <span>{isGenerating ? "Generating..." : "Download Badge"}</span>
                   </button>
 
-                  {/* Share on LinkedIn Button */}
-                  <button
-                    type="button"
-                    onClick={handleLinkedInShare}
-                    disabled={!image || !name.trim() || isGenerating || isSharing}
-                    className={`flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg font-bold uppercase tracking-wider text-xs sm:text-sm transition-all cursor-pointer ${
-                      !image || !name.trim()
-                        ? "bg-white/5 text-white/30 cursor-not-allowed border border-white/5"
-                        : "bg-[#0A66C2] hover:bg-[#004182] text-white hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(10,102,194,0.4)]"
-                    }`}
-                  >
-                    {isSharing ? (
-                      <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                    ) : (
-                      <Linkedin className="w-4 h-4 fill-current" />
-                    )}
-                    <span>{isSharing ? "Preparing..." : "Share on LinkedIn"}</span>
-                  </button>
+                  {/* Social Share Buttons: LinkedIn & Instagram Story */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {/* Share on LinkedIn Button */}
+                    <button
+                      type="button"
+                      onClick={handleLinkedInShare}
+                      disabled={!image || !name.trim() || isGenerating || isSharing || isSharingInsta}
+                      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-bold uppercase tracking-wider text-xs transition-all cursor-pointer ${
+                        !image || !name.trim()
+                          ? "bg-white/5 text-white/30 cursor-not-allowed border border-white/5"
+                          : "bg-[#0A66C2] hover:bg-[#004182] text-white hover:scale-[1.02] active:scale-95 shadow-[0_0_15px_rgba(10,102,194,0.35)]"
+                      }`}
+                    >
+                      {isSharing ? (
+                        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        <Linkedin className="w-4 h-4 fill-current" />
+                      )}
+                      <span>{isSharing ? "Preparing..." : "LinkedIn"}</span>
+                    </button>
+
+                    {/* Share to Instagram Story Button */}
+                    <button
+                      type="button"
+                      onClick={handleInstagramShare}
+                      disabled={!image || !name.trim() || isGenerating || isSharing || isSharingInsta}
+                      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-bold uppercase tracking-wider text-xs transition-all cursor-pointer ${
+                        !image || !name.trim()
+                          ? "bg-white/5 text-white/30 cursor-not-allowed border border-white/5"
+                          : "bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-95 text-white hover:scale-[1.02] active:scale-95 shadow-[0_0_18px_rgba(253,29,29,0.35)]"
+                      }`}
+                    >
+                      {isSharingInsta ? (
+                        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        <Instagram className="w-4 h-4" />
+                      )}
+                      <span>{isSharingInsta ? "Preparing..." : "Instagram Story"}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1091,6 +1205,139 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
                 >
                   <ExternalLink className="w-4 h-4" />
                   Open LinkedIn Again
+                </a>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Instagram Story Guidance Modal */}
+      <AnimatePresence>
+        {showInstaModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="bg-[#0f1117] border border-white/15 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl relative text-left"
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-gradient-to-r from-[#833ab4]/30 via-[#fd1d1d]/20 to-[#fcb045]/20 bg-[#141824]">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#fd1d1d] via-[#e1306c] to-[#833ab4] flex items-center justify-center text-white shadow-md">
+                    <Instagram className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-white text-base">
+                      Share to Instagram Story!
+                    </h3>
+                    <p className="text-xs text-white/50">
+                      Tag us to get featured on our official page
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowInstaModal(false)}
+                  className="text-white/40 hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-6 space-y-4">
+                {/* Status checklist */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 px-3 py-2 rounded-lg">
+                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                    <span>Badge downloaded</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 px-3 py-2 rounded-lg">
+                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                    <span>Tag copied to clipboard</span>
+                  </div>
+                </div>
+
+                {/* Clear instructions */}
+                <div className="bg-[#181f2f] border border-[#23314f] rounded-xl p-3.5 text-xs text-slate-300 space-y-2">
+                  <p className="font-semibold text-white flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    How to post your Badge on Instagram:
+                  </p>
+                  <ol className="list-decimal list-inside space-y-1.5 text-slate-300">
+                    <li>
+                      Open <strong className="text-white">Instagram</strong> and tap <strong className="text-white">+ Your Story</strong>.
+                    </li>
+                    <li>
+                      Select your downloaded badge from your photo gallery.
+                    </li>
+                    <li>
+                      Tap the <strong className="text-white">Sticker (@MENTION or text)</strong> button and paste:
+                      <div className="mt-1">
+                        <span className="font-mono text-xs text-aws-orange bg-black/70 px-2 py-0.5 rounded border border-aws-orange/30 inline-block">
+                          {INSTA_TAG_TEXT}
+                        </span>
+                      </div>
+                    </li>
+                    <li>
+                      Share your story! We'll reshare attendees on the official page.
+                    </li>
+                  </ol>
+                </div>
+
+                {/* Quick copy box for tag */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-mono text-white/50 uppercase tracking-wider">
+                      Official Handle & Event Hashtag
+                    </span>
+                    <button
+                      onClick={copyInstaTagToClipboard}
+                      className="text-xs text-aws-orange hover:text-white flex items-center gap-1 font-mono transition-colors cursor-pointer"
+                    >
+                      {hasCopiedInstaTag ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-emerald-400">Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Copy tag</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <div className="bg-[#08090d] border border-white/10 rounded-xl p-3 font-mono text-xs text-white/90 flex items-center justify-between">
+                    <span>{INSTA_TAG_TEXT}</span>
+                    <button
+                      onClick={copyInstaTagToClipboard}
+                      className="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-[11px] font-sans transition-colors cursor-pointer"
+                    >
+                      {hasCopiedInstaTag ? "Copied" : "Copy"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-4 bg-[#141824] border-t border-white/10 flex flex-col sm:flex-row gap-2 justify-end">
+                <button
+                  onClick={() => setShowInstaModal(false)}
+                  className="px-4 py-2.5 rounded-lg text-white/70 hover:text-white hover:bg-white/5 font-medium text-xs sm:text-sm transition-all cursor-pointer"
+                >
+                  Done
+                </button>
+                <a
+                  href={INSTA_PROFILE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-95 text-white font-bold text-xs sm:text-sm transition-all shadow-md cursor-pointer"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Open Instagram
                 </a>
               </div>
             </motion.div>
