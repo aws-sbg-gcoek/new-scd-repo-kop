@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -13,6 +13,17 @@ import {
   ExternalLink,
   X,
   Sparkles,
+  Sliders,
+  ZoomIn,
+  ZoomOut,
+  RotateCw,
+  RotateCcw,
+  Maximize2,
+  Minimize2,
+  Move,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -31,7 +42,26 @@ export const BadgePage = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState<RoleType>("Attendee");
   const [image, setImage] = useState<string | null>(null);
+
+  // References for badge rendering & photo canvas
   const badgeRef = useRef<HTMLDivElement>(null);
+  const photoContainerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageObjRef = useRef<HTMLImageElement | null>(null);
+
+  // Photo Crop, Zoom, Pan & Rotation State
+  const [zoom, setZoom] = useState(1.0);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [rotation, setRotation] = useState(0);
+  const [fitMode, setFitMode] = useState<"cover" | "contain">("cover");
+  const [justApplied, setJustApplied] = useState(false);
+
+  // Dragging state for pointer interaction on live badge preview
+  const isDraggingRef = useRef(false);
+  const dragStartRef = useRef({ x: 0, y: 0 });
+  const panStartRef = useRef({ x: 0, y: 0 });
+
+  // Download & Share states
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -48,10 +78,144 @@ export const BadgePage = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        setImage(event.target?.result as string);
+        const dataUrl = event.target?.result as string;
+        setImage(dataUrl);
+        // Reset crop & positioning on new image upload
+        setZoom(1.0);
+        setPan({ x: 0, y: 0 });
+        setRotation(0);
+        setFitMode("cover");
+        setJustApplied(false);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  // Preload Image object when image dataUrl changes
+  useEffect(() => {
+    if (!image) {
+      imageObjRef.current = null;
+      return;
+    }
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      imageObjRef.current = img;
+      renderCanvas();
+    };
+    img.src = image;
+  }, [image]);
+
+  // High-performance canvas rendering for live preview & final badge capture
+  const renderCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    const img = imageObjRef.current;
+    if (!canvas || !img) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const cw = canvas.width;  // 720
+    const ch = canvas.height; // 760
+
+    ctx.clearRect(0, 0, cw, ch);
+    ctx.fillStyle = "#0a0a0a";
+    ctx.fillRect(0, 0, cw, ch);
+
+    const nw = img.naturalWidth || img.width;
+    const nh = img.naturalHeight || img.height;
+    if (!nw || !nh) return;
+
+    // Check if 90 or 270 deg rotation swaps width/height
+    const rot = ((rotation % 360) + 360) % 360;
+    const isSwapped = rot === 90 || rot === 270;
+    const effectiveW = isSwapped ? nh : nw;
+    const effectiveH = isSwapped ? nw : nh;
+
+    // Calculate base scale according to fitMode
+    const scaleCover = Math.max(cw / effectiveW, ch / effectiveH);
+    const scaleContain = Math.min(cw / effectiveW, ch / effectiveH);
+    const baseScale = fitMode === "cover" ? scaleCover : scaleContain;
+    const finalScale = baseScale * zoom;
+
+    ctx.save();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    // Translate to center + pan (multiplied by 2 for Retina 720x760 canvas)
+    ctx.translate(cw / 2 + pan.x * 2, ch / 2 + pan.y * 2);
+    ctx.rotate((rot * Math.PI) / 180);
+
+    const drawW = nw * finalScale;
+    const drawH = nh * finalScale;
+
+    ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
+    ctx.restore();
+  }, [zoom, pan, rotation, fitMode]);
+
+  useEffect(() => {
+    renderCanvas();
+  }, [renderCanvas]);
+
+  // Pointer drag controls directly on badge photo
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!image) return;
+    isDraggingRef.current = true;
+    dragStartRef.current = { x: e.clientX, y: e.clientY };
+    panStartRef.current = { ...pan };
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return;
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
+    const maxPan = 400;
+    setPan({
+      x: Math.max(-maxPan, Math.min(maxPan, panStartRef.current.x + dx)),
+      y: Math.max(-maxPan, Math.min(maxPan, panStartRef.current.y + dy)),
+    });
+    setJustApplied(false);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {}
+  };
+
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (!image) return;
+    e.preventDefault();
+    const delta = e.deltaY < 0 ? 0.08 : -0.08;
+    setZoom((z) => Math.max(0.5, Math.min(3.0, Math.round((z + delta) * 100) / 100)));
+    setJustApplied(false);
+  };
+
+  const handleNudge = (dx: number, dy: number) => {
+    const maxPan = 400;
+    setPan((p) => ({
+      x: Math.max(-maxPan, Math.min(maxPan, p.x + dx)),
+      y: Math.max(-maxPan, Math.min(maxPan, p.y + dy)),
+    }));
+    setJustApplied(false);
+  };
+
+  const handleResetCrop = () => {
+    setZoom(1.0);
+    setPan({ x: 0, y: 0 });
+    setRotation(0);
+    setFitMode("cover");
+    setJustApplied(false);
+  };
+
+  const handleApplyCrop = () => {
+    setJustApplied(true);
+    setTimeout(() => setJustApplied(false), 2500);
   };
 
   // Helper to generate high-resolution badge image
@@ -321,7 +485,7 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
 
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">
           {/* Left Column: Badge Preview */}
-          <div className="w-full lg:w-1/2 flex justify-center lg:justify-start">
+          <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start">
             <div className="relative p-1 rounded-2xl bg-gradient-to-b from-white/10 to-transparent">
               {/* Actual Badge Container for html-to-image */}
               <div
@@ -329,16 +493,16 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
                 className="w-full max-w-[360px] h-[450px] aspect-[4/5] bg-[#0a0a0a] rounded-[24px] overflow-hidden relative shadow-2xl flex flex-col border-4 border-f1-red/80"
               >
                 {/* Badge inner aesthetic layers */}
-                <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                <div className="absolute top-[70px] left-0 w-full h-[250px] z-0 mix-blend-overlay bg-gradient-to-b from-f1-red/30 to-transparent"></div>
+                <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none"></div>
+                <div className="absolute top-0 left-0 w-full h-[250px] z-0 mix-blend-overlay bg-gradient-to-b from-f1-red/30 to-transparent pointer-events-none"></div>
 
-                {/* Top Black Header for Logos */}
-                <div className="absolute top-0 left-0 w-full h-[70px] bg-[#050505] z-30 flex justify-between items-center px-5 border-b border-white/10 shadow-md">
+                {/* Top Transparent Header for Logos */}
+                <div className="absolute top-0 left-0 w-full h-[75px] z-30 flex justify-between items-center px-5 pointer-events-none bg-gradient-to-b from-black/80 via-black/35 to-transparent">
                   {/* Left Logo */}
                   <img
                     src="/scd-kolhapur-logo.png"
                     alt="SCD Kolhapur"
-                    className="h-10 sm:h-11 w-auto max-w-[200px] object-contain"
+                    className="h-10 sm:h-11 w-auto max-w-[200px] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
                   />
                   {/* Right Logos - Single Line */}
                   <div className="flex items-center gap-2">
@@ -348,19 +512,39 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
                         (e.currentTarget as HTMLImageElement).src = "/AWS_Builder.png";
                       }}
                       alt="AWS Builder Kolhapur"
-                      className="h-7 w-auto object-contain"
+                      className="h-7 w-auto object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
                     />
                   </div>
                 </div>
 
-                {/* Photo Area - Full photo visible across all corners */}
-                <div className="absolute top-[70px] left-0 right-0 bottom-0 z-10 flex items-center justify-center overflow-hidden p-1">
+                {/* Photo Area - Full-bleed Interactive Cropping, Dragging & Live Preview */}
+                <div
+                  ref={photoContainerRef}
+                  onPointerDown={handlePointerDown}
+                  onPointerMove={handlePointerMove}
+                  onPointerUp={handlePointerUp}
+                  onPointerCancel={handlePointerUp}
+                  onWheel={handleWheel}
+                  className={`absolute inset-0 z-10 flex items-center justify-center overflow-hidden select-none ${
+                    image ? "cursor-grab active:cursor-grabbing" : ""
+                  }`}
+                  style={{ touchAction: "none" }}
+                  title={image ? "Drag photo to reposition • Mouse wheel to zoom" : undefined}
+                >
                   {image ? (
-                    <img
-                      src={image}
-                      alt="User"
-                      className="w-full h-full object-contain object-center"
-                    />
+                    <>
+                      <canvas
+                        ref={canvasRef}
+                        width={720}
+                        height={900}
+                        className="w-full h-full object-cover block pointer-events-none"
+                      />
+                      {/* Live repositioning indicator pill */}
+                      <div className="absolute top-20 right-3 pointer-events-none bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-mono text-white/90 flex items-center gap-1.5 border border-white/20 shadow-md">
+                        <Move className="w-2.5 h-2.5 text-aws-orange" />
+                        <span>Drag to position</span>
+                      </div>
+                    </>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-white/5">
                       <ImageIcon
@@ -369,12 +553,12 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
                       />
                     </div>
                   )}
-                  {/* Subtle bottom gradient so photo remains bright and clear */}
-                  <div className="absolute bottom-0 left-0 right-0 h-[120px] pointer-events-none bg-gradient-to-t from-[#0a0a0a]/90 via-[#0a0a0a]/40 to-transparent" />
+                  {/* Subtle bottom gradient so name and stats remain crisp & readable */}
+                  <div className="absolute bottom-0 left-0 right-0 h-[130px] pointer-events-none bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/45 to-transparent" />
                 </div>
 
-                {/* Content Area - Bottom part */}
-                <div className="relative z-20 mt-auto flex flex-col w-full h-[180px] justify-end pb-[20px]">
+                {/* Content Area - Bottom part (pointer-events-none so drags pass through to photo) */}
+                <div className="relative z-20 mt-auto flex flex-col w-full h-[180px] justify-end pb-[20px] pointer-events-none">
                   {/* Status/Badge Ribbon Label - Dynamic per selected role */}
                   <div className="px-6 mb-3">
                     <div className="inline-block bg-gradient-to-r from-aws-orange to-f1-red text-black font-mono text-[9px] font-black tracking-widest px-2.5 py-1 uppercase transform -skew-x-12 shadow-[0_0_15px_rgba(255,153,0,0.4)]">
@@ -451,18 +635,19 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
 
           {/* Right Column: Controls */}
           <div className="w-full lg:w-1/2 flex flex-col space-y-4 lg:space-y-5">
-            {/* Step 1: Photo */}
+            {/* Step 1: Photo & Editing Controls */}
             <div className="flex gap-4">
               <div className="flex-shrink-0 w-8 h-8 rounded-full bg-aws-orange/20 border border-aws-orange flex items-center justify-center text-aws-orange font-bold font-mono text-sm shadow-[0_0_15px_rgba(255,153,0,0.3)]">
                 1
               </div>
-              <div className="flex flex-col flex-grow">
+              <div className="flex flex-col flex-grow w-full max-w-md">
                 <h3 className="text-lg font-bold text-white mb-0.5">
                   Select your photo
                 </h3>
                 <p className="text-sm text-white/50 mb-3">
-                  A clear, face-forward photo works best.
+                  Upload a photo and adjust it to fit the badge frame.
                 </p>
+
                 <div className="relative">
                   <input
                     aria-label="input"
@@ -480,6 +665,199 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
                     {image ? "Change photo" : "Choose photo"}
                   </button>
                 </div>
+
+                {/* ── Photo Editing & Positioning Panel (Placed immediately after photo upload) ── */}
+                {image && (
+                  <div className="mt-4 p-4 rounded-xl bg-[#11131a] border border-white/15 space-y-4 shadow-xl animate-fade-in">
+                    <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                      <div className="flex items-center gap-2">
+                        <Sliders className="w-4 h-4 text-aws-orange" />
+                        <span className="text-sm font-bold text-white tracking-wide">
+                          Photo Editing & Crop
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-mono text-aws-orange bg-aws-orange/10 px-2 py-0.5 rounded border border-aws-orange/20">
+                        Live Preview Active
+                      </span>
+                    </div>
+
+                    {/* Framing & Resize: Fill vs Fit */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-white/70 font-medium">Framing & Resize</span>
+                        <span className="text-[11px] font-mono text-white/40">
+                          {fitMode === "cover" ? "Fill Frame (No empty bars)" : "Fit Entire Image"}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setFitMode("cover")}
+                          className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                            fitMode === "cover"
+                              ? "bg-aws-orange text-black shadow-[0_0_12px_rgba(255,153,0,0.3)]"
+                              : "bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/10"
+                          }`}
+                        >
+                          <Maximize2 className="w-3.5 h-3.5" />
+                          <span>Fill Frame</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setFitMode("contain")}
+                          className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                            fitMode === "contain"
+                              ? "bg-aws-orange text-black shadow-[0_0_12px_rgba(255,153,0,0.3)]"
+                              : "bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/10"
+                          }`}
+                        >
+                          <Minimize2 className="w-3.5 h-3.5" />
+                          <span>Fit Photo</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Zoom In/Out Slider & Buttons */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-white/70 font-medium">Zoom In / Out</span>
+                        <span className="text-xs font-mono font-bold text-aws-orange">
+                          {Math.round(zoom * 100)}%
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setZoom((z) => Math.max(0.5, Math.round((z - 0.1) * 10) / 10))}
+                          className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white border border-white/10 cursor-pointer"
+                          title="Zoom Out"
+                        >
+                          <ZoomOut className="w-4 h-4" />
+                        </button>
+                        <input
+                          type="range"
+                          min="0.5"
+                          max="3.0"
+                          step="0.05"
+                          value={zoom}
+                          onChange={(e) => setZoom(parseFloat(e.target.value))}
+                          className="w-full accent-aws-orange cursor-pointer h-1.5 bg-white/20 rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setZoom((z) => Math.min(3.0, Math.round((z + 0.1) * 10) / 10))}
+                          className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white border border-white/10 cursor-pointer"
+                          title="Zoom In"
+                        >
+                          <ZoomIn className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Rotate & Position Tools */}
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-white/70 font-medium">Rotation & Position</span>
+                        <span className="text-[11px] font-mono text-white/40">
+                          {rotation}°
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setRotation((r) => (r + 90) % 360)}
+                          className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white border border-white/10 text-xs font-medium transition-all cursor-pointer"
+                          title="Rotate 90 degrees clockwise"
+                        >
+                          <RotateCw className="w-3.5 h-3.5 text-aws-orange" />
+                          <span>Rotate 90°</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setPan({ x: 0, y: 0 })}
+                          className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white border border-white/10 text-xs font-medium transition-all cursor-pointer"
+                          title="Reset center position"
+                        >
+                          <Move className="w-3.5 h-3.5 text-aws-orange" />
+                          <span>Center Photo</span>
+                        </button>
+                      </div>
+
+                      {/* Directional Nudge Pad for precise pixel adjustment */}
+                      <div className="flex items-center justify-between bg-black/40 border border-white/5 rounded-lg px-3 py-2">
+                        <span className="text-[11px] font-mono text-white/50">Nudge:</span>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleNudge(-15, 0)}
+                            className="p-1.5 rounded bg-white/5 hover:bg-white/15 text-white/70 hover:text-white cursor-pointer"
+                            title="Nudge Left"
+                          >
+                            <ChevronLeft className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleNudge(0, -15)}
+                            className="p-1.5 rounded bg-white/5 hover:bg-white/15 text-white/70 hover:text-white cursor-pointer"
+                            title="Nudge Up"
+                          >
+                            <ChevronUp className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleNudge(0, 15)}
+                            className="p-1.5 rounded bg-white/5 hover:bg-white/15 text-white/70 hover:text-white cursor-pointer"
+                            title="Nudge Down"
+                          >
+                            <ChevronDown className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleNudge(15, 0)}
+                            className="p-1.5 rounded bg-white/5 hover:bg-white/15 text-white/70 hover:text-white cursor-pointer"
+                            title="Nudge Right"
+                          >
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Interactive Drag Hint */}
+                    <div className="flex items-center gap-2 text-[11px] text-white/60 bg-black/50 px-3 py-2 rounded-lg border border-white/5">
+                      <Move className="w-3.5 h-3.5 text-aws-orange shrink-0" />
+                      <span>Click & drag directly on the badge preview to position your face.</span>
+                    </div>
+
+                    {/* Action Buttons: Reset & Apply Changes */}
+                    <div className="flex items-center gap-2 pt-2 border-t border-white/10">
+                      <button
+                        type="button"
+                        onClick={handleResetCrop}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg bg-white/5 hover:bg-red-500/15 text-white/70 hover:text-red-400 border border-white/10 hover:border-red-500/25 text-xs font-medium transition-all cursor-pointer"
+                        title="Restore original defaults"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>Reset</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleApplyCrop}
+                        className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          justApplied
+                            ? "bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]"
+                            : "bg-aws-orange text-black hover:bg-aws-orange-dark shadow-[0_0_15px_rgba(255,153,0,0.3)]"
+                        }`}
+                        title="Apply adjustments to badge"
+                      >
+                        <Check className="w-4 h-4" />
+                        <span>{justApplied ? "✓ Saved!" : "Apply Changes"}</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
