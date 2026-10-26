@@ -236,12 +236,20 @@ export const BadgePage = () => {
     // Short delay to ensure DOM painting has completely settled
     await new Promise((resolve) => setTimeout(resolve, 150));
 
+    const exportFilter = (node: Node) => {
+      if (node instanceof HTMLElement && node.classList?.contains("badge-no-export")) {
+        return false;
+      }
+      return true;
+    };
+
     let dataUrl: string;
     try {
       dataUrl = await toPng(badgeRef.current, {
         pixelRatio: 2,
         backgroundColor: "#050505",
         cacheBust: true,
+        filter: exportFilter,
       });
     } catch (err) {
       console.warn("Primary toPng failed, retrying with skipFonts fallback:", err);
@@ -249,6 +257,7 @@ export const BadgePage = () => {
         pixelRatio: 2,
         backgroundColor: "#050505",
         skipFonts: true,
+        filter: exportFilter,
       });
     }
 
@@ -730,6 +739,14 @@ Organised by the AWS Student Builder Group, GCOE Kolhapur. If you're coming too,
           {/* Left Column: Badge Preview */}
           <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start">
             <div className="relative p-1 rounded-2xl bg-gradient-to-b from-white/10 to-transparent">
+              {/* Live repositioning indicator pill - placed outside badgeRef so it is NEVER captured into the downloaded badge */}
+              {image && !isGenerating && !isSharing && !isSharingInsta && (
+                <div className="absolute top-22 right-4 pointer-events-none z-40 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-mono text-white/90 flex items-center gap-1.5 border border-white/20 shadow-md">
+                  <Move className="w-2.5 h-2.5 text-aws-orange" />
+                  <span>Drag to position</span>
+                </div>
+              )}
+
               {/* Actual Badge Container for html-to-image */}
               <div
                 ref={badgeRef}
@@ -775,19 +792,12 @@ Organised by the AWS Student Builder Group, GCOE Kolhapur. If you're coming too,
                   title={image ? "Drag photo to reposition • Mouse wheel to zoom" : undefined}
                 >
                   {image ? (
-                    <>
-                      <canvas
-                        ref={canvasRef}
-                        width={720}
-                        height={900}
-                        className="w-full h-full object-cover block pointer-events-none"
-                      />
-                      {/* Live repositioning indicator pill */}
-                      <div className="absolute top-20 right-3 pointer-events-none bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-mono text-white/90 flex items-center gap-1.5 border border-white/20 shadow-md">
-                        <Move className="w-2.5 h-2.5 text-aws-orange" />
-                        <span>Drag to position</span>
-                      </div>
-                    </>
+                    <canvas
+                      ref={canvasRef}
+                      width={720}
+                      height={900}
+                      className="w-full h-full object-cover block pointer-events-none"
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-white/5">
                       <ImageIcon
