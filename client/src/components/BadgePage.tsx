@@ -68,11 +68,15 @@ export const BadgePage = () => {
   const [showShareModal, setShowShareModal] = useState(false);
   const [currentCaption, setCurrentCaption] = useState("");
   const [hasCopiedCaption, setHasCopiedCaption] = useState(false);
+  const [hasCopiedBadgeImage, setHasCopiedBadgeImage] = useState(false);
+  const [badgeDataUrlForShare, setBadgeDataUrlForShare] = useState<string | null>(null);
 
   // Instagram Story sharing states
   const [isSharingInsta, setIsSharingInsta] = useState(false);
   const [showInstaModal, setShowInstaModal] = useState(false);
   const [hasCopiedInstaTag, setHasCopiedInstaTag] = useState(false);
+  const [currentInstaCaption, setCurrentInstaCaption] = useState("");
+  const [hasCopiedInstaCaption, setHasCopiedInstaCaption] = useState(false);
 
   const getRoleRibbon = (selectedRole: RoleType) => {
     const found = ROLE_OPTIONS.find((r) => r.value === selectedRole);
@@ -283,81 +287,183 @@ export const BadgePage = () => {
     }
   };
 
-  // Dynamic, natural, and professional LinkedIn caption generator
+  // Official event captions for LinkedIn
   const generateLinkedInCaption = (userName: string, userRole: RoleType) => {
-    const eventName = "AWS Student Community Day Kolhapur 2026";
-    const clubName = "AWS Cloud Club - GCOE Kolhapur";
-    const eventHashtag = "#SCDKolhapur2026";
-    const eventUrl = typeof window !== "undefined" ? window.location.origin : "https://awsscd2026.com";
-
     switch (userRole) {
+      case "Organizer":
+        return `AWS Student Community Day 2026 is coming to Kolhapur. ☁️
+
+Join us on 1 November for a day of AWS and cloud computing, hands-on workshops, industry speakers, live trivia, swag, food, and a certificate of participation.
+
+Open to students from all colleges and branches. No prior cloud experience needed.
+
+📅 1 November 2026
+📍 V. T. Patil Convention Hall, Rajarampuri, Kolhapur
+🎟️ Early Bird ₹349 | Standard ₹449 (limited seats per tier)
+
+🔗 Register: https://aws-scd-kolhapur.vercel.app/
+💬 WhatsApp Community: https://chat.whatsapp.com/KFima5xdcxW2dQsZN0C5SP
+📸 Instagram: https://www.instagram.com/aws.sbg.gcoe.kolhapur
+💼 LinkedIn: https://www.linkedin.com/company/aws-sbg-gcoe-kolhapur/
+
+Organised by the AWS Student Builder Group, GCOE Kolhapur. Share it with friends who'd like to come. 💙
+
+#AWSStudentCommunityDay #AWS #AWSCloud #CloudComputing #AWSStudentBuilderGroup #GCOEKolhapur #Kolhapur #StudentBuilders`;
+
       case "Speaker":
-        return `🎤 Thrilled to announce that I'll be speaking at ${eventName}! 🚀
+        return `🎤 I'll be speaking at AWS Student Community Day 2026 in Kolhapur on 1 November! ☁️
 
-I'm honored to share my insights and experience with such an energetic community of students, developers, and cloud enthusiasts. Looking forward to engaging discussions, hands-on learning, and inspiring connections.
+Honored to share my insights with the next generation of cloud builders. Looking forward to hands-on workshops, tech conversations, and connecting with students from across Maharashtra.
 
-A huge shoutout to ${clubName} for organizing this premier cloud conference!
+📍 V. T. Patil Convention Hall, Rajarampuri, Kolhapur
+🎟️ Passes: https://aws-scd-kolhapur.vercel.app/
 
-📅 Date: November 1st, 2026
-📍 Location: Kolhapur
-🌐 Join us: ${eventUrl}
+💬 WhatsApp Community: https://chat.whatsapp.com/KFima5xdcxW2dQsZN0C5SP
+📸 Instagram: https://www.instagram.com/aws.sbg.gcoe.kolhapur
+💼 LinkedIn: https://www.linkedin.com/company/aws-sbg-gcoe-kolhapur/
 
-#AWS #AWSSCDKolhapur #AWSCloudClubs #Speaker #CloudComputing #StudentCommunityDay #TechCommunity #Kolhapur ${eventHashtag}`;
+Organised by the AWS Student Builder Group, GCOE Kolhapur. See you there! 🚀
+
+#AWSStudentCommunityDay #AWS #AWSCloud #CloudComputing #Speaker #GCOEKolhapur #Kolhapur #StudentBuilders`;
 
       case "VIP":
-        return `🌟 Honored to be part of ${eventName} as a VIP Guest! 🚀
+        return `🌟 Honored to attend AWS Student Community Day 2026 in Kolhapur on 1 November as a VIP Guest. ☁️
 
-Looking forward to witnessing the innovation, technical brilliance, and leadership of the next generation of cloud pioneers in Kolhapur.
+Excited to witness the innovation, hands-on learning, and leadership of student cloud builders in Kolhapur.
 
-Kudos to ${clubName} and the entire organizing team for curating such a high-impact gathering.
+📍 V. T. Patil Convention Hall, Rajarampuri, Kolhapur
+🔗 Event Details: https://aws-scd-kolhapur.vercel.app/
+💬 WhatsApp Community: https://chat.whatsapp.com/KFima5xdcxW2dQsZN0C5SP
+📸 Instagram: https://www.instagram.com/aws.sbg.gcoe.kolhapur
+💼 LinkedIn: https://www.linkedin.com/company/aws-sbg-gcoe-kolhapur/
 
-📅 Date: November 1st, 2026
-📍 Location: Kolhapur
-🌐 Event details: ${eventUrl}
+Organised by the AWS Student Builder Group, GCOE Kolhapur. 💙
 
-#AWS #AWSSCDKolhapur #AWSCloudClubs #VIP #Leadership #Innovation #CloudComputing #StudentCommunityDay ${eventHashtag}`;
-
-      case "Organizer":
-        return `⚡ The countdown is on! As an Organizer for ${eventName}, I'm super proud of what our team has built! ☁️🔥
-
-From deep-dive cloud architectures and interactive tech challenges to renowned keynote speakers, we're bringing together builders across Maharashtra for an unforgettable experience.
-
-Proud to drive this vision alongside ${clubName}!
-
-📅 Mark your calendars: November 1st, 2026
-📍 Location: Kolhapur
-🎟️ Grab your passes: ${eventUrl}
-
-#AWS #AWSSCDKolhapur #AWSCloudClubs #Organizer #CommunityBuilders #CloudComputing #Technology ${eventHashtag}`;
+#AWSStudentCommunityDay #AWS #AWSCloud #CloudComputing #VIP #GCOEKolhapur #Kolhapur #StudentBuilders`;
 
       case "Volunteer":
-        return `🙌 Proud to be part of the volunteer crew driving ${eventName}! ⚡
+        return `🙌 Proud to be part of the volunteer team driving AWS Student Community Day 2026 in Kolhapur on 1 November! ⚡☁️
 
-Working behind the scenes with ${clubName} to empower students and create a world-class technology conference is an incredible experience.
+We're bringing together students from across Maharashtra for a day packed with workshops, industry keynotes, live trivia, swag, and food.
 
-Can't wait to welcome all of you on November 1st in Kolhapur!
+📍 V. T. Patil Convention Hall, Rajarampuri, Kolhapur
+🎟️ Early Bird ₹349 | Standard ₹449
 
-🌐 Learn more & register: ${eventUrl}
+🔗 Register: https://aws-scd-kolhapur.vercel.app/
+💬 WhatsApp Community: https://chat.whatsapp.com/KFima5xdcxW2dQsZN0C5SP
+📸 Instagram: https://www.instagram.com/aws.sbg.gcoe.kolhapur
+💼 LinkedIn: https://www.linkedin.com/company/aws-sbg-gcoe-kolhapur/
 
-#AWS #AWSSCDKolhapur #AWSCloudClubs #Volunteers #StudentCommunityDay #CloudComputing #CommunityFirst ${eventHashtag}`;
+Organised by the AWS Student Builder Group, GCOE Kolhapur. Join us! 🚀
+
+#AWSStudentCommunityDay #AWS #AWSCloud #CloudComputing #Volunteer #GCOEKolhapur #Kolhapur #StudentBuilders`;
 
       case "Attendee":
       default:
-        return `🚀 Excited to announce that I'll be attending ${eventName}! ☁️
+        return `I'll be attending AWS Student Community Day 2026 in Kolhapur on 1 November. ☁️
 
-Looking forward to diving deep into cloud technologies, learning from industry experts, and networking with fellow passionate builders and students.
+Looking forward to the workshops, the speakers, and meeting other student builders from across Maharashtra.
 
-Proud to be part of this incredible community with ${clubName}!
+📍 V. T. Patil Convention Hall, Rajarampuri, Kolhapur
 
-Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
+🔗 Register: https://aws-scd-kolhapur.vercel.app/
+💬 WhatsApp Community: https://chat.whatsapp.com/KFima5xdcxW2dQsZN0C5SP
+📸 Instagram: https://www.instagram.com/aws.sbg.gcoe.kolhapur
+💼 LinkedIn: https://www.linkedin.com/company/aws-sbg-gcoe-kolhapur/
 
-🌐 Register & join me: ${eventUrl}
+Organised by the AWS Student Builder Group, GCOE Kolhapur. If you're coming too, let me know. 👇
 
-#AWS #AWSSCDKolhapur #AWSCloudClubs #Community #Technology #Networking #CloudComputing #StudentCommunityDay ${eventHashtag}`;
+#AWSStudentCommunityDay #AWS #AWSCloud #CloudComputing #GCOEKolhapur #Kolhapur #StudentBuilders`;
     }
   };
 
-  // Seamless LinkedIn Sharing flow
+  // Dedicated Instagram Caption generator (with 'link in bio' instead of raw unclickable links)
+  const generateInstagramCaption = (userName: string, userRole: RoleType) => {
+    switch (userRole) {
+      case "Organizer":
+        return `AWS Student Community Day 2026 is coming to Kolhapur. ☁️
+
+Join us on 1 November for a day of AWS and cloud computing, hands-on workshops, industry speakers, live trivia, swag, food, and a certificate of participation.
+
+Open to students from all colleges and branches. No prior cloud experience needed.
+
+📅 1 November 2026
+📍 V. T. Patil Convention Hall, Rajarampuri, Kolhapur
+🎟️ Early Bird ₹349 | Standard ₹449 (limited seats per tier)
+
+🔗 Register link in bio: @aws.sbg.gcoe.kolhapur
+💬 WhatsApp Community link in bio
+💼 LinkedIn: AWS Student Builder Group, GCOE Kolhapur
+
+Organised by the AWS Student Builder Group, GCOE Kolhapur. Share it with friends who'd like to come. 💙
+
+#AWSStudentCommunityDay #AWS #AWSCloud #CloudComputing #AWSStudentBuilderGroup #GCOEKolhapur #Kolhapur #StudentBuilders`;
+
+      case "Speaker":
+        return `🎤 I'll be speaking at AWS Student Community Day 2026 in Kolhapur on 1 November! ☁️
+
+Honored to share my insights with the next generation of cloud builders. Looking forward to hands-on workshops, tech conversations, and connecting with students from across Maharashtra.
+
+📅 1 November 2026
+📍 V. T. Patil Convention Hall, Rajarampuri, Kolhapur
+🎟️ Passes: link in bio (@aws.sbg.gcoe.kolhapur)
+
+💬 WhatsApp Community: link in bio
+💼 LinkedIn: AWS Student Builder Group, GCOE Kolhapur
+
+Organised by the AWS Student Builder Group, GCOE Kolhapur. See you there! 🚀
+
+#AWSStudentCommunityDay #AWS #AWSCloud #CloudComputing #Speaker #GCOEKolhapur #Kolhapur #StudentBuilders`;
+
+      case "VIP":
+        return `🌟 Honored to attend AWS Student Community Day 2026 in Kolhapur on 1 November as a VIP Guest. ☁️
+
+Excited to witness the innovation, hands-on learning, and leadership of student cloud builders in Kolhapur.
+
+📅 1 November 2026
+📍 V. T. Patil Convention Hall, Rajarampuri, Kolhapur
+
+🔗 Event Details: link in bio (@aws.sbg.gcoe.kolhapur)
+💬 WhatsApp Community: link in bio
+
+Organised by the AWS Student Builder Group, GCOE Kolhapur. 💙
+
+#AWSStudentCommunityDay #AWS #AWSCloud #CloudComputing #VIP #GCOEKolhapur #Kolhapur #StudentBuilders`;
+
+      case "Volunteer":
+        return `🙌 Proud to be part of the volunteer team driving AWS Student Community Day 2026 in Kolhapur on 1 November! ⚡☁️
+
+We're bringing together students from across Maharashtra for a day packed with workshops, industry keynotes, live trivia, swag, and food.
+
+📅 1 November 2026
+📍 V. T. Patil Convention Hall, Rajarampuri, Kolhapur
+🎟️ Early Bird ₹349 | Standard ₹449
+
+🔗 Register: link in bio (@aws.sbg.gcoe.kolhapur)
+💬 WhatsApp Community: link in bio
+
+Organised by the AWS Student Builder Group, GCOE Kolhapur. Join us! 🚀
+
+#AWSStudentCommunityDay #AWS #AWSCloud #CloudComputing #Volunteer #GCOEKolhapur #Kolhapur #StudentBuilders`;
+
+      case "Attendee":
+      default:
+        return `I'll be attending AWS Student Community Day 2026 in Kolhapur on 1 November. ☁️
+
+Looking forward to the workshops, the speakers, and meeting other student builders from across Maharashtra.
+
+📍 V. T. Patil Convention Hall, Rajarampuri, Kolhapur
+
+🔗 Register: link in bio (@aws.sbg.gcoe.kolhapur)
+💬 WhatsApp Community: link in bio
+
+Organised by the AWS Student Builder Group, GCOE Kolhapur. If you're coming too, let me know. 👇
+
+#AWSStudentCommunityDay #AWS #AWSCloud #CloudComputing #GCOEKolhapur #Kolhapur #StudentBuilders`;
+    }
+  };
+
+  // Seamless LinkedIn Sharing flow (Photo Post mode)
   const handleLinkedInShare = async () => {
     if (!name.trim()) {
       alert("Please enter your name before sharing your badge.");
@@ -373,18 +479,31 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
       const result = await generateBadgeImage();
       if (!result) throw new Error("Could not render badge");
 
+      setBadgeDataUrlForShare(result.dataUrl);
+
       const caption = generateLinkedInCaption(name, role);
       setCurrentCaption(caption);
 
-      // Copy caption to clipboard
+      // 1. Automatically copy the Badge PNG Image directly to clipboard!
+      // This allows pressing Ctrl+V in LinkedIn's post composer to immediately attach the badge photo!
       try {
-        await navigator.clipboard.writeText(caption);
-        setHasCopiedCaption(true);
-      } catch {
-        // clipboard permission fallback
+        const res = await fetch(result.dataUrl);
+        const blob = await res.blob();
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            [blob.type]: blob,
+          }),
+        ]);
+        setHasCopiedBadgeImage(true);
+      } catch (imgErr) {
+        console.warn("Could not copy badge image to clipboard, copying text instead:", imgErr);
+        try {
+          await navigator.clipboard.writeText(caption);
+          setHasCopiedCaption(true);
+        } catch {}
       }
 
-      // Check if mobile Web Share API can share the image file directly
+      // 2. Check if mobile Web Share API can share the image file directly
       let sharedViaNative = false;
       try {
         const res = await fetch(result.dataUrl);
@@ -411,9 +530,9 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
         console.warn("Native file share unsupported or failed, falling back to download+URL:", shareErr);
       }
 
-      // Desktop & Web fallback: automatically download badge + open LinkedIn composer
+      // 3. Desktop & Web fallback: automatically download badge + open LinkedIn composer
       if (!sharedViaNative) {
-        // Download badge PNG automatically
+        // Download badge PNG automatically so user has the file locally too
         const link = document.createElement("a");
         link.download = result.filename;
         link.href = result.dataUrl;
@@ -421,7 +540,8 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
         link.click();
         document.body.removeChild(link);
 
-        // Open LinkedIn post composer in new tab with pre-filled text
+        // Open LinkedIn post composer in new tab with pre-filled caption text
+        // (Clean text without http:// ensures LinkedIn does not create a blocking article link preview!)
         const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(caption)}`;
         window.open(linkedInUrl, "_blank", "noopener,noreferrer");
 
@@ -436,6 +556,24 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
     }
   };
 
+  const copyBadgeImageToClipboard = async () => {
+    if (!badgeDataUrlForShare) return;
+    try {
+      const res = await fetch(badgeDataUrlForShare);
+      const blob = await res.blob();
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob,
+        }),
+      ]);
+      setHasCopiedBadgeImage(true);
+      setTimeout(() => setHasCopiedBadgeImage(false), 2500);
+    } catch (err) {
+      console.warn("Could not copy badge image:", err);
+      alert("Could not copy image to clipboard. Please use your downloaded badge file.");
+    }
+  };
+
   const copyCaptionToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(currentCaption);
@@ -447,10 +585,10 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
   };
 
   const INSTA_HANDLE = "@aws.sbg.gcoe.kolhapur";
-  const INSTA_TAG_TEXT = "@aws.sbg.gcoe.kolhapur #SCDKolhapur2026";
+  const INSTA_TAG_TEXT = "@aws.sbg.gcoe.kolhapur #AWSStudentCommunityDay";
   const INSTA_PROFILE_URL = "https://www.instagram.com/aws.sbg.gcoe.kolhapur/";
 
-  // Instagram Story Sharing workflow
+  // Instagram Story & Feed Sharing workflow
   const handleInstagramShare = async () => {
     if (!name.trim()) {
       alert("Please enter your name before sharing your badge.");
@@ -465,6 +603,9 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
     try {
       const result = await generateBadgeImage();
       if (!result) throw new Error("Could not render badge");
+
+      const instaCaption = generateInstagramCaption(name, role);
+      setCurrentInstaCaption(instaCaption);
 
       // Auto-copy the official tag & hashtag so user can immediately paste sticker
       try {
@@ -487,8 +628,8 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
           navigator.canShare({ files: [file] })
         ) {
           await navigator.share({
-            title: `AWS Student Community Day Kolhapur 2026 - ${role} Badge`,
-            text: `Attending AWS Student Community Day Kolhapur 2026! 🚀 Proud to represent as ${role}. Tagging ${INSTA_TAG_TEXT}`,
+            title: `AWS Student Community Day 2026 - ${role} Badge`,
+            text: instaCaption,
             files: [file],
           });
           sharedViaNative = true;
@@ -529,6 +670,16 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
       setTimeout(() => setHasCopiedInstaTag(false), 2500);
     } catch {
       alert("Failed to copy tag to clipboard. Please copy manually: " + INSTA_TAG_TEXT);
+    }
+  };
+
+  const copyInstaCaptionToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(currentInstaCaption);
+      setHasCopiedInstaCaption(true);
+      setTimeout(() => setHasCopiedInstaCaption(false), 2500);
+    } catch {
+      alert("Failed to copy Instagram caption to clipboard.");
     }
   };
 
@@ -1132,58 +1283,83 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 px-3 py-2 rounded-lg">
                     <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
-                    <span>Badge downloaded</span>
+                    <span>Badge downloaded to device</span>
                   </div>
                   <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 px-3 py-2 rounded-lg">
                     <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
-                    <span>Caption copied to clipboard</span>
+                    <span>{hasCopiedBadgeImage ? "Badge image in clipboard!" : "Ready to paste (Ctrl+V)"}</span>
                   </div>
                 </div>
 
-                {/* Clear instructions */}
+                {/* Instant Action Prompt */}
                 <div className="bg-[#181f2f] border border-[#23314f] rounded-xl p-3.5 text-xs text-slate-300 space-y-2">
-                  <p className="font-semibold text-white flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                    On your opened LinkedIn tab:
+                  <p className="font-semibold text-white flex items-center gap-1.5 text-sm">
+                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    How to post your badge on LinkedIn:
                   </p>
-                  <ol className="list-decimal list-inside space-y-1 text-slate-300">
+                  <ol className="list-decimal list-inside space-y-2 text-slate-300">
                     <li>
-                      Click the <strong className="text-white">Media (photo)</strong> icon in LinkedIn.
+                      Your <strong className="text-white">LinkedIn composer</strong> has opened in a new tab with your pre-filled caption.
+                    </li>
+                    <li className="text-aws-orange font-medium bg-aws-orange/10 p-2.5 rounded-lg border border-aws-orange/20 leading-relaxed">
+                      ⚡ <strong>Instant Shortcut:</strong> Click anywhere into the LinkedIn post window and press <kbd className="bg-black/70 text-white px-1.5 py-0.5 rounded border border-white/20 font-mono text-[11px]">Ctrl+V</kbd> (or <kbd className="bg-black/70 text-white px-1.5 py-0.5 rounded border border-white/20 font-mono text-[11px]">⌘+V</kbd>) — your badge image is already copied to your clipboard and will attach immediately!
                     </li>
                     <li>
-                      Select your downloaded badge from your Downloads folder.
-                    </li>
-                    <li>
-                      Paste the caption (already copied to your clipboard, press <kbd className="bg-black/50 px-1 py-0.5 rounded border border-white/20 font-mono text-[10px]">Ctrl+V</kbd> or <kbd className="bg-black/50 px-1 py-0.5 rounded border border-white/20 font-mono text-[10px]">⌘+V</kbd>).
+                      (Alternative) Or click LinkedIn's <strong className="text-white">Photo</strong> icon and select your downloaded badge file.
                     </li>
                     <li>Hit <strong className="text-white">Post</strong>!</li>
                   </ol>
                 </div>
 
-                {/* Caption Preview Box */}
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-mono text-white/50 uppercase tracking-wider">
-                      Your Personalized Caption
-                    </span>
+                {/* Quick Copy Controls */}
+                <div className="space-y-1.5">
+                  <span className="text-xs font-mono text-white/50 uppercase tracking-wider block">
+                    Quick Actions
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <button
+                      type="button"
+                      onClick={copyBadgeImageToClipboard}
+                      className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 text-xs font-medium transition-all cursor-pointer"
+                    >
+                      {hasCopiedBadgeImage ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-emerald-400">Badge Image Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5 text-aws-orange" />
+                          <span>Copy Badge Image (Ctrl+V)</span>
+                        </>
+                      )}
+                    </button>
+                    <button
+                      type="button"
                       onClick={copyCaptionToClipboard}
-                      className="text-xs text-aws-orange hover:text-white flex items-center gap-1 font-mono transition-colors cursor-pointer"
+                      className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 text-xs font-medium transition-all cursor-pointer"
                     >
                       {hasCopiedCaption ? (
                         <>
                           <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400">Copied!</span>
+                          <span className="text-emerald-400">Caption Copied!</span>
                         </>
                       ) : (
                         <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>Copy again</span>
+                          <Copy className="w-3.5 h-3.5 text-aws-orange" />
+                          <span>Copy Caption Text</span>
                         </>
                       )}
                     </button>
                   </div>
-                  <div className="bg-[#08090d] border border-white/10 rounded-xl p-3 max-h-36 overflow-y-auto font-mono text-xs text-white/80 whitespace-pre-wrap select-all">
+                </div>
+
+                {/* Caption Preview Box */}
+                <div>
+                  <span className="text-xs font-mono text-white/50 uppercase tracking-wider block mb-1.5">
+                    Your Personalized Caption
+                  </span>
+                  <div className="bg-[#08090d] border border-white/10 rounded-xl p-3 max-h-28 overflow-y-auto font-mono text-xs text-white/80 whitespace-pre-wrap select-all">
                     {currentCaption}
                   </div>
                 </div>
@@ -1204,7 +1380,7 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
                   className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#0A66C2] hover:bg-[#004182] text-white font-bold text-xs sm:text-sm transition-all shadow-md cursor-pointer"
                 >
                   <ExternalLink className="w-4 h-4" />
-                  Open LinkedIn Again
+                  Open LinkedIn Post
                 </a>
               </div>
             </motion.div>
@@ -1256,7 +1432,7 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
                   </div>
                   <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 px-3 py-2 rounded-lg">
                     <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
-                    <span>Tag copied to clipboard</span>
+                    <span>Tag & caption ready</span>
                   </div>
                 </div>
 
@@ -1264,60 +1440,74 @@ Here is my official event badge. See you in Kolhapur on November 1st, 2026! 👇
                 <div className="bg-[#181f2f] border border-[#23314f] rounded-xl p-3.5 text-xs text-slate-300 space-y-2">
                   <p className="font-semibold text-white flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                    How to post your Badge on Instagram:
+                    How to post on Instagram (Story or Feed):
                   </p>
                   <ol className="list-decimal list-inside space-y-1.5 text-slate-300">
                     <li>
-                      Open <strong className="text-white">Instagram</strong> and tap <strong className="text-white">+ Your Story</strong>.
+                      Open <strong className="text-white">Instagram</strong> and choose <strong className="text-white">+ Your Story</strong> or <strong className="text-white">New Post</strong>.
                     </li>
                     <li>
-                      Select your downloaded badge from your photo gallery.
+                      Select your downloaded badge from your gallery.
                     </li>
                     <li>
-                      Tap the <strong className="text-white">Sticker (@MENTION or text)</strong> button and paste:
-                      <div className="mt-1">
-                        <span className="font-mono text-xs text-aws-orange bg-black/70 px-2 py-0.5 rounded border border-aws-orange/30 inline-block">
-                          {INSTA_TAG_TEXT}
-                        </span>
-                      </div>
+                      Tag <span className="font-mono text-aws-orange bg-black/60 px-1.5 py-0.5 rounded border border-aws-orange/30">@aws.sbg.gcoe.kolhapur</span> so we can reshare you!
                     </li>
-                    <li>
-                      Share your story! We'll reshare attendees on the official page.
+                    <li className="text-white/80 bg-black/40 p-2 rounded border border-white/5">
+                      💡 <em>Note:</em> Links aren't clickable in Instagram captions. Keep your registration link in your bio and write <strong className="text-white">"link in bio"</strong> (or add a Link Sticker in Stories)!
                     </li>
                   </ol>
                 </div>
 
-                {/* Quick copy box for tag */}
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-mono text-white/50 uppercase tracking-wider">
-                      Official Handle & Event Hashtag
-                    </span>
+                {/* Quick copy controls */}
+                <div className="space-y-1.5">
+                  <span className="text-xs font-mono text-white/50 uppercase tracking-wider block">
+                    Quick Actions
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <button
+                      type="button"
                       onClick={copyInstaTagToClipboard}
-                      className="text-xs text-aws-orange hover:text-white flex items-center gap-1 font-mono transition-colors cursor-pointer"
+                      className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 text-xs font-medium transition-all cursor-pointer"
                     >
                       {hasCopiedInstaTag ? (
                         <>
                           <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400">Copied!</span>
+                          <span className="text-emerald-400">Tag Copied!</span>
                         </>
                       ) : (
                         <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>Copy tag</span>
+                          <Copy className="w-3.5 h-3.5 text-aws-orange" />
+                          <span>Copy @Tag & Hashtag</span>
+                        </>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={copyInstaCaptionToClipboard}
+                      className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 text-xs font-medium transition-all cursor-pointer"
+                    >
+                      {hasCopiedInstaCaption ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-emerald-400">Caption Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5 text-aws-orange" />
+                          <span>Copy Caption (Link in bio)</span>
                         </>
                       )}
                     </button>
                   </div>
-                  <div className="bg-[#08090d] border border-white/10 rounded-xl p-3 font-mono text-xs text-white/90 flex items-center justify-between">
-                    <span>{INSTA_TAG_TEXT}</span>
-                    <button
-                      onClick={copyInstaTagToClipboard}
-                      className="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-[11px] font-sans transition-colors cursor-pointer"
-                    >
-                      {hasCopiedInstaTag ? "Copied" : "Copy"}
-                    </button>
+                </div>
+
+                {/* Instagram Caption Preview */}
+                <div>
+                  <span className="text-xs font-mono text-white/50 uppercase tracking-wider block mb-1.5">
+                    Instagram Caption Preview
+                  </span>
+                  <div className="bg-[#08090d] border border-white/10 rounded-xl p-3 max-h-28 overflow-y-auto font-mono text-xs text-white/80 whitespace-pre-wrap select-all">
+                    {currentInstaCaption}
                   </div>
                 </div>
               </div>
