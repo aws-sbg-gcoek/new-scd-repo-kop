@@ -329,14 +329,14 @@ export function buildRegistrationConfirmationEmail(data: ConfirmationEmailData):
                     <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
                       <tr>
                         <td style="background:#25D366;border-radius:8px;padding:12px 28px;">
-                          <a href="https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf?s=cl&p=a&mlu=4&ilr=4&iam=2"
+                          <a href="https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf"
                              target="_blank"
                              style="color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:0.3px;"
                           >👉 &nbsp;Join WhatsApp Group</a>
                         </td>
                       </tr>
                     </table>
-                    <p style="margin:12px 0 0;font-size:11px;color:#a7f3d0;">Tap the button above or copy the link: https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf?s=cl&p=a&mlu=4&ilr=4&iam=2</p>
+                    <p style="margin:12px 0 0;font-size:11px;color:#a7f3d0;">Tap the button above or copy the link: https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf</p>
                   </td>
                 </tr>
               </table>
@@ -428,7 +428,7 @@ ${download_url}
 - Keep this email accessible on the event day.
 
 💬 Join our Official WhatsApp Group for event updates:
-https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf?s=cl&p=a&mlu=4&ilr=4&iam=2
+https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf
 
 📍 Venue:
 V.T. Patil Convention Hall, Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008
@@ -760,14 +760,14 @@ export function buildGroupRegistrationConfirmationEmail(data: GroupConfirmationE
                     <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
                       <tr>
                         <td style="background:#25D366;border-radius:8px;padding:12px 28px;">
-                          <a href="https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf?s=cl&p=a&mlu=4&ilr=4&iam=2"
+                          <a href="https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf"
                              target="_blank"
                              style="color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:0.3px;"
                           >👉 &nbsp;Join WhatsApp Group</a>
                         </td>
                       </tr>
                     </table>
-                    <p style="margin:12px 0 0;font-size:11px;color:#a7f3d0;">Tap the button above or copy the link: https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf?s=cl&p=a&mlu=4&ilr=4&iam=2</p>
+                    <p style="margin:12px 0 0;font-size:11px;color:#a7f3d0;">Tap the button above or copy the link: https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf</p>
                   </td>
                 </tr>
               </table>
@@ -858,7 +858,7 @@ Category: ${pass_name}
 - Keep this email accessible on the event day.
 
 💬 Join our Official WhatsApp Group for event updates:
-https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf?s=cl&p=a&mlu=4&ilr=4&iam=2
+https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf
 
 📍 Venue:
 V.T. Patil Convention Hall, Tararani High School Compound, Poorvarang, Mahalaxminagar, Rajarampuri, Kolhapur, Maharashtra 416008
