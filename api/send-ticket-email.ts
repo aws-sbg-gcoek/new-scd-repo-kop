@@ -30,6 +30,11 @@ export default async function handler(req: any, res: any) {
     html = html.replace(/https:\/\/aws-scd-ticket\.vercel\.app[^\s"'<>]*/g, CANONICAL_REGISTER_URL);
     text = text.replace(/https:\/\/aws-scd-ticket\.vercel\.app[^\s]*/g, CANONICAL_REGISTER_URL);
 
+    // Auto-rewrite reset ticket email WhatsApp group URLs to the active invite link
+    const ACTIVE_WHATSAPP_URL = 'https://chat.whatsapp.com/IWR1Pgmj1Eh1fW3QoXqkvf?s=cl&p=a&mlu=4&ilr=4&iam=2';
+    html = html.replace(/https:\/\/chat\.whatsapp\.com\/C3n5K5mqVgv4GC0wFu9gvj[^\s"'<>]*/g, ACTIVE_WHATSAPP_URL);
+    text = text.replace(/https:\/\/chat\.whatsapp\.com\/C3n5K5mqVgv4GC0wFu9gvj[^\s]*/g, ACTIVE_WHATSAPP_URL);
+
     const gmailUser = payload.gmailUser || process.env.VITE_GMAIL_USER || process.env.GMAIL_USER || 'Awssbggcoek@gmail.com';
     const gmailPass = payload.gmailPass || process.env.VITE_GMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || 'uoepgjczzkohretv';
     const resendKey = payload.apiKey || process.env.VITE_RESEND_API_KEY || process.env.RESEND_API_KEY;
