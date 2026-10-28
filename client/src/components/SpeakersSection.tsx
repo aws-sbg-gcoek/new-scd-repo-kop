@@ -323,8 +323,6 @@ export const SpeakersSection = () => {
                         alt={slot.name}
                         className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
                       />
-                      {/* Scanning laser line animation */}
-                      <div className="absolute inset-0 w-full h-[2px] bg-aws-orange shadow-[0_0_8px_#FF9900] opacity-0 group-hover:opacity-100 animate-[scan_2s_ease-in-out_infinite] pointer-events-none" />
                     </div>
                   ) : (
                     /* Holographic Classified Avatar HUD */
@@ -549,8 +547,6 @@ export const SpeakersSection = () => {
                               alt={selectedSlot.name}
                               className="w-full h-full object-cover object-top"
                             />
-                            {/* Laser line scanner animation */}
-                            <div className="absolute inset-0 w-full h-[2px] bg-aws-orange shadow-[0_0_8px_#FF9900] animate-[scan_2s_ease-in-out_infinite] pointer-events-none" />
                           </div>
                         ) : (
                           <div className="w-full h-full rounded-full overflow-hidden relative border-2 border-aws-orange/40 shadow-[0_0_20px_rgba(255,153,0,0.15)] bg-[#050505] flex flex-col items-center justify-center text-aws-orange">

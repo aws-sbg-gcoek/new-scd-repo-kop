@@ -61,7 +61,7 @@ const coreCrew: TeamMember[] = [
   },
   {
     name: "Anas Pathan",
-    role: "Project Lead",
+    role: "Technical Lead",
     department: "Technical Dept",
     description: "Leading project development, coordinating the team, and building scalable applications with modern cloud technologies.",
     image: "https://i.ibb.co/xS2tZTkf/Formal-Black-Suit-Portrait.png",
@@ -93,8 +93,8 @@ const coreCrew: TeamMember[] = [
   },
   {
     name: "Bhushan Jadhav",
-    role: "Treasurer",
-    department: "Finance & Marketing Dept",
+    role: "Joint Secretary",
+    department: "Leadership Dept",
     description: "Managing conference finances, ticketing workflows, budgeting for community events, and ensuring seamless financial operations.",
     image: "https://i.ibb.co/4Ztn2gvb/Bhushan-png.png",
     linkedin: "https://www.linkedin.com/in/bhushan-jadhav-93b94630b?utm_source=share_via&utm_content=profile&utm_medium=member_android",

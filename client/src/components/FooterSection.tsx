@@ -87,7 +87,7 @@ export const FooterSection = () => {
                <ul className="flex flex-col gap-3 font-mono text-[10px] sm:text-xs opacity-70 uppercase tracking-wider sm:tracking-widest">
                   <li>Shardul Kolekar<br/><span className="text-[#FF9900]">President // Captain</span></li>
                   <li>Apeksha Khodave<br/><span className="text-[#FF9900]">Vice President</span></li>
-                  <li>Bhushan Jadhav<br/><span className="text-[#FF9900]">Treasurer</span></li>
+                  <li>Bhushan Jadhav<br/><span className="text-[#FF9900]">Joint Secretary</span></li>
                </ul>
             </div>
             

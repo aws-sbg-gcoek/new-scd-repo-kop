@@ -18,7 +18,7 @@ const perks = [
   },
   {
     title: "Career & Internships",
-    desc: "Discover cloud career paths, internship opportunities, and industry expectations by speaking with active hiring sponsors.",
+    desc: "Discover cloud career paths, internship opportunities, and industry expectations.",
     icon: Briefcase,
     color: "f1-red"
   },
@@ -54,29 +54,29 @@ export const WhatYouGetSection = () => {
       {/* Sleek dotted/grid background pattern */}
       <div className="absolute inset-0 bg-[#050505] pointer-events-none" />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] pointer-events-none" />
-      
+
       {/* Multi-layered soft glow blobs */}
       <div className="absolute -left-10 top-1/4 w-[350px] h-[350px] bg-aws-orange/5 blur-[130px] rounded-full pointer-events-none" />
       <div className="absolute -right-10 bottom-1/4 w-[350px] h-[350px] bg-f1-red/5 blur-[130px] rounded-full pointer-events-none" />
 
       <div className="w-full relative z-10 flex flex-col gap-16">
-        <SectionHeader 
-          title="Event Benefits" 
-          subtitle="A comprehensive student experience crafted to accelerate your growth, validate your skills, and connect you with the tech ecosystem." 
-          sysId="01.BEN" 
+        <SectionHeader
+          title="Event Benefits"
+          subtitle="A comprehensive student experience crafted to accelerate your growth, validate your skills, and connect you with the tech ecosystem."
+          sysId="01.BEN"
         />
 
         <div className="flex sm:grid overflow-x-auto sm:overflow-visible snap-x snap-mandatory sm:snap-none gap-6 pb-6 sm:pb-0 px-4 sm:px-0 -mx-4 sm:mx-auto no-scrollbar sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto w-full">
           {perks.map((perk, i) => {
             const Icon = perk.icon;
-            
+
             // Map card color states for high-tech HUD borders and elements
             let accentBorder = "group-hover:border-white/20";
             let accentGlow = "group-hover:shadow-[0_0_25px_rgba(255,255,255,0.06)]";
             let lineGradient = "from-white/40 to-transparent";
             let iconBoxStyle = "text-white bg-white/5 border-white/10";
             let cornerColor = "group-hover:border-white/50";
-            
+
             if (perk.color === "aws-orange") {
               accentBorder = "group-hover:border-aws-orange/30";
               accentGlow = "group-hover:shadow-[0_0_25px_rgba(255,153,0,0.12)]";
@@ -102,7 +102,7 @@ export const WhatYouGetSection = () => {
               >
                 {/* Expansive top color line on hover */}
                 <div className={`absolute top-0 left-0 w-0 h-[2px] bg-gradient-to-r ${lineGradient} group-hover:w-full transition-all duration-500`} />
-                
+
                 {/* Corner Crosshairs / HUD brackets */}
                 <div className={`absolute top-0 left-0 w-2 h-2 border-t border-l border-white/10 ${cornerColor} transition-colors duration-300`} />
                 <div className={`absolute top-0 right-0 w-2 h-2 border-t border-r border-white/10 ${cornerColor} transition-colors duration-300`} />

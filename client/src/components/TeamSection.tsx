@@ -51,14 +51,14 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
   },
   {
     department: "Leadership Dept",
-    id: "gopal",
-    name: "Gopal Lakwal",
+    id: "bhushan-jadhav",
+    name: "Bhushan Jadhav",
     role: "Joint Secretary",
-    bio: "Supporting the General Secretary in daily club operations and logistics coordination.",
-    skills: "Management, Coordination",
-    email: "gopallakwal526@gmail.com",
-    linkedin: "https://www.linkedin.com/in/gopal-lakwal-461467383",
-    image: "https://i.ibb.co/4wBwTHtx/file-000000002ef871fab1e8c53a2708be68-Gopal-lakwal.png"
+    bio: "Supporting club operations, coordinating community initiatives, and managing financial operations.",
+    skills: "Leadership, Operations, Finance, Management",
+    email: "aj6244249@gmail.com",
+    linkedin: "https://www.linkedin.com/in/bhushan-jadhav-93b94630b?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    image: "https://i.ibb.co/4Ztn2gvb/Bhushan-png.png"
   },
   {
     department: "Leadership Dept",
@@ -77,9 +77,9 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     department: "Technical Dept",
     id: "anas",
     name: "Anas Pathan",
-    role: "Project Lead",
-    bio: "Leading project development, coordinating the student builder team, and building scalable applications with modern cloud technologies.",
-    skills: "AWS, Project Leadership, Cloud Development, Node.js, Docker",
+    role: "Technical Lead",
+    bio: "Leading technical initiatives, guiding student builders, and building scalable applications with modern cloud technologies.",
+    skills: "AWS, Technical Leadership, Cloud Development, Node.js, Docker",
     email: "pathananas2007@gmail.com",
     linkedin: "https://www.linkedin.com/in/anas-pathan-91a6b3368",
     image: "https://i.ibb.co/xS2tZTkf/Formal-Black-Suit-Portrait.png"
@@ -99,8 +99,8 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     department: "Technical Dept",
     id: "atharv-patil",
     name: "Atharv Patil",
-    role: "Technical Lead",
-    bio: "Assisting in the strategic direction and operations of the club, leading technical masterclasses.",
+    role: "Project Lead",
+    bio: "Leading technical projects, coordinating development, and conducting masterclasses for student builders.",
     skills: "Cloud Computing, Management, AWS",
     email: "atharvpatil1808@gmail.com",
     linkedin: "https://www.linkedin.com/in/atharvpatilw",
@@ -151,6 +151,17 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     email: "punamage123@gmail.com",
     linkedin: "https://www.linkedin.com/in/punam-age-5219a52b6",
     image: "https://i.ibb.co/spsQqkZ3/Professional-passport-style-headshot-with-smile-1-Punam-age.png"
+  },
+  {
+    department: "Events & Operations Dept",
+    id: "gopal",
+    name: "Gopal Lakwal",
+    role: "Event Associate",
+    bio: "Supporting event planning, coordination, and logistics to ensure smooth execution of club activities.",
+    skills: "Event Coordination, Teamwork, Management",
+    email: "gopallakwal526@gmail.com",
+    linkedin: "https://www.linkedin.com/in/gopal-lakwal-461467383",
+    image: "https://i.ibb.co/4wBwTHtx/file-000000002ef871fab1e8c53a2708be68-Gopal-lakwal.png"
   },
 
   {
@@ -257,17 +268,6 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     email: "kodagvaishnavi26@gmail.com",
     linkedin: "https://www.linkedin.com/in/vaishnavi-kodag-766010389?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     image: "https://i.ibb.co/rRW7fXjn/Whats-App-Image-2026-09-03-at-8-38-17-AM.jpg"
-  },
-  {
-    department: "Finance & Marketing Dept",
-    id: "bhushan-jadhav",
-    name: "Bhushan Jadhav",
-    role: "Treasurer",
-    bio: "Managing club finances, ticket processing, budgeting, and financial integrity for community events.",
-    skills: "Finance, Budgeting, Accounting",
-    email: "aj6244249@gmail.com",
-    linkedin: "https://www.linkedin.com/in/bhushan-jadhav-93b94630b?utm_source=share_via&utm_content=profile&utm_medium=member_android",
-    image: "https://i.ibb.co/4Ztn2gvb/Bhushan-png.png"
   }
 ];
 
@@ -289,7 +289,7 @@ export const newTeamMembers: TeamMember[] = [
     ],
     email: "dikshasp101729@gmail.com",
     linkedin: "https://www.linkedin.com/in/diksha-patil-s1729",
-    image: "https://i.ibb.co/DDp4ch74/Dikasha-Patil.png",
+    image: "/team/diksha-patil.png",
   },
   {
     department: "Technical Dept",
@@ -300,7 +300,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Technical Support", "Problem Solving", "Teamwork"],
     email: "harshpisal0809@gmail.com",
     linkedin: "https://www.linkedin.com/in/harsh-pisal-b03450441",
-    image: "https://i.ibb.co/N2nz01zX/Harsh-Pisal.png",
+    image: "/team/harsh.png",
   },
 
   // ─────────────────────────────────────────
@@ -316,8 +316,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Event Coordination", "Teamwork", "Communication"],
     email: "praptiarchanapatil@gmail.com",
     linkedin: "https://www.linkedin.com/in/prapti-patil-2504a5434",
-    image:
-      "https://i.ibb.co/Q7qZfBFq/Whats-App-Image-2026-10-20-at-6-33-15-AM.jpg",
+    image: "/team/prapti.jpg",
   },
   {
     department: "Events & Operations Dept",
@@ -328,7 +327,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Event Coordination", "Teamwork", "Organization"],
     email: "shindeaaryavardhan8@gmail.com",
     linkedin: "https://www.linkedin.com/in/aaryavardhan-shinde-a4477b437",
-    image: "https://i.ibb.co/1Y8pg0zn/Santosh-Patil.jpg",
+    image: "/team/aaryavardhan.jpg",
   },
   {
     department: "Events & Operations Dept",
@@ -340,7 +339,7 @@ export const newTeamMembers: TeamMember[] = [
     email: "shubhampandagale00@gmail.com",
     linkedin:
       "https://www.linkedin.com/in/shubham-pandagale-a422b73a0?utm_source=share_via&utm_content=profile&utm_medium=member_android",
-    image: "https://i.ibb.co/zVqqqjxq/Shubham-Vijay-Pandagale.jpg",
+    image: "/team/santosh.jpg",
   },
   {
     department: "Events & Operations Dept",
@@ -351,7 +350,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Event Planning", "Coordination", "Teamwork"],
     email: "asmitaugale07@gmail.com",
     linkedin: "https://www.linkedin.com/in/asmita-ugale-b5a4412a4",
-    image: "https://i.ibb.co/ccZ9C5Dh/Asmita-Ugale.png",
+    image: "/team/asmita.png",
   },
   {
     department: "Events & Operations Dept",
@@ -362,7 +361,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Event Coordination", "Organization", "Teamwork"],
     email: "gkedar321@gmail.com",
     linkedin: "https://www.linkedin.com/in/kedar-gurav-811264416",
-    image: "https://i.ibb.co/Jw3kq7gb/Kedar-Gurav.jpg",
+    image: "/team/kedar.jpg",
   },
   {
     department: "Events & Operations Dept",
@@ -373,7 +372,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Event Coordination", "Teamwork", "Communication"],
     email: "tejasmahant95@gmail.com",
     linkedin: "https://www.linkedin.com/in/tejas-mahant-a26583440",
-    image: "https://i.ibb.co/tp6N08P9/Tejas-mahant.jpg",
+    image: "/team/tejas.jpg",
   },
 
   // ─────────────────────────────────────────
@@ -393,7 +392,7 @@ export const newTeamMembers: TeamMember[] = [
     ],
     email: "Sumittipane123@gmail.com",
     linkedin: "https://www.linkedin.com/in/sumit-tipane-292520441",
-    image: "https://i.ibb.co/d4jyp05y/Sumit-Tipane.jpg",
+    image: "/team/sumit.jpg",
   },
   {
     department: "Media & Content Dept",
@@ -404,8 +403,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Graphic Design", "Visual Communication", "Creativity"],
     email: "shrutipaul53@gmail.com",
     linkedin: "",
-    image:
-      "https://i.ibb.co/tPDc952j/file-0000000013688211a26f79127c663c9d-Shruti-Paul-41.png",
+    image: "/team/shruti.png",
   },
   {
     department: "Media & Content Dept",
@@ -420,8 +418,7 @@ export const newTeamMembers: TeamMember[] = [
     ],
     email: "dattadhole1911@gmail.com",
     linkedin: "",
-    image:
-      "https://i.ibb.co/0y5QRFLp/IMG-20261011-190533-Dattatray-Dhole.png",
+    image: "/team/dattatray.png",
   },
   {
     department: "Media & Content Dept",
@@ -432,8 +429,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Graphic Design", "Visual Communication", "Creativity"],
     email: "mr.zaid.1029@gmail.com",
     linkedin: "https://www.linkedin.com/in/abdul-samad-354023362/",
-    image:
-      "https://i.ibb.co/Fk1qPtV7/file-00000000f1bc82118b681c8769c3c154-Abdul-Samad-Zaid.png",
+    image: "/team/abdul-samad.png",
   },
 
   // ─────────────────────────────────────────
@@ -449,7 +445,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Public Relations", "Outreach Strategy", "Communication"],
     email: "digvijaya.ronghe@gmail.com",
     linkedin: "",
-    image: "https://i.ibb.co/bg27x5WZ/1791724153696-Digvijaya-Ronghe.png",
+    image: "/team/digvijay-ronghe.png",
   },
   {
     department: "PR, Outreach & Corporate Dept",
@@ -460,7 +456,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Public Relations", "Communication", "Networking"],
     email: "vk4578526@gmail.com",
     linkedin: "https://www.linkedin.com/in/vaishnavi-kale-762014389",
-    image: "https://i.ibb.co/PGbwbxfQ/Vaishnavi-Kale.jpg",
+    image: "",
   },
   {
     department: "PR, Outreach & Corporate Dept",
@@ -471,8 +467,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Public Relations", "Communication", "Networking"],
     email: "sairajmali43@gmail.com",
     linkedin: "",
-    image:
-      "https://i.ibb.co/j9WtHb4J/file-000000002eb482118dcd7c92f75ef9c9-Sairaj-Mali.png",
+    image: "/team/sairaj.png",
   },
 
   // ─────────────────────────────────────────
@@ -492,8 +487,7 @@ export const newTeamMembers: TeamMember[] = [
     ],
     email: "patilayushi738@gmail.com",
     linkedin: "https://www.linkedin.com/in/ayushi-patil-a9867a3b7",
-    image:
-      "https://i.ibb.co/TBTVFM9G/Whats-App-Image-2026-10-20-at-9-13-01-AM.jpg",
+    image: "/team/ayushi.jpg",
   },
   {
     department: "Finance & Marketing Dept",
@@ -504,7 +498,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Marketing", "Content Creation", "Communication"],
     email: "yogitamandhare264@gmail.com",
     linkedin: "https://www.linkedin.com/in/yogita-mandhare-00923439b",
-    image: "https://i.ibb.co/vxmp1HCr/Yogita.jpg",
+    image: "/team/yogita.jpg",
   },
   {
     department: "Finance & Marketing Dept",
@@ -519,7 +513,7 @@ export const newTeamMembers: TeamMember[] = [
     ],
     email: "digvijaypatil6321@gmail.com",
     linkedin: "https://www.linkedin.com/in/digvijay-patil-668360441",
-    image: "https://i.ibb.co/fVQW52dV/Digviay-Patil.jpg",
+    image: "/team/digvijay.jpg",
   },
 ];
 
@@ -706,6 +700,13 @@ function MemberCard({ member }: { member: TeamMember }) {
             decoding="async"
             className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
             onError={() => setImgError(true)}
+            onLoad={(e) => {
+              const img = e.currentTarget;
+              // Detect imgbb 503 error square (200x200 placeholder)
+              if (img.naturalWidth === 200 && img.naturalHeight === 200) {
+                setImgError(true);
+              }
+            }}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-tr from-black via-[#141414] to-aws-orange/10 text-white font-mono text-3xl font-black">
