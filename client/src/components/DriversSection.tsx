@@ -542,7 +542,7 @@ export const DriversSection = () => {
               className="inline-flex items-center gap-2 px-4 py-2 border border-white/15 bg-white/[0.02] hover:bg-aws-orange hover:text-black hover:border-aws-orange text-white text-xs font-mono font-bold uppercase tracking-wider transition-all rounded group"
             >
               <Users size={14} className="text-aws-orange group-hover:text-black" />
-              <span>Full Team Directory (28)</span>
+              <span>Full Team Directory (41)</span>
               <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
           }

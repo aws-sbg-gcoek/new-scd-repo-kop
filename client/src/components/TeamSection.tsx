@@ -152,17 +152,7 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     linkedin: "https://www.linkedin.com/in/punam-age-5219a52b6",
     image: "https://i.ibb.co/spsQqkZ3/Professional-passport-style-headshot-with-smile-1-Punam-age.png"
   },
-  {
-    department: "Events & Operations Dept",
-    id: "gopal",
-    name: "Gopal Lakwal",
-    role: "Event Associate",
-    bio: "Supporting event planning, coordination, and logistics to ensure smooth execution of club activities.",
-    skills: "Event Coordination, Teamwork, Management",
-    email: "gopallakwal526@gmail.com",
-    linkedin: "https://www.linkedin.com/in/gopal-lakwal-461467383",
-    image: "https://i.ibb.co/4wBwTHtx/file-000000002ef871fab1e8c53a2708be68-Gopal-lakwal.png"
-  },
+
 
   {
     department: "Events & Operations Dept",
@@ -186,6 +176,17 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     linkedin: "https://www.linkedin.com/in/palak-vedi-284821388",
     image: "/team/palak-vedi.png"
   },
+  {
+    department: "Events & Operations Dept",
+    id: "gopal",
+    name: "Gopal Lakwal",
+    role: "Event Associate",
+    bio: "Supporting event planning, coordination, and logistics to ensure smooth execution of club activities.",
+    skills: "Event Coordination, Teamwork, Management",
+    email: "gopallakwal526@gmail.com",
+    linkedin: "https://www.linkedin.com/in/gopal-lakwal-461467383",
+    image: "https://i.ibb.co/4wBwTHtx/file-000000002ef871fab1e8c53a2708be68-Gopal-lakwal.png"
+  },
 
   // Media & Content Dept
   {
@@ -201,17 +202,6 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
   },
   {
     department: "Media & Content Dept",
-    id: "amruta",
-    name: "Amruta Kole",
-    role: "Social Media Associate",
-    bio: "Assisting in content creation, design assets, and social media coverage during events.",
-    skills: "Content Creation, Social Media, Graphic Design",
-    email: "koleamruta836@gmail.com",
-    linkedin: "https://www.linkedin.com/in/amruta-kole-907958388",
-    image: "https://i.ibb.co/C5g4Mm7x/Whats-App-Image-2026-04-18-at-8-14-43-AM.jpg"
-  },
-  {
-    department: "Media & Content Dept",
     id: "dhrupata",
     name: "Dhrupata Wankhede",
     role: "Design & Branding Lead",
@@ -221,6 +211,18 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     linkedin: "https://www.linkedin.com/in/dhrupata-wankhede-b68b323a3",
     image: "https://i.ibb.co/9mS6qrPr/IMG-20260316-WA0033-Dhrupata-Wankhede.jpg"
   },
+  {
+    department: "Media & Content Dept",
+    id: "amruta",
+    name: "Amruta Kole",
+    role: "Social Media Associate",
+    bio: "Assisting in content creation, design assets, and social media coverage during events.",
+    skills: "Content Creation, Social Media, Graphic Design",
+    email: "koleamruta836@gmail.com",
+    linkedin: "https://www.linkedin.com/in/amruta-kole-907958388",
+    image: "https://i.ibb.co/C5g4Mm7x/Whats-App-Image-2026-04-18-at-8-14-43-AM.jpg"
+  },
+
   {
     department: "Media & Content Dept",
     id: "vedika",
@@ -456,7 +458,7 @@ export const newTeamMembers: TeamMember[] = [
     skills: ["Public Relations", "Communication", "Networking"],
     email: "vk4578526@gmail.com",
     linkedin: "https://www.linkedin.com/in/vaishnavi-kale-762014389",
-    image: "",
+    image: "/team/vaishnavi-kale.jpg",
   },
   {
     department: "PR, Outreach & Corporate Dept",
@@ -579,14 +581,34 @@ export default function TeamSection() {
     'Finance & Marketing Dept'
   ];
 
-  const filteredMembers = selectedDepartment === 'All'
-    ? teamMembers
-    : teamMembers.filter(m => m.department === selectedDepartment);
+  // Sort members by role seniority within each department
+  const getRolePriority = (role: string): number => {
+    const r = role.toLowerCase();
+    if (r.includes('president') || r.includes('captain')) return 1;
+    if (r.includes('vice president')) return 2;
+    if (r.includes('general secretary')) return 3;
+    if (r.includes('joint secretary')) return 4;
+    if (r.includes('treasurer')) return 5;
+    if (r.includes('lead') && !r.includes('co-lead') && !r.includes('co lead')) return 6;
+    if (r.includes('co-lead') || r.includes('co lead')) return 7;
+    if (r.includes('coordinator') || r.includes('coordination') || r.includes('manager')) return 8;
+    if (r.includes('associate')) return 9;
+    return 10;
+  };
+
+  const sortByRole = (members: TeamMember[]) =>
+    [...members].sort((a, b) => getRolePriority(a.role) - getRolePriority(b.role));
+
+  const filteredMembers = sortByRole(
+    selectedDepartment === 'All'
+      ? teamMembers
+      : teamMembers.filter(m => m.department === selectedDepartment)
+  );
 
   // Group by department when 'All' is selected
   const groupedDepartments = departments.slice(1).map(dept => ({
     name: dept,
-    members: teamMembers.filter(m => m.department === dept)
+    members: sortByRole(teamMembers.filter(m => m.department === dept))
   })).filter(g => g.members.length > 0);
 
   return (
@@ -682,6 +704,11 @@ export default function TeamSection() {
 function MemberCard({ member }: { member: TeamMember }) {
   const [imgError, setImgError] = useState(false);
   const initials = member.name.split(' ').map(n => n[0]).join('').slice(0, 2);
+
+  // Reset error state if image source changes
+  useEffect(() => {
+    setImgError(false);
+  }, [member.image]);
 
   return (
     <motion.div
