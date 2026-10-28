@@ -57,14 +57,32 @@ interface SpeakerSlot {
 const SPEAKER_SLOTS: SpeakerSlot[] = [
   {
     id: 1,
-    revealed: false,
-    track: "Keynote Address",
+    revealed: true,
+    name: "Rana Okan",
+    image: "/Speakers/rana-okan.jpg",
+    designation: "Associate Account Manager — SBGL Program, Amazon Web Services (AWS)",
+    role: "AWS Student Builder Group Leader Program · Strategy & Analytics Professional",
     badge: "SPEAKER 01 // KEYNOTE",
+    specialBadge: "AMAZON WEB SERVICES",
+    subTrackBadge: "Short Introduction (Between Events)",
+    experience: "GLOBAL PROGRAMS",
+    accreditation: "AWS SBGL",
     sector: "SECTOR-A1",
-    headline: "Cloud Innovation & The Next Generation of Builders",
-    focus: "Keynote Address, Future of Cloud & AWS Ecosystem Trends",
-    description: "Opening keynote address exploring cutting-edge cloud innovations, global developer ecosystem trends, and empowering the next generation of cloud builders.",
-    statusBadge: "IN PADDOCK // REVEALING SOON",
+    track: "Keynote Address",
+    headline: "Greetings from Boston — AWS & the SBGL Program",
+    focus: "AWS SBGL Program, Student Empowerment & Cloud Leadership",
+    description: "Data-driven strategy and analytics professional with experience leading global programs, analyzing business performance, and developing insight-driven recommendations that support strategic decision-making. With foundations in finance, marketing, and analytics, Rana brings a unique approach to problem-solving — connecting financial performance with consumer behavior, engagement trends, and growth opportunities. Skilled at translating complex quantitative and qualitative data into actionable business insights that inform strategy, optimize performance, and drive organizational growth. Education: Babson College, BS in Finance | Boston University, MS in Marketing Analytics & Advertising.",
+    sessionType: "Short Introduction (Between Events)",
+    sessionTitle: "Greetings from Boston — AWS & the SBGL Program",
+    sessionDescription: "In this short session, Rana shares a warm greeting from Boston and introduces the AWS Student Builder Group Leader (SBGL) Program — a global initiative designed to empower student communities through cloud technology, leadership, and hands-on learning. She also shares a few words of encouragement for the students of Kolhapur as they build their futures in tech.",
+    keyTopics: [
+      "Overview of the AWS SBGL Program — Understanding the global initiative designed to empower student communities.",
+      "Benefits of the SBGL Program for student communities — Resources, mentorship, and opportunities available to student builders.",
+      "How students can get involved and grow with AWS — Pathways to join, contribute, and advance within the AWS ecosystem.",
+      "Words of inspiration for the students of Kolhapur — Encouragement and guidance for students building their futures in tech."
+    ],
+    linkedinLink: "https://www.linkedin.com/company/aws-sbg-gcoe-kolhapur/",
+    statusBadge: "CONFIRMED // STAGE READY",
     iconName: "award"
   },
   {
@@ -237,7 +255,7 @@ export const SpeakersSection = () => {
             <span className="w-2.5 h-2.5 rounded-full bg-aws-orange animate-ping" />
             <span className="font-mono text-[9px] sm:text-[10px] text-aws-orange uppercase tracking-widest font-bold flex items-center gap-1.5">
               <Radio size={12} className="text-aws-orange" />
-              PADDOCK STATUS // 4 STAGE SESSIONS & WORKSHOPS
+              PADDOCK STATUS // 5 STAGE SESSIONS & WORKSHOPS
             </span>
           </div>
           <div className="font-mono text-[9px] sm:text-[10px] text-white/50 tracking-wider flex items-center gap-2">
