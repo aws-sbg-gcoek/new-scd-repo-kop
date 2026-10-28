@@ -59,7 +59,7 @@ const SPEAKER_SLOTS: SpeakerSlot[] = [
     id: 1,
     revealed: true,
     name: "Rana Okan",
-    image: "/Speakers/rana-okan.jpg",
+    image: "/Speakers/rana-okan-v2.jpg",
     designation: "Associate Account Manager — SBGL Program, Amazon Web Services (AWS)",
     role: "AWS Student Builder Group Leader Program · Strategy & Analytics Professional",
     badge: "SPEAKER 01 // KEYNOTE",
