@@ -3,21 +3,21 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { SectionHeader } from './LayoutElements';
-import { 
-  Radio, 
-  Sparkles, 
-  ArrowRight, 
-  Eye, 
-  Ticket, 
-  X, 
-  Terminal, 
-  Layers, 
-  Cpu, 
-  ShieldCheck, 
-  Cloud, 
-  Users, 
-  Binary, 
-  Workflow, 
+import {
+  Radio,
+  Sparkles,
+  ArrowRight,
+  Eye,
+  Ticket,
+  X,
+  Terminal,
+  Layers,
+  Cpu,
+  ShieldCheck,
+  Cloud,
+  Users,
+  Binary,
+  Workflow,
   Award,
   Lock,
   ChevronRight,
@@ -81,7 +81,7 @@ const SPEAKER_SLOTS: SpeakerSlot[] = [
       "How students can get involved and grow with AWS — Pathways to join, contribute, and advance within the AWS ecosystem.",
       "Words of inspiration for the students of Kolhapur — Encouragement and guidance for students building their futures in tech."
     ],
-    linkedinLink: "https://www.linkedin.com/company/aws-sbg-gcoe-kolhapur/",
+    linkedinLink: "https://www.linkedin.com/in/ranaokan/",
     statusBadge: "CONFIRMED // STAGE READY",
     iconName: "award"
   },
@@ -241,10 +241,10 @@ export const SpeakersSection = () => {
 
       {/* Header */}
       <div className="mb-12 max-w-7xl mx-auto">
-        <SectionHeader 
-          title="Speakers" 
-          subtitle="Meet our world-class lineup of AWS community leaders, golden jacket holders, and cloud architects taking the stage at AWS Student Community Day Kolhapur." 
-          sysId="02.SPK" 
+        <SectionHeader
+          title="Speakers"
+          subtitle="Meet our world-class lineup of AWS community leaders, golden jacket holders, and cloud architects taking the stage at AWS Student Community Day Kolhapur."
+          sysId="02.SPK"
         />
       </div>
 
@@ -262,8 +262,8 @@ export const SpeakersSection = () => {
             <span className="text-white/30 hidden md:inline">EVENT DATE:</span>
             <span className="text-white font-semibold">STAGE REVEAL // NOV 2026</span>
             <span className="text-white/20">|</span>
-            <a 
-              href="#tickets" 
+            <a
+              href="#tickets"
               className="text-aws-orange hover:text-white underline underline-offset-2 transition-colors flex items-center gap-1 font-bold"
             >
               <span>Get Pass to Attend</span>
@@ -286,12 +286,11 @@ export const SpeakersSection = () => {
             onClick={() => setSelectedSlot(slot)}
           >
             {/* Card Body */}
-            <div className={`relative bg-[#0d0d0d] border ${
-              slot.revealed 
-                ? 'border-aws-orange/40 shadow-[0_0_20px_rgba(255,153,0,0.08)]' 
+            <div className={`relative bg-[#0d0d0d] border ${slot.revealed
+                ? 'border-aws-orange/40 shadow-[0_0_20px_rgba(255,153,0,0.08)]'
                 : 'border-white/5'
-            } h-full overflow-hidden flex flex-col justify-start p-5 sm:p-6 transition-all duration-500 hover:border-aws-orange/60 hover:shadow-[0_0_35px_rgba(255,153,0,0.18)] rounded-xl`}>
-              
+              } h-full overflow-hidden flex flex-col justify-start p-5 sm:p-6 transition-all duration-500 hover:border-aws-orange/60 hover:shadow-[0_0_35px_rgba(255,153,0,0.18)] rounded-xl`}>
+
               {/* Corner tech accents */}
               <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-white/10 group-hover:border-aws-orange/40 transition-colors pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-white/10 group-hover:border-aws-orange/40 transition-colors pointer-events-none" />
@@ -312,17 +311,16 @@ export const SpeakersSection = () => {
               <div className="relative z-10 flex-1 flex items-center justify-center my-5 sm:my-6">
                 <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-white/10 flex items-center justify-center relative bg-white/[0.01] shrink-0">
                   {/* Concentric rotating dashed borders */}
-                  <div className={`absolute inset-[-4px] rounded-full border border-dashed ${
-                    slot.revealed ? 'border-aws-orange/70 animate-[spin_10s_linear_infinite]' : 'border-aws-orange/40 group-hover:animate-[spin_6s_linear_infinite]'
-                  }`} />
+                  <div className={`absolute inset-[-4px] rounded-full border border-dashed ${slot.revealed ? 'border-aws-orange/70 animate-[spin_10s_linear_infinite]' : 'border-aws-orange/40 group-hover:animate-[spin_6s_linear_infinite]'
+                    }`} />
                   <div className="absolute inset-[-8px] rounded-full border border-dashed border-white/10 group-hover:border-f1-red/30 group-hover:animate-[spin_4s_linear_reverse_infinite]" />
-                  
+
                   {slot.revealed && slot.image ? (
                     /* Revealed Speaker Photo */
                     <div className="w-full h-full rounded-full overflow-hidden border-2 border-aws-orange/60 relative bg-[#070707] shadow-[0_0_20px_rgba(255,153,0,0.25)]">
-                      <img 
-                        src={slot.image} 
-                        alt={slot.name} 
+                      <img
+                        src={slot.image}
+                        alt={slot.name}
                         className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
                       />
                       {/* Scanning laser line animation */}
@@ -348,11 +346,10 @@ export const SpeakersSection = () => {
               {/* Bottom - Info */}
               <div className="relative z-10 border-t border-white/5 pt-4 text-left mt-auto flex flex-col justify-start">
                 <div className="mb-2 flex flex-wrap items-center gap-1.5">
-                  <span className={`text-[7.5px] sm:text-[8.5px] font-mono px-2 py-0.5 ${
-                    slot.revealed 
-                      ? 'bg-aws-orange text-black font-black' 
+                  <span className={`text-[7.5px] sm:text-[8.5px] font-mono px-2 py-0.5 ${slot.revealed
+                      ? 'bg-aws-orange text-black font-black'
                       : 'bg-aws-orange/10 border border-aws-orange/25 text-aws-orange font-bold'
-                  } rounded uppercase tracking-wider inline-block`}>
+                    } rounded uppercase tracking-wider inline-block`}>
                     {slot.badge}
                   </span>
                   {slot.revealed && slot.specialBadge && (
@@ -412,7 +409,7 @@ export const SpeakersSection = () => {
 
       {/* Dual Paddock Action Banner Below Grid */}
       <div className="max-w-7xl mx-auto mt-12 sm:mt-16 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-        
+
         {/* Banner 1: Attend Event to See Lineup */}
         <div className="relative bg-[#090909] border border-white/10 rounded-2xl p-6 sm:p-8 overflow-hidden backdrop-blur-sm group hover:border-aws-orange/40 transition-colors">
           <div className="absolute top-0 right-0 w-32 h-32 bg-aws-orange/5 rounded-full blur-2xl pointer-events-none" />
@@ -485,14 +482,14 @@ export const SpeakersSection = () => {
       {createPortal(
         <AnimatePresence>
           {selectedSlot && (
-            <div 
+            <div
               className="fixed inset-0 z-[999] flex items-center justify-center p-4 sm:p-6 md:p-10"
               role="dialog"
               aria-label="Speaker Telemetry Modal"
               aria-modal="true"
             >
               {/* Backdrop */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -517,15 +514,15 @@ export const SpeakersSection = () => {
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-aws-orange animate-ping" />
                     <span className="text-aws-orange font-bold">
-                      {selectedSlot.revealed 
-                        ? `SPEAKER TELEMETRY // 0${selectedSlot.id} CONFIRMED` 
+                      {selectedSlot.revealed
+                        ? `SPEAKER TELEMETRY // 0${selectedSlot.id} CONFIRMED`
                         : `PADDOCK TELEMETRY // TRACK 0${selectedSlot.id}`}
                     </span>
                   </div>
                   <div className="flex items-center gap-4">
                     <span className="hidden sm:inline">SECTOR: {selectedSlot.sector}</span>
-                    <button 
-                      type="button" 
+                    <button
+                      type="button"
                       onClick={() => setSelectedSlot(null)}
                       className="p-1 hover:text-white text-white/50 transition-colors border border-white/5 hover:border-aws-orange/30 rounded bg-white/[0.02] cursor-pointer"
                     >
@@ -537,19 +534,19 @@ export const SpeakersSection = () => {
                 {/* Scrollable Content */}
                 <div className="flex-1 overflow-y-auto p-6 md:p-8">
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-                    
+
                     {/* Left Column */}
                     <div className="md:col-span-4 flex flex-col items-center">
                       <div className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-full p-2 bg-gradient-to-tr from-f1-red/20 via-transparent to-aws-orange/20 border border-white/5">
                         {/* Concentric rotating design lines */}
                         <div className="absolute inset-0 rounded-full border border-dashed border-aws-orange/30 animate-[spin_12s_linear_infinite]" />
                         <div className="absolute inset-1 rounded-full border border-dashed border-white/20 animate-[spin_8s_linear_reverse_infinite]" />
-                        
+
                         {selectedSlot.revealed && selectedSlot.image ? (
                           <div className="w-full h-full rounded-full overflow-hidden relative border-2 border-aws-orange/60 shadow-[0_0_25px_rgba(255,153,0,0.3)] bg-[#050505]">
-                            <img 
-                              src={selectedSlot.image} 
-                              alt={selectedSlot.name} 
+                            <img
+                              src={selectedSlot.image}
+                              alt={selectedSlot.name}
                               className="w-full h-full object-cover object-top"
                             />
                             {/* Laser line scanner animation */}
@@ -622,11 +619,10 @@ export const SpeakersSection = () => {
                     {/* Right Column */}
                     <div className="md:col-span-8 flex flex-col text-left">
                       <div className="mb-3 flex flex-wrap items-center gap-2">
-                        <span className={`text-[10px] font-mono tracking-widest ${
-                          selectedSlot.revealed 
-                            ? 'bg-aws-orange text-black font-black' 
+                        <span className={`text-[10px] font-mono tracking-widest ${selectedSlot.revealed
+                            ? 'bg-aws-orange text-black font-black'
                             : 'bg-aws-orange/10 border border-aws-orange/20 text-aws-orange font-bold'
-                        } uppercase px-2.5 py-0.5 rounded`}>
+                          } uppercase px-2.5 py-0.5 rounded`}>
                           {selectedSlot.badge}
                         </span>
                         {selectedSlot.revealed && selectedSlot.specialBadge && (
@@ -683,12 +679,12 @@ export const SpeakersSection = () => {
                       {/* Session Parameters Box */}
                       <div className="bg-[#121212] border border-white/5 rounded-xl p-4 sm:p-5 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-24 h-24 bg-aws-orange/5 rounded-full blur-2xl pointer-events-none" />
-                        
+
                         <div className="font-mono text-[8px] sm:text-[9px] uppercase tracking-widest text-white/40 mb-2 flex items-center gap-1.5">
-                          <Sparkles size={10} className="text-aws-orange" /> 
+                          <Sparkles size={10} className="text-aws-orange" />
                           {selectedSlot.revealed ? "Confirmed Masterclass & Workshop" : "Focus Areas & Takeaways"}
                         </div>
-                        
+
                         <h4 className="font-sans font-black italic text-base sm:text-lg uppercase tracking-tight text-white mb-2">
                           {selectedSlot.sessionTitle || selectedSlot.headline}
                         </h4>
@@ -762,7 +758,7 @@ export const SpeakersSection = () => {
                   <span className="font-mono text-[8px] tracking-widest text-white/30">
                     STAGE PREPARATIONS ACTIVE // SEE YOU AT THE EVENT
                   </span>
-                  <button 
+                  <button
                     type="button"
                     onClick={() => setSelectedSlot(null)}
                     className="w-full sm:w-auto px-5 py-2 bg-white/[0.04] hover:bg-white/10 text-white font-mono text-[10px] tracking-widest uppercase transition-colors rounded cursor-pointer text-center border border-white/5"

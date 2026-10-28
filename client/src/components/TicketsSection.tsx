@@ -119,6 +119,15 @@ export const TicketsSection = () => {
 
                   {/* Bottom Action Section */}
                   <div className="mt-6 pt-5 border-t border-white/10">
+                    {/* Urgency badge — frontend only */}
+                    {registrationEnabled && !isDisabled && (
+                      <div className="mb-3 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-red-500/10 border border-red-500/30 animate-pulse">
+                        <span className="text-[10px]">🔥</span>
+                        <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-red-400">
+                          Only 10 tickets left!
+                        </span>
+                      </div>
+                    )}
                     {registrationEnabled && !isDisabled ? (
                       <Link
                         to={`/ticket?passId=${tier.id}`}
