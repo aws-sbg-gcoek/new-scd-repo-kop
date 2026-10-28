@@ -8,7 +8,7 @@ export interface TeamMember {
   name: string;
   role: string;
   bio: string;
-  skills: string;
+  skills: string | string[];
   email: string;
   linkedin: string;
   image: string;
@@ -152,17 +152,6 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     linkedin: "https://www.linkedin.com/in/punam-age-5219a52b6",
     image: "https://i.ibb.co/spsQqkZ3/Professional-passport-style-headshot-with-smile-1-Punam-age.png"
   },
-  {
-    department: "Events & Operations Dept",
-    id: "chaitanya",
-    name: "Chaitanya",
-    role: "Logistics Lead",
-    bio: "Ensuring all conference sessions and logistics run smoothly with meticulous execution.",
-    skills: "Logistics, Management, Problem Solving",
-    email: "chhaitanyaaz@gmail.com",
-    linkedin: "https://www.linkedin.com/in/chhaitanyaa-zanjurne-84976a24",
-    image: "https://i.ibb.co/KjLPBGnt/chaitanya.png"
-  },
 
   {
     department: "Events & Operations Dept",
@@ -232,17 +221,6 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     linkedin: "https://www.linkedin.com/in/vedika-desai-8095b732a",
     image: "https://i.ibb.co/qY73yh3F/Scanned-20260316-2043-Vedika-Desai.jpg"
   },
-  {
-    department: "Media & Content Dept",
-    id: "aniket-mohite",
-    name: "Aniket Mohite",
-    role: "Design & Graphics Lead",
-    bio: "Contributing to visual branding, stage graphics, digital posters, and marketing assets.",
-    skills: "Design, Creativity, Branding",
-    email: "mohiteaniket248@gmail.com",
-    linkedin: "https://www.linkedin.com/in/aniket-mohite-7082b3289",
-    image: "https://i.ibb.co/TBNp3tJm/Whats-App-Image-2026-04-12-at-6-27-55-PM.jpg"
-  },
 
   // PR, Outreach & Corporate Dept
   {
@@ -256,17 +234,6 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     linkedin: "https://www.linkedin.com/in/siddhi-agedkar-35b042385",
     image: "https://i.ibb.co/4RnZt8mK/IMG-20260316-WA0049-Shruti-Paul-41.jpg"
   },
-  {
-    department: "PR, Outreach & Corporate Dept",
-    id: "renuka",
-    name: "Renuka",
-    role: "PR Lead",
-    bio: "Connecting with corporate sponsors, student communities, and community partners across Maharashtra.",
-    skills: "Public Relations, Networking, Communication",
-    email: "renukabansode592@gmail.com",
-    linkedin: "https://www.linkedin.com/in/renuka-bansode-674a4232a",
-    image: "https://i.ibb.co/MkRr4m0Q/renuka.jpg"
-  },
 
   // Finance & Marketing Dept
   {
@@ -279,17 +246,6 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     email: "awssbggcoek@gmail.com",
     linkedin: "https://www.linkedin.com/in/tushant-tagade-06a210254",
     image: "https://i.ibb.co/zWbTwkBX/tushant-Tagade.jpg"
-  },
-  {
-    department: "Finance & Marketing Dept",
-    id: "Ankita",
-    name: "Ankita Pujari",
-    role: "Marketing Associate",
-    bio: "Assisting in promotional marketing campaigns, campus activations, and community outreach.",
-    skills: "Marketing, Analytics, Content Creation",
-    email: "ankitapujari711@gmail.com",
-    linkedin: "https://www.linkedin.com/in/ankita-pujari-821230398",
-    image: "https://i.ibb.co/VcnZRZKS/Whats-App-Image-2026-04-18-at-9-02-28-PM.jpg"
   },
   {
     department: "Finance & Marketing Dept",
@@ -312,19 +268,262 @@ export const ALL_TEAM_MEMBERS: TeamMember[] = [
     email: "aj6244249@gmail.com",
     linkedin: "https://www.linkedin.com/in/bhushan-jadhav-93b94630b?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     image: "https://i.ibb.co/4Ztn2gvb/Bhushan-png.png"
+  }
+];
+
+export const newTeamMembers: TeamMember[] = [
+  // ─────────────────────────────────────────
+  // TECHNICAL DEPT
+  // ─────────────────────────────────────────
+
+  {
+    department: "Technical Dept",
+    id: "diksha-patil",
+    name: "Diksha Patil",
+    role: "Technical Co-Lead",
+    bio: "Co-leading technical initiatives and supporting members in developing practical technology solutions.",
+    skills: [
+      "Technical Leadership",
+      "Project Coordination",
+      "Problem Solving",
+    ],
+    email: "dikshasp101729@gmail.com",
+    linkedin: "https://www.linkedin.com/in/diksha-patil-s1729",
+    image: "https://i.ibb.co/DDp4ch74/Dikasha-Patil.png",
+  },
+  {
+    department: "Technical Dept",
+    id: "harsh",
+    name: "Harsh Pisal",
+    role: "Technical Associate",
+    bio: "Contributing to technical initiatives and supporting the development of practical solutions for club projects.",
+    skills: ["Technical Support", "Problem Solving", "Teamwork"],
+    email: "harshpisal0809@gmail.com",
+    linkedin: "https://www.linkedin.com/in/harsh-pisal-b03450441",
+    image: "https://i.ibb.co/N2nz01zX/Harsh-Pisal.png",
+  },
+
+  // ─────────────────────────────────────────
+  // EVENTS & OPERATIONS DEPT
+  // ─────────────────────────────────────────
+
+  {
+    department: "Events & Operations Dept",
+    id: "prapti",
+    name: "Prapti Patil",
+    role: "Event Associate",
+    bio: "Assisting in planning and executing engaging events and activities for the club community.",
+    skills: ["Event Coordination", "Teamwork", "Communication"],
+    email: "praptiarchanapatil@gmail.com",
+    linkedin: "https://www.linkedin.com/in/prapti-patil-2504a5434",
+    image:
+      "https://i.ibb.co/Q7qZfBFq/Whats-App-Image-2026-10-20-at-6-33-15-AM.jpg",
+  },
+  {
+    department: "Events & Operations Dept",
+    id: "aaryavardhan",
+    name: "Aaryavardhan Santosh Shinde",
+    role: "Event Associate",
+    bio: "Supporting event planning and execution to ensure smooth and engaging club activities.",
+    skills: ["Event Coordination", "Teamwork", "Organization"],
+    email: "shindeaaryavardhan8@gmail.com",
+    linkedin: "https://www.linkedin.com/in/aaryavardhan-shinde-a4477b437",
+    image: "https://i.ibb.co/1Y8pg0zn/Santosh-Patil.jpg",
+  },
+  {
+    department: "Events & Operations Dept",
+    id: "santosh",
+    name: "Shubham Vijay Pandagale",
+    role: "Event Associate",
+    bio: "Helping coordinate club events and supporting their smooth execution.",
+    skills: ["Event Coordination", "Teamwork", "Logistics"],
+    email: "shubhampandagale00@gmail.com",
+    linkedin:
+      "https://www.linkedin.com/in/shubham-pandagale-a422b73a0?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    image: "https://i.ibb.co/zVqqqjxq/Shubham-Vijay-Pandagale.jpg",
+  },
+  {
+    department: "Events & Operations Dept",
+    id: "asmita",
+    name: "Asmita Anant Ugale",
+    role: "Event Associate",
+    bio: "Supporting the planning and coordination of club events and community activities.",
+    skills: ["Event Planning", "Coordination", "Teamwork"],
+    email: "asmitaugale07@gmail.com",
+    linkedin: "https://www.linkedin.com/in/asmita-ugale-b5a4412a4",
+    image: "https://i.ibb.co/ccZ9C5Dh/Asmita-Ugale.png",
+  },
+  {
+    department: "Events & Operations Dept",
+    id: "kedar",
+    name: "Kedar Gurav",
+    role: "Event Associate",
+    bio: "Assisting with event preparation and coordination to help deliver successful club activities.",
+    skills: ["Event Coordination", "Organization", "Teamwork"],
+    email: "gkedar321@gmail.com",
+    linkedin: "https://www.linkedin.com/in/kedar-gurav-811264416",
+    image: "https://i.ibb.co/Jw3kq7gb/Kedar-Gurav.jpg",
+  },
+  {
+    department: "Events & Operations Dept",
+    id: "tejas",
+    name: "Tejas Satish Mahant",
+    role: "Event Associate",
+    bio: "Helping organize club events and coordinate activities for the student community.",
+    skills: ["Event Coordination", "Teamwork", "Communication"],
+    email: "tejasmahant95@gmail.com",
+    linkedin: "https://www.linkedin.com/in/tejas-mahant-a26583440",
+    image: "https://i.ibb.co/tp6N08P9/Tejas-mahant.jpg",
+  },
+
+  // ─────────────────────────────────────────
+  // MEDIA & CONTENT DEPT
+  // ─────────────────────────────────────────
+
+  {
+    department: "Media & Content Dept",
+    id: "sumit",
+    name: "Sumit Tipane",
+    role: "Social Media Associate",
+    bio: "Creating and supporting social media content to promote club activities and engage the student community.",
+    skills: [
+      "Social Media Management",
+      "Content Creation",
+      "Communication",
+    ],
+    email: "Sumittipane123@gmail.com",
+    linkedin: "https://www.linkedin.com/in/sumit-tipane-292520441",
+    image: "https://i.ibb.co/d4jyp05y/Sumit-Tipane.jpg",
+  },
+  {
+    department: "Media & Content Dept",
+    id: "shruti",
+    name: "Shruti Paul",
+    role: "Design Associate",
+    bio: "Supporting the creation of visual designs and creative content for club events and communications.",
+    skills: ["Graphic Design", "Visual Communication", "Creativity"],
+    email: "shrutipaul53@gmail.com",
+    linkedin: "",
+    image:
+      "https://i.ibb.co/tPDc952j/file-0000000013688211a26f79127c663c9d-Shruti-Paul-41.png",
+  },
+  {
+    department: "Media & Content Dept",
+    id: "dattatray",
+    name: "Dattatray Dhole",
+    role: "Social media associate",
+    bio: "Supporting social media activities and creating content to promote club updates and engage the student community.",
+    skills: [
+      "Social Media Management",
+      "Content Creation",
+      "Communication",
+    ],
+    email: "dattadhole1911@gmail.com",
+    linkedin: "",
+    image:
+      "https://i.ibb.co/0y5QRFLp/IMG-20261011-190533-Dattatray-Dhole.png",
+  },
+  {
+    department: "Media & Content Dept",
+    id: "abdul-samad",
+    name: "Abdul Samad",
+    role: "Associate Designer",
+    bio: "Supporting visual design and creative content creation for club events and communications.",
+    skills: ["Graphic Design", "Visual Communication", "Creativity"],
+    email: "mr.zaid.1029@gmail.com",
+    linkedin: "https://www.linkedin.com/in/abdul-samad-354023362/",
+    image:
+      "https://i.ibb.co/Fk1qPtV7/file-00000000f1bc82118b681c8769c3c154-Abdul-Samad-Zaid.png",
+  },
+
+  // ─────────────────────────────────────────
+  // PR, OUTREACH & CORPORATE DEPT
+  // ─────────────────────────────────────────
+
+  {
+    department: "PR, Outreach & Corporate Dept",
+    id: "digvijay-ronghe",
+    name: "Digvijay Ronghe",
+    role: "Public Relations Co-Lead",
+    bio: "Co-leading public relations initiatives and building relationships to strengthen the club's outreach and visibility.",
+    skills: ["Public Relations", "Outreach Strategy", "Communication"],
+    email: "digvijaya.ronghe@gmail.com",
+    linkedin: "",
+    image: "https://i.ibb.co/bg27x5WZ/1791724153696-Digvijaya-Ronghe.png",
+  },
+  {
+    department: "PR, Outreach & Corporate Dept",
+    id: "vaishnavi-kale",
+    name: "Vaishnavi Kale",
+    role: "PR Associate",
+    bio: "Supporting public relations and outreach initiatives to build connections and increase awareness of club activities.",
+    skills: ["Public Relations", "Communication", "Networking"],
+    email: "vk4578526@gmail.com",
+    linkedin: "https://www.linkedin.com/in/vaishnavi-kale-762014389",
+    image: "https://i.ibb.co/PGbwbxfQ/Vaishnavi-Kale.jpg",
+  },
+  {
+    department: "PR, Outreach & Corporate Dept",
+    id: "sairaj",
+    name: "Sairaj Mali",
+    role: "PR-Associate",
+    bio: "Supporting public relations and outreach activities to build connections and promote club initiatives.",
+    skills: ["Public Relations", "Communication", "Networking"],
+    email: "sairajmali43@gmail.com",
+    linkedin: "",
+    image:
+      "https://i.ibb.co/j9WtHb4J/file-000000002eb482118dcd7c92f75ef9c9-Sairaj-Mali.png",
+  },
+
+  // ─────────────────────────────────────────
+  // FINANCE & MARKETING DEPT
+  // ─────────────────────────────────────────
+
+  {
+    department: "Finance & Marketing Dept",
+    id: "ayushi",
+    name: "Ayushi Patil",
+    role: "Marketing Co-Lead",
+    bio: "Co-leading marketing initiatives to promote club events, strengthen outreach, and increase community engagement.",
+    skills: [
+      "Marketing Strategy",
+      "Campaign Planning",
+      "Communication",
+    ],
+    email: "patilayushi738@gmail.com",
+    linkedin: "https://www.linkedin.com/in/ayushi-patil-a9867a3b7",
+    image:
+      "https://i.ibb.co/TBTVFM9G/Whats-App-Image-2026-10-20-at-9-13-01-AM.jpg",
   },
   {
     department: "Finance & Marketing Dept",
-    id: "vaishnavi",
-    name: "Vaishnavi",
-    role: "Treasurer Associate",
-    bio: "Assisting in accounting, budget allocations, and transaction validations for community operations.",
-    skills: "Finance, Budgeting, Accounting",
-    email: "awssbggcoek@gmail.com",
-    linkedin: "https://www.linkedin.com/in/vaishnavi-sawant-70845833b?utm_source=share_via&utm_content=profile&utm_medium=member_android",
-    image: "https://i.ibb.co/JRBSNVZL/Whats-App-Image-2026-04-12-at-11-02-42-PM.jpg"
-  }
+    id: "yogita",
+    name: "Yogita Mandhare",
+    role: "Marketing Associate",
+    bio: "Assisting in marketing campaigns and promoting club activities to strengthen student engagement.",
+    skills: ["Marketing", "Content Creation", "Communication"],
+    email: "yogitamandhare264@gmail.com",
+    linkedin: "https://www.linkedin.com/in/yogita-mandhare-00923439b",
+    image: "https://i.ibb.co/vxmp1HCr/Yogita.jpg",
+  },
+  {
+    department: "Finance & Marketing Dept",
+    id: "digvijay",
+    name: "Digvijay Patil",
+    role: "Marketing Associate",
+    bio: "Contributing to marketing initiatives and promotional campaigns for club events and activities.",
+    skills: [
+      "Marketing",
+      "Campaign Planning",
+      "Content Creation",
+    ],
+    email: "digvijaypatil6321@gmail.com",
+    linkedin: "https://www.linkedin.com/in/digvijay-patil-668360441",
+    image: "https://i.ibb.co/fVQW52dV/Digviay-Patil.jpg",
+  },
 ];
+
+ALL_TEAM_MEMBERS.push(...newTeamMembers);
 
 export default function TeamSection() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>(ALL_TEAM_MEMBERS);
@@ -531,7 +730,12 @@ function MemberCard({ member }: { member: TeamMember }) {
               Skills:
             </span>
             <div className="flex flex-wrap gap-1">
-              {member.skills.split(',').map((skill, sIdx) => (
+              {(Array.isArray(member.skills)
+                ? member.skills
+                : typeof member.skills === 'string'
+                  ? member.skills.split(',')
+                  : []
+              ).map((skill, sIdx) => (
                 <span key={sIdx} className="px-1.5 py-0.5 bg-white/10 text-white text-[8px] font-mono rounded">
                   {skill.trim()}
                 </span>
