@@ -95,30 +95,6 @@ function mapConfigToPasses(config: TicketSystemConfig): PassType[] {
   return result;
 }
 
-// Dummy frontend-only ticket (no backend / Firestore entry)
-const DUMMY_STANDARD_PLUS: PassType = {
-  id: 'standard_plus',
-  name: 'Standard Plus Ticket',
-  slug: 'SCD-STANDARD-PLUS',
-  description: 'Premium Experience Pass',
-  price: 749,
-  capacity: 200,
-  sold: 0,
-  available: 0,
-  perks: [
-    'Full Day All-Track Conference Access',
-    'Official Event Swag Kit & Badge',
-    'Networking High Tea & Catered Lunch',
-    'Verified Certificate of Participation',
-    'Access to Keynotes & Hands-on Tech Demos'
-  ],
-  is_active: true,
-  is_locked: true,
-  sort_order: 99,
-  badge_color: '#8b5cf6',
-  label: 'COMING SOON',
-};
-
 export function usePassTypes() {
   const [passes, setPasses] = useState<PassType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -128,8 +104,7 @@ export function usePassTypes() {
     const unsubscribe = subscribeToTicketConfig((config) => {
       try {
         const mapped = mapConfigToPasses(config);
-        // Append dummy frontend-only ticket after real ones
-        setPasses([...mapped, DUMMY_STANDARD_PLUS]);
+        setPasses(mapped);
         setLoading(false);
       } catch (err: any) {
         setError(err.message || 'Error processing ticket passes');
