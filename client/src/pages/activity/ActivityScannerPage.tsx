@@ -372,7 +372,7 @@ export default function ActivityScannerPage() {
       html5QrCodeRef.current = scanner;
 
       const qrConfig = {
-        fps: 30,
+        fps: 12,
         qrbox: (w: number, h: number) => {
           const edge = Math.min(w, h);
           const boxSize = Math.max(220, Math.min(Math.floor(edge * 0.85), 360));
@@ -471,7 +471,12 @@ export default function ActivityScannerPage() {
     if (!trimmed || isProcessing || !activity) return;
 
     const now = Date.now();
-    if (trimmed === lastScannedCodeRef.current && now - lastScanTimeRef.current < 1000) return;
+    // 1. If scanning the exact same ticket code, enforce an 8-second cooldown to prevent
+    // false duplicate errors when holding the camera over the attendee's ticket for a few seconds.
+    if (trimmed === lastScannedCodeRef.current && now - lastScanTimeRef.current < 8000) return;
+
+    // 2. Enforce a minimum 2-second cooldown between consecutive scans so scanning is steady and never double-fires
+    if (now - lastScanTimeRef.current < 2000) return;
 
     lastScannedCodeRef.current = trimmed;
     lastScanTimeRef.current = now;
@@ -982,7 +987,11 @@ export default function ActivityScannerPage() {
                       </div>
                       <button
                         type="button"
-                        onClick={() => setLastResult(null)}
+                        onClick={() => {
+                          setLastResult(null);
+                          lastScanTimeRef.current = 0;
+                          lastScannedCodeRef.current = '';
+                        }}
                         className="bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs px-4 py-2 rounded-lg cursor-pointer transition-colors shadow-lg shadow-emerald-950/40"
                       >
                         Ready Next Ticket
@@ -1048,7 +1057,11 @@ export default function ActivityScannerPage() {
 
                       <button
                         type="button"
-                        onClick={() => setLastResult(null)}
+                        onClick={() => {
+                          setLastResult(null);
+                          lastScanTimeRef.current = 0;
+                          lastScannedCodeRef.current = '';
+                        }}
                         className="bg-red-700 hover:bg-red-600 text-white font-mono text-xs px-4 py-2 rounded-lg cursor-pointer ml-auto"
                       >
                         Clear Alert

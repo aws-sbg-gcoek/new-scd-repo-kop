@@ -159,9 +159,14 @@ export default function TicketScanner({ registrations: propRegistrations, onChec
     const trimmed = rawCode.trim();
     if (!trimmed || isProcessing) return;
 
-    // Throttle duplicate reads of the exact same string within 1 second
+    // Throttle duplicate reads of the exact same string within 8 seconds
     const now = Date.now();
-    if (trimmed === lastScannedCodeRef.current && now - lastScanTimeRef.current < 1000) {
+    if (trimmed === lastScannedCodeRef.current && now - lastScanTimeRef.current < 8000) {
+      return;
+    }
+
+    // Enforce 2-second cooldown between consecutive scans
+    if (now - lastScanTimeRef.current < 2000) {
       return;
     }
 
@@ -248,7 +253,7 @@ export default function TicketScanner({ registrations: propRegistrations, onChec
       html5QrCodeRef.current = scanner;
 
       const qrConfig = {
-        fps: 30,
+        fps: 12,
         qrbox: (viewfinderWidth: number, viewfinderHeight: number) => {
           const edge = Math.min(viewfinderWidth, viewfinderHeight);
           const boxSize = Math.max(220, Math.min(Math.floor(edge * 0.85), 360));
