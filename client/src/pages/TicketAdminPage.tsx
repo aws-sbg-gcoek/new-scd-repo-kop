@@ -265,6 +265,8 @@ export default function TicketAdminPage() {
   const [isSendingTestEmail, setIsSendingTestEmail] = useState(false);
   const [testEmailResult, setTestEmailResult] = useState<string>('');
   const [isBulkApproving, setIsBulkApproving] = useState(false);
+  const [isBulkEmailing, setIsBulkEmailing] = useState(false);
+  const [bulkEmailProgress, setBulkEmailProgress] = useState('');
   const [isSyncing, setIsSyncing] = useState(false);
 
   // UPI Account Switcher State (Bhushan / Shardul / Anas)
@@ -355,6 +357,61 @@ export default function TicketAdminPage() {
     setEmailNotice(`✅ Successfully approved all ${count} student registrations in Firebase!`);
     setTimeout(() => setEmailNotice(''), 7000);
     setIsBulkApproving(false);
+  };
+
+  // Bulk send ticket email to ALL approved attendees with 1 click
+  const handleSendEmailToAllApproved = async () => {
+    const approvedList = registrations.filter(r => r.status === 'APPROVED');
+    if (approvedList.length === 0) {
+      alert('There are no approved attendees to send ticket emails to.');
+      return;
+    }
+
+    if (
+      !window.confirm(
+        `Are you sure you want to send official ticket emails to ALL ${approvedList.length} approved attendees?\n\nThis will generate each attendee's ticket pass with QR code and dispatch it to their registered email address.`
+      )
+    ) {
+      return;
+    }
+
+    setIsBulkEmailing(true);
+    let successCount = 0;
+    let failCount = 0;
+
+    for (let i = 0; i < approvedList.length; i++) {
+      const student = approvedList[i];
+      const progressStr = `${i + 1}/${approvedList.length}`;
+      setBulkEmailProgress(progressStr);
+      setEmailNotice(`📧 Sending ticket pass ${progressStr} to ${student.fullName} (${student.email})...`);
+
+      try {
+        const res = await sendTicketEmailViaResend(student);
+        if (res.success) {
+          successCount++;
+        } else {
+          failCount++;
+          console.warn(`Failed to email ${student.email}:`, res.error);
+        }
+      } catch (err) {
+        failCount++;
+        console.warn(`Exception emailing ${student.email}:`, err);
+      }
+
+      // 350ms delay between emails to avoid hitting email provider rate limits
+      if (i < approvedList.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 350));
+      }
+    }
+
+    setIsBulkEmailing(false);
+    setBulkEmailProgress('');
+    if (failCount === 0) {
+      setEmailNotice(`✅ Successfully dispatched ticket pass emails to all ${successCount} approved attendees!`);
+    } else {
+      setEmailNotice(`✅ Finished email dispatch: ${successCount} delivered successfully, ${failCount} failed.`);
+    }
+    setTimeout(() => setEmailNotice(''), 10000);
   };
 
   // Live clock, live real-time registration sync & live ticket tiers config (Firestore / Local)
@@ -1133,8 +1190,22 @@ export default function TicketAdminPage() {
                   </strong>
                   <span className="text-[10px] text-slate-500">Confirmed attendee passes</span>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                  <UserCheck className="w-5 h-5" />
+                <div className="flex flex-col items-end gap-2">
+                  <div className="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                    <UserCheck className="w-5 h-5" />
+                  </div>
+                  {approvedCount > 0 && (
+                    <button
+                      type="button"
+                      disabled={isBulkEmailing}
+                      onClick={handleSendEmailToAllApproved}
+                      className="text-[10px] font-mono px-2 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold flex items-center gap-1 transition-colors cursor-pointer disabled:opacity-50 shadow-md shadow-blue-950"
+                      title="Send official ticket emails to all approved attendees"
+                    >
+                      {isBulkEmailing ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
+                      <span>{isBulkEmailing ? `Emailing (${bulkEmailProgress})` : `Email All (${approvedCount})`}</span>
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -1215,6 +1286,18 @@ export default function TicketAdminPage() {
                   >
                     <span>Approved ({approvedCount})</span>
                   </button>
+                  {statusFilter === 'APPROVED' && approvedCount > 0 && (
+                    <button
+                      type="button"
+                      disabled={isBulkEmailing}
+                      onClick={handleSendEmailToAllApproved}
+                      className="text-xs font-mono px-3 py-2 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 shadow-md shadow-blue-950 shrink-0"
+                      title="Send official ticket pass email to all approved attendees"
+                    >
+                      {isBulkEmailing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                      <span>{isBulkEmailing ? `Sending (${bulkEmailProgress})...` : `Send Email to All Approved (${approvedCount})`}</span>
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={() => setStatusFilter('REJECTED')}
