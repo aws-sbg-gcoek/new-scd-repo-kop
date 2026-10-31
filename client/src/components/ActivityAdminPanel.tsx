@@ -63,6 +63,7 @@ const ACTIVITY_COLORS: Record<ActivitySlug, { light: string; dark: string; dot: 
   'move-the-byte':{ light: 'text-amber-400',   dark: 'bg-amber-500/10 border-amber-500/30',   dot: 'bg-amber-400' },
   'live-trivia':  { light: 'text-emerald-400', dark: 'bg-emerald-500/10 border-emerald-500/30',dot: 'bg-emerald-400' },
   'food':         { light: 'text-rose-400',    dark: 'bg-rose-500/10 border-rose-500/30',    dot: 'bg-rose-400' },
+  'tea':          { light: 'text-orange-400',  dark: 'bg-orange-500/10 border-orange-500/30', dot: 'bg-orange-400' },
 };
 
 function ActivityPill({ slug }: { slug: string }) {
@@ -459,7 +460,7 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
       </div>
 
       {/* ── Summary stat cards ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
         {/* Total scans */}
         <div className="col-span-1 bg-[#101726] border border-[#1E293B] rounded-xl p-3 flex flex-col">
           <span className="text-[10px] font-mono uppercase text-slate-400">Total Scans</span>
@@ -581,8 +582,8 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
           {studentSummary.length > 0 && (
             <div className="bg-[#101726] border border-[#1E293B] rounded-2xl p-5">
               <h3 className="text-sm font-bold text-white mb-4">Participation Depth</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {[5, 4, 3, 2, 1].map(count => {
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+                {[6, 5, 4, 3, 2, 1].map(count => {
                   const students = studentSummary.filter(s => s.scan_count === count).length;
                   return (
                     <div key={count} className="bg-[#0B0F19] border border-[#1E293B] rounded-xl p-3 text-center">
@@ -732,8 +733,8 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
                     {/* Expanded detail */}
                     {isExpanded && (
                       <div className="border-t border-[#1E293B] px-4 py-4 bg-[#0D1627] space-y-4 animate-fade-in">
-                        {/* 5 Activity Status Pills */}
-                        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                        {/* 6 Activity Status Pills */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
                           {ACTIVITIES.map(act => {
                             const done = student.activities.includes(act.slug);
                             const col = ACTIVITY_COLORS[act.slug];
@@ -792,7 +793,7 @@ export default function ActivityAdminPanel({ scannerKey }: ActivityAdminPanelPro
                             <span>{student.scan_count} of {ACTIVITIES.length} activities completed ({progress}%)</span>
                             {progress === 100 && (
                               <span className="text-emerald-400 font-bold flex items-center gap-1">
-                                <span>🎉</span> All 5 Activities Completed!
+                                <span>🎉</span> All {ACTIVITIES.length} Activities Completed!
                               </span>
                             )}
                           </div>

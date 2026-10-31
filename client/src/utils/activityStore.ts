@@ -443,7 +443,7 @@ export async function resetAllStudentActivityScans(ticketNumber: string): Promis
   await removeLocalScan(ticketNumber);
 
   // 2. Reset across all activities in Firestore
-  const activities: ActivitySlug[] = ['human-tetris', 'blindfold', 'move-the-byte', 'live-trivia', 'food'];
+  const activities: ActivitySlug[] = ['human-tetris', 'blindfold', 'move-the-byte', 'live-trivia', 'food', 'tea'];
   for (const act of activities) {
     await resetActivityScan(ticketNumber, act);
   }

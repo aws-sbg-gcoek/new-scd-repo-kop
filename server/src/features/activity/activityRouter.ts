@@ -12,6 +12,7 @@ const VALID_ACTIVITIES = [
   'move-the-byte',
   'live-trivia',
   'food',
+  'tea',
 ] as const;
 
 type ActivitySlug = typeof VALID_ACTIVITIES[number];

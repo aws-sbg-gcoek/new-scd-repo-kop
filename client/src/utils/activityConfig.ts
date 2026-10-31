@@ -9,7 +9,8 @@ export type ActivitySlug =
   | 'blindfold'
   | 'move-the-byte'
   | 'live-trivia'
-  | 'food';
+  | 'food'
+  | 'tea';
 
 export interface ActivityConfig {
   slug: ActivitySlug;
@@ -102,6 +103,21 @@ export const ACTIVITIES: ActivityConfig[] = [
       badge: 'bg-rose-500 text-white',
       glow: 'shadow-rose-500/20',
       activeBg: 'bg-rose-500',
+    },
+  },
+  {
+    slug: 'tea',
+    name: 'TEA',
+    emoji: '☕',
+    description: 'Collect your tea & refreshments token!',
+    color: {
+      primary: 'orange',
+      bg: 'bg-orange-500/10',
+      border: 'border-orange-500/30',
+      text: 'text-orange-400',
+      badge: 'bg-orange-500 text-white',
+      glow: 'shadow-orange-500/20',
+      activeBg: 'bg-orange-500',
     },
   },
 ];

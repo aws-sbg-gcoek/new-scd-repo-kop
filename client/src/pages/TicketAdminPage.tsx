@@ -930,7 +930,7 @@ export default function TicketAdminPage() {
             }`}
           >
             <Gamepad2 className="w-4 h-4" />
-            <span>5 Activities Tracker</span>
+            <span>6 Activities Tracker</span>
           </button>
 
           <button
@@ -2740,7 +2740,7 @@ export default function TicketAdminPage() {
         )}
 
         {/* ─────────────────────────────────────────────────────────────
-            TAB: 5 ACTIVITIES TRACKER & STUDENT PARTICIPATION
+            TAB: 6 ACTIVITIES TRACKER & STUDENT PARTICIPATION
         ───────────────────────────────────────────────────────────── */}
         {activeAdminTab === 'activities' && (
           <ActivityAdminPanel scannerKey={adminKey} />
