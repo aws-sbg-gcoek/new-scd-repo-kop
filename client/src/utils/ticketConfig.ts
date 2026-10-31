@@ -61,7 +61,7 @@ export const DEFAULT_TICKETS_CONFIG: TicketSystemConfig = {
     },
     regular: {
       code: 'regular',
-      label: 'Regular Ticket',
+      label: 'Standard Plus Ticket',
       tagline: 'General Admission',
       price: 349,
       mode: 'manual',
@@ -69,6 +69,7 @@ export const DEFAULT_TICKETS_CONFIG: TicketSystemConfig = {
       openFrom: '2026-10-22T17:54',
       openUntil: '2026-11-01T23:59',
       remaining: 300,
+      highlightBadge: 'LATE ENTRY',
       dateDescription: 'Available from: 22nd Oct 2026, 05:54 PM IST',
     },
   },

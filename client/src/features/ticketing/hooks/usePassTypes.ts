@@ -36,13 +36,13 @@ function mapConfigToPasses(config: TicketSystemConfig): PassType[] {
     // early_bird hidden from frontend display (ticket data preserved in backend)
     {
       code: 'regular',
-      defaultName: 'Regular Ticket',
-      slug: 'SCD-STANDARD',
+      defaultName: 'Standard Plus Ticket',
+      slug: 'SCD-STANDARD-PLUS',
       defaultTagline: 'General Admission',
-      defaultPrice: 349,
+      defaultPrice: 749,
       capacity: 300,
       badgeColor: '#10b981',
-      defaultBadge: 'STANDARD ENTRY',
+      defaultBadge: 'LATE ENTRY',
       perks: [
         'Full Day All-Track Conference Access',
         'Official Event Swag Kit & Badge',
@@ -76,7 +76,7 @@ function mapConfigToPasses(config: TicketSystemConfig): PassType[] {
 
     result.push({
       id: def.code,
-      name: t.label || def.defaultName,
+      name: (t.label && t.label !== 'Regular Ticket' && t.label !== 'Standard Ticket') ? t.label : def.defaultName,
       slug: def.slug,
       description: t.tagline || def.defaultTagline,
       price: t.price !== undefined ? t.price : def.defaultPrice,
@@ -88,7 +88,7 @@ function mapConfigToPasses(config: TicketSystemConfig): PassType[] {
       is_locked: isComingSoon,
       sort_order: i + 1,
       badge_color: def.badgeColor,
-      label: isSoldOut ? 'SOLD OUT' : isComingSoon ? 'COMING SOON' : (t.highlightBadge || def.defaultBadge)
+      label: isSoldOut ? 'SOLD OUT' : isComingSoon ? 'COMING SOON' : ((t.highlightBadge && t.highlightBadge !== 'STANDARD ENTRY') ? t.highlightBadge : def.defaultBadge)
     });
   }
 

@@ -36,6 +36,24 @@ export const SPONSORS_STORAGE_KEY = 'aws_scd_sponsors_v1';
 // Seed demo sponsors if empty so the admin panel has rich preview data
 export const INITIAL_DEMO_SPONSORS: SponsorApplication[] = [
   {
+    id: 'SPN-2026-0001',
+    company: 'The XL Gym',
+    contactName: 'Shiva Kanse',
+    email: 'thexlgymkolhapur@gmail.com',
+    phone: '+91 93716 29175',
+    website: 'https://www.instagram.com/thexlgymkolhapur/',
+    industry: 'Fitness, Health & Wellness',
+    tier: 'Official Fitness Partner',
+    price: 'Partner Tier',
+    companyPhotoBase64: '/xl-gym-poster.jpg',
+    showcaseInterests: ['Product Expo Stall & Booth', 'Logo on Stage Backdrop & Banners', 'Distribute Goodies / Swag / Kits', 'Student Pass Lanyards & Badges Branding'],
+    customShowcase: 'Exclusive fitness partner for SCD 2026. Student wellness vouchers, fitness consultations, and endurance challenges.',
+    details: 'The XL Gym - Fitness is life (Powered by Being Fit), 1st Floor, Desai house, 7th Ln, near Lucky Bazar, Rajarampuri, Kolhapur, Maharashtra 416008. Contact: Shiva Kanse (+91 93716 29175, Instagram: @shivakanse_). Official Instagram: @thexlgymkolhapur',
+    status: 'CONFIRMED',
+    createdAt: '2026-10-31T05:00:00.000Z',
+    updatedAt: '2026-10-31T05:00:00.000Z',
+  },
+  {
     id: 'SPN-2026-9021',
     company: 'CloudSphere Technologies',
     contactName: 'Rohit Kulkarni',

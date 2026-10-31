@@ -1,7 +1,7 @@
 /* eslint-disable react-doctor/no-initialize-state, react-doctor/prefer-useReducer, react-doctor/no-event-handler, react-doctor/rerender-state-only-in-handlers, react-doctor/no-derived-state */
 import { motion, useScroll, useTransform } from "motion/react";
 import { AngledButton } from "./LayoutElements";
-import { Zap, Calendar, MapPin, Volume2, VolumeX } from "lucide-react";
+import { Zap, Calendar, MapPin, Volume2, VolumeX, ArrowUpRight } from "lucide-react";
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 
@@ -326,6 +326,32 @@ export const HeroSection = () => {
           transition={{ delay: 0.6, duration: 0.8 }}
           className="w-full lg:w-2/5 flex flex-col justify-center mt-8 lg:mt-0"
         >
+          {/* Official Sponsor Badge — slightly bigger & on the right side */}
+          <div className="mb-6 sm:mb-8 flex justify-end">
+            <a
+              href="#sponsors"
+              className="inline-flex items-center gap-3.5 p-2.5 sm:p-3 pr-5 sm:pr-6 rounded-2xl bg-black/75 hover:bg-black/95 border border-white/15 hover:border-aws-orange/70 backdrop-blur-md shadow-xl hover:shadow-aws-orange/20 transition-all duration-300 group hover:scale-[1.02]"
+              title="Official Event Sponsor - The XL Gym"
+            >
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl p-0.5 bg-[#121212] border border-white/15 group-hover:border-aws-orange/60 shrink-0 overflow-hidden flex items-center justify-center shadow-md">
+                <img
+                  src="/xl-gym-badge.png"
+                  alt="The XL Gym"
+                  className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform"
+                />
+              </div>
+              <div className="flex flex-col text-left">
+                <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-widest text-aws-orange font-bold flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-aws-orange animate-pulse" />
+                  Official Fitness Partner
+                </span>
+                <span className="font-sans font-black italic uppercase text-sm sm:text-base text-white group-hover:text-aws-orange transition-colors leading-tight tracking-wide">
+                  The XL Gym
+                </span>
+              </div>
+              <ArrowUpRight size={18} className="text-white/40 group-hover:text-aws-orange ml-1 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+          </div>
           <div className="flex flex-col gap-8 sm:gap-10 border-l-2 border-white/10 pl-6 sm:pl-10">
             <div className="flex flex-col group cursor-default">
               <span className="font-mono text-[10px] sm:text-xs text-aws-orange uppercase tracking-[0.3em] mb-2 font-bold flex items-center gap-2">

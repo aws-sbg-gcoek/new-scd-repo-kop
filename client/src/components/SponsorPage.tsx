@@ -29,6 +29,7 @@ import {
   Radio,
   Eye,
   Megaphone,
+  Instagram,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -491,6 +492,68 @@ export const SponsorPage = () => {
               </motion.div>
             );
           })}
+        </div>
+      </section>
+
+      {/* Confirmed Sponsors & Partners Showcase */}
+      <section className="py-8 px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto border-t border-white/5">
+        <div className="p-6 sm:p-8 rounded-2xl bg-[#0a0a0a] border border-white/10 hover:border-aws-orange/40 shadow-[0_0_50px_rgba(0,0,0,0.8),0_0_30px_rgba(255,153,0,0.06)] relative overflow-hidden transition-all duration-300">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-5">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl p-1 bg-[#111] border border-white/10 shadow-lg shrink-0 overflow-hidden">
+                <img
+                  src="/xl-gym-badge.png"
+                  alt="The XL Gym"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-aws-orange/10 border border-aws-orange/30 text-aws-orange font-mono text-[9px] font-bold uppercase tracking-widest mb-1.5">
+                  ★ Confirmed Official Fitness Partner
+                </div>
+                <h3 className="text-xl sm:text-2xl font-black italic uppercase text-white">
+                  The XL Gym — Kolhapur
+                </h3>
+                <p className="text-xs text-white/60 font-mono mt-0.5">
+                  Fitness is life · Powered by Being Fit · 1st Floor, Desai house, 7th Ln, near Lucky Bazar, Rajarampuri, Kolhapur, Maharashtra 416008
+                </p>
+                <div className="flex flex-wrap items-center gap-3 mt-2.5 font-mono text-[11px]">
+                  <a
+                    href="https://www.instagram.com/thexlgymkolhapur/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-pink-400 hover:text-pink-300 transition-colors"
+                  >
+                    <Instagram size={12} />
+                    <span>@thexlgymkolhapur</span>
+                  </a>
+                  <span className="text-white/20">•</span>
+                  <a
+                    href="https://www.instagram.com/shivakanse_?cplk=MXZ1ZGM4a2RyZjdvMw=="
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-aws-orange hover:text-amber-300 transition-colors"
+                  >
+                    <Instagram size={12} />
+                    <span>Shiva Kanse (@shivakanse_)</span>
+                  </a>
+                  <span className="text-white/20">•</span>
+                  <a
+                    href="tel:+919371629175"
+                    className="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 transition-colors"
+                  >
+                    <Phone size={12} />
+                    <span>+91 93716 29175</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 self-stretch md:self-auto justify-end">
+              <span className="font-mono text-xs text-aws-orange bg-aws-orange/10 border border-aws-orange/30 px-3.5 py-2 rounded-xl text-center font-bold">
+                Official Event Partner · 2026
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 

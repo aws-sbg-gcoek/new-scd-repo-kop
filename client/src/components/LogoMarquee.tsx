@@ -83,6 +83,16 @@ export const LogoMarquee = () => {
             />
 
             <img
+              src="/xl-gym-badge.png"
+              alt="The XL Gym - Official Fitness Partner"
+              width={120}
+              height={48}
+              loading="lazy"
+              decoding="async"
+              className="marquee-logo h-10 sm:h-12 w-auto object-contain rounded-md opacity-95 hover:opacity-100 hover:scale-105 transition-all duration-300 border border-amber-400/40 shadow-[0_0_16px_rgba(250,204,21,0.3)]"
+            />
+
+            <img
               src="/AWS_Builder.webp"
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src = "/AWS_Builder.png";
